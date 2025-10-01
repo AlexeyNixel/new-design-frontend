@@ -1,0 +1,23 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@font-face {
+    font-family: 'RootUI';
+    src: url("../fonts/pt-root-ui_regular.woff2") format("woff2");
+    src: url("../fonts/pt-root-ui_regular.woff") format("woff");
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'RootUI';
+    src: url('../fonts/pt-root-ui_bold.woff2') format("woff2");
+    src: url('../fonts/pt-root-ui_bold.woff') format("woff");
+    font-weight: 700;
+    font-display: swap;
+}
+
+body {
+    font-family: 'RootUI', serif;
+    font-weight: 400;
+}

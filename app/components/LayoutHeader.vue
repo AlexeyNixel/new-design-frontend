@@ -1,11 +1,11 @@
 <template>
   <header
-    class="grid grid-cols-[200px_minmax(300px,_900px)_200px_300px] items-center my-2 mx-10"
+    class="grid grid-cols-[200px_minmax(300px,_900px)_auto_auto] items-center my-2 mx-20"
   >
     <div class="text-5xl font-bold">НОМБ</div>
 
     <div class="grid grid-cols-3">
-      <div class="flex items-center justify-center gap-2">
+      <div class="flex items-center justify-center  gap-2">
         <Icon class="text-5xl" name="i-heroicons-map-pin" />
         <span>г. Новосибирск, Красный проспект, 26 </span>
       </div>
@@ -37,7 +37,7 @@
       </NuxtLink>
     </div>
 
-    <nav class="flex gap-2 items-center justify-center">
+    <nav class="flex gap-2 items-center justify-end">
       <UPopover mode="hover" v-for="btn in navigationButtons" :key="btn.icon">
         <NuxtLink :to="btn.link" class="hover:text-blue-400 transition">
           <Icon class="text-5xl" :name="btn.icon" />

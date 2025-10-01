@@ -1,16 +1,10 @@
 <template>
   <UNavigationMenu
-    color="secondary"
+    color="primary"
     contentOrientation="vertical"
     :items="items"
     class="my-4 w-full justify-center bg-[#0F172B] text-white"
-  >
-    <template #item="{ item }">
-      <div class="text-white font-bold text-[16px] mx-10">
-        {{ item.label }}
-      </div>
-    </template>
-  </UNavigationMenu>
+  />
 </template>
 
 <script setup lang="ts">
@@ -32,41 +26,6 @@ interface MenuResponse {
   meta: any;
 }
 
-const navigationLinks = [
-  {
-    text: 'Читателям',
-    link: '/',
-  },
-
-  {
-    text: 'Ресурсы',
-    link: '/',
-  },
-  {
-    text: 'Пространства',
-    link: '/',
-  },
-  {
-    text: 'Конкурсы',
-    link: '/',
-  },
-  {
-    text: 'Проекты',
-    link: '/',
-  },
-  {
-    text: 'О библиотеке',
-    link: '/',
-  },
-  {
-    text: 'Коллегам',
-    link: '/',
-  },
-  {
-    text: 'Документы',
-    link: '/',
-  },
-];
 const items = ref<NavigationMenuItem[]>([
   {
     label: 'Читателям',

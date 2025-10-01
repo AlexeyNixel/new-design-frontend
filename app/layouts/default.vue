@@ -3,6 +3,7 @@
 <template>
   <div class="app-layout">
     <LayoutHeader />
+    <MainNavigation />
     <main class="main-content">
       <slot />
     </main>
@@ -15,11 +16,11 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  //margin: 0 20px;
 }
 
 .main-content {
   flex: 1 0 auto;
   width: 100%;
+  margin: 0 80px;
 }
 </style>

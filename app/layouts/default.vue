@@ -2,7 +2,9 @@
 
 <template>
   <div class="app-layout">
-    <LayoutHeader />
+    <div class="max-w-[1710px] w-full mx-auto">
+      <LayoutHeader />
+    </div>
     <MainNavigation />
     <main class="main-content">
       <slot />
@@ -19,8 +21,9 @@
 }
 
 .main-content {
+  flex-direction: column;
   flex: 1 0 auto;
-  width: 100%;
-  margin: 0 80px;
+  margin: 0 auto;
+  max-width: 1710px;
 }
 </style>

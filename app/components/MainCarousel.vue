@@ -1,32 +1,37 @@
 <template>
-  <ClientOnly>
-    <swiper-container class="w-2/3 h-[600px] rounded-xl" ref="containerRef">
-      <swiper-slide
-        class="rounded-xl"
-        v-for="item in slides.data"
-        :key="item.id"
-      >
-        <img
-          class="h-full object-cover rounded-xl"
-          :src="`http://static.infomania.ru` + item.image.path"
-          alt=""
-        />
-      </swiper-slide>
-    </swiper-container>
-  </ClientOnly>
+  <UCarousel
+    arrows
+    loop
+    dots
+    :ui="ui"
+    v-slot="{ item }"
+    :items="slides"
+    class="h-[700px] rounded-xl"
+  >
+    <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.entry.slug } }">
+      <img :src="item.image.preview" alt="" class="h-full rounded" />
+    </NuxtLink>
+  </UCarousel>
 </template>
 
 <script setup lang="ts">
-const containerRef = ref();
+import { useSlides } from '~~/services/api/slidesService';
 
-const slides = await $fetch('http://api.infomania.ru/api/slides', {
-  params: {
-    include: 'image',
-    orderBy: '-createdAt',
-  },
+const slideService = useSlides();
+const ui = {
+  viewport: 'h-full rounded',
+  item: 'h-full',
+  container: 'h-full',
+  prev: 'rounded ml-[60px] bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
+  next: ' rounded mr-[60px] bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
+  dots: 'bottom-5',
+  dot: 'w-6 h-1',
+};
+const { data: slides } = await slideService.getAllSlides({
+  orderBy: '-createdAt',
+  pageSize: 5,
+  include: 'image,entry',
 });
-
-console.log(slides);
 </script>
 
 <style scoped></style>

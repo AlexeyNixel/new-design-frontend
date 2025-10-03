@@ -2,26 +2,44 @@
 @import '@nuxt/ui';
 
 @font-face {
-  font-family: 'RootUI';
-  src: url('../fonts/pt-root-ui_regular.woff2') format('woff2');
-  src: url('../fonts/pt-root-ui_regular.woff') format('woff');
-  font-weight: 400;
-  font-display: swap;
+    font-family: 'RootUI';
+    src: url('../fonts/pt-root-ui_regular.woff2') format('woff2');
+    src: url('../fonts/pt-root-ui_regular.woff') format('woff');
+    font-weight: 400;
+    font-display: swap;
 }
 
 @font-face {
-  font-family: 'RootUI';
-  src: url('../fonts/pt-root-ui_bold.woff2') format('woff2');
-  src: url('../fonts/pt-root-ui_bold.woff') format('woff');
-  font-weight: 700;
-  font-display: swap;
+    font-family: 'RootUI';
+    src: url('../fonts/pt-root-ui_bold.woff2') format('woff2');
+    src: url('../fonts/pt-root-ui_bold.woff') format('woff');
+    font-weight: 700;
+    font-display: swap;
+}
+
+html {
+    @apply bg-neutral-400;
 }
 
 body {
-  font-family: 'RootUI', serif;
-  font-weight: 400;
+    @apply bg-neutral-100;
+    font-family: 'RootUI', serif;
+    font-weight: 400;
+
+
 }
 
 :root {
-  --ui-text-muted: white;
+    /*--ui-text-muted: white;*/
+    --color-primary-50: #0b0f1dff;
+    --color-primary-100: #0c1120ff;
+    --color-primary-200: #0d1323ff;
+    --color-primary-300: #0e1527ff;
+    --color-primary-400: #0f172bff;
+    --color-primary-500: #1e2538ff;
+    --color-primary-600: #2c3345ff;
+    --color-primary-700: #484f5fff;
+    --color-primary-800: #808692ff;
+    --color-primary-900: #f1f5f9ff;
+
 }

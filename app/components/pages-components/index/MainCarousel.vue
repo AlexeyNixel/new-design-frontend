@@ -6,10 +6,10 @@
     :ui="ui"
     v-slot="{ item }"
     :items="slides"
-    class="h-[500px] rounded-xl"
+    class="h-[500px] rounded-xl shadow"
   >
     <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.entry.slug } }">
-      <img :src="item.image.preview" alt="" class="h-full rounded" />
+      <img :src="item.image.preview" alt="" class="h-full rounded-xl" />
     </NuxtLink>
   </UCarousel>
 </template>
@@ -19,7 +19,7 @@ import { useSlides } from '~~/services/api/slidesService';
 
 const slideService = useSlides();
 const ui = {
-  viewport: 'h-full rounded',
+  viewport: 'h-full rounded-xl',
   item: 'h-full',
   container: 'h-full',
   prev: 'rounded ml-[60px] bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',

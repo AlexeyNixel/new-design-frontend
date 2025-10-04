@@ -6,10 +6,10 @@
       </div>
 
       <div class="col-span-1 flex flex-col gap-5 w-full">
-        <div class="bg-white rounded-xl shadow p-4 w-full h-1/2">
-          <PagesComponentsIndexNotificationBanner />
+        <div class="bg-white rounded-xl shadow p-4 w-full h-1/3">
+          <PagesComponentsIndexInfoBanner />
         </div>
-        <div class="bg-white p-4 rounded-xl shadow flex-1 h-1/2">
+        <div class="bg-white p-4 rounded-xl shadow flex-1 h-2/3">
           <PagesComponentsIndexEventCalendar />
         </div>
       </div>

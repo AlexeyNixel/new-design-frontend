@@ -1,3 +1,5 @@
+import { type File } from './file.type';
+
 export interface Book {
   id: string;
   oldId: number;
@@ -12,5 +14,5 @@ export interface Book {
   link: string;
   storagePlace: string;
   isVideo: boolean;
-  preview: any;
+  preview: File;
 }

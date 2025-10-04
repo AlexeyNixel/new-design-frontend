@@ -41,5 +41,15 @@ body {
     --color-primary-700: #484f5fff;
     --color-primary-800: #808692ff;
     --color-primary-900: #f1f5f9ff;
+    h1 {
+        @apply font-bold text-3xl mb-2;
+    }
 
+    h2 {
+        @apply font-bold text-2xl mb-2;
+    }
+
+    h2 {
+        @apply font-bold text-xl mb-2;
+    }
 }

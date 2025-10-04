@@ -8,5 +8,8 @@ export const useBookApi = () => {
   return {
     getAllBooks: (params?: any) =>
       api.get<Book[]>(API_ENDPOINTS.book, { params: params }),
+
+    getOneBook: (id: string, params?: any) =>
+      api.getOne<Book>(API_ENDPOINTS.book, id, { params: params }),
   };
 };

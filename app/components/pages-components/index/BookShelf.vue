@@ -3,7 +3,7 @@
     <header class="flex justify-between items-center">
       <h1 class="text-3xl font-bold mb-4">Книги</h1>
       <NuxtLink
-        to="/"
+        to="/public"
         class="flex items-center font-bold text-xl hover:underline"
       >
         <span> Полный список книг </span>

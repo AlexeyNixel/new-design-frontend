@@ -21,16 +21,8 @@
       </swiper-container>
 
       <div class="h-max flex gap-2 justify-end">
-        <UButton
-          color="primary"
-          @click="swiper.prev()"
-          icon="i-heroicons-arrow-left-20-solid"
-        />
-        <UButton
-          color="primary"
-          @click="swiper.next()"
-          icon="i-heroicons-arrow-right-20-solid"
-        />
+        <UiSwiperButton direction="left" @click="swiper.prev()" />
+        <UiSwiperButton direction="right" @click="swiper.next()" />
       </div>
     </div>
   </ClientOnly>

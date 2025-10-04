@@ -5,7 +5,7 @@
     <div class="max-w-[1710px] w-full mx-auto">
       <LayoutHeader />
     </div>
-    <MainNavigation />
+    <PagesComponentsIndexMainNavigation />
     <main class="main-content">
       <slot />
     </main>

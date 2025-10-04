@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { CalendarDate } from '@internationalized/date';
-
 const { data: events } = await $fetch('http://api.infomania.ru/api/affiche', {
   params: {
     orderBy: '-eventDate',

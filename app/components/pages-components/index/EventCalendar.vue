@@ -41,23 +41,21 @@ function getColorByDate(date: Date) {
   <div class="flex">
     <UCalendar class="w-4/5" color="primary">
       <template #day="{ day }">
-        <UChip
-          :show="!!getColorByDate(day.toDate('UTC'))"
-          :color="getColorByDate(day.toDate('UTC'))"
-          size="2xs"
+        <UTooltip
+          :text="
+            getColorByDate(day.toDate('UTC')) === 'warning'
+              ? 'Выходной'
+              : 'События'
+          "
         >
-          <UTooltip
-            :text="
-              getColorByDate(day.toDate('UTC')) === 'warning'
-                ? 'Выходной'
-                : 'События'
-            "
+          <UButton
+            :variant="!!getColorByDate(day.toDate('UTC')) ? 'soft' : 'link'"
+            :color="getColorByDate(day.toDate('UTC'))"
+            class="flex items-center justify-center rounded-full h-[34px] w-[34px]"
           >
-            <UButton variant="link" color="neutral">
-              {{ day.day }}
-            </UButton>
-          </UTooltip>
-        </UChip>
+            {{ day.day }}
+          </UButton>
+        </UTooltip>
       </template>
     </UCalendar>
     <div class="w-[60%] text-wrap">

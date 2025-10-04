@@ -6,7 +6,7 @@
     :ui="ui"
     v-slot="{ item }"
     :items="slides"
-    class="h-[700px] rounded-xl"
+    class="h-[500px] rounded-xl"
   >
     <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.entry.slug } }">
       <img :src="item.image.preview" alt="" class="h-full rounded" />

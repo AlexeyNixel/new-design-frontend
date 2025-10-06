@@ -7,4 +7,8 @@
 </template>
 <script setup lang="ts">
 import { ru } from '@nuxt/ui/locale';
+
+useSeoMeta({
+  title: 'НОМБ',
+});
 </script>

@@ -38,6 +38,10 @@ const items = ref([
     icon: 'i-heroicons-document-text',
   },
 ]);
+
+useSeoMeta({
+  title: entry.title,
+});
 </script>
 
 <style scoped>

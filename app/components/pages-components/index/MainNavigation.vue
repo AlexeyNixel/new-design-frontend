@@ -1,41 +1,40 @@
 <template>
   <div class="bg-primary my-4 p-2">
     <div class="flex justify-between mx-auto max-w-[1710px]">
-      <UPopover mode="hover" v-for="item in items">
-        <UButton
-          variant="link"
-          class="text-white hover:text-muted active:text-muted text-md"
-          :icon="item.icon"
-        >
-          {{ item.label }}</UButton
-        >
-
-        <template #content>
-          <div class="p-2">
-            <div
-              v-if="item?.children?.length > 1"
-              v-for="child in item?.children"
-              class="p-2 flex gap-2 items-center rounded hover:bg-neutral-100"
-            >
-              <icon :name="child.icon" class="text-2xl"></icon>
-              <div>
-                <h3 class="my-2 font-bold">{{ child.label }}</h3>
-                <div class="text-muted">{{ child.description }}</div>
-              </div>
-            </div>
-            <div v-else class="h-[100px] w-[100px]">123</div>
-          </div>
-        </template>
-      </UPopover>
+      <UiCustomPopover
+        v-for="(menu, index) in menus"
+        :key="index"
+        :label="menu.label"
+        :icon="menu.icon"
+        side="bottom"
+        mode="click"
+      >
+        <div class="flex flex-col">
+          <UiCustomPopover
+            v-if="menu.children"
+            v-for="(child, childIdx) in menu.children"
+            :key="childIdx"
+            :label="child.label"
+            :icon="child.icon"
+            side="right"
+            mode="hover"
+          >
+            <UButton
+              v-if="child.children"
+              v-for="(item, itemIdx) in child.children"
+              variant="link"
+              :key="itemIdx"
+              :label="item.label"
+              :icon="item.icon"
+            />
+          </UiCustomPopover>
+        </div>
+      </UiCustomPopover>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import type { Menu } from '~~/types/api';
-
-import type { NavigationMenuItem } from '#ui/components/NavigationMenu.vue';
-
 interface Menu {
   id: string;
   oldId: number;
@@ -50,25 +49,60 @@ interface MenuResponse {
   meta: any;
 }
 
-const items = ref<NavigationMenuItem[]>([
+const menus = ref([
   {
     label: 'Читателям',
     icon: 'i-lucide-book-open',
     children: [
       {
         label: 'Услуги',
-        description: 'Список услуг предостовляемый нашей библиотекой.',
         icon: 'i-lucide-house',
+        children: [
+          {
+            label: 'Ответы на вопросы',
+            icon: 'i-lucide-house',
+          },
+          {
+            label: 'Пушкинская карта',
+            icon: 'i-lucide-cloud-download',
+          },
+          {
+            label: 'Ассортимент услуг',
+            icon: 'i-lucide-smile',
+          },
+          {
+            label: 'Сервисные услуги',
+            icon: 'i-lucide-smile',
+          },
+          {
+            label: 'Личный кабинет',
+            icon: 'i-lucide-smile',
+          },
+          {
+            label: 'Виртуальная справка',
+            icon: 'i-lucide-smile',
+          },
+          {
+            label: 'Правила пользования',
+            icon: 'i-lucide-smile',
+          },
+          {
+            label: 'Правила выдачи книг из фонда',
+            icon: 'i-lucide-smile',
+          },
+          {
+            label: 'Обратная связь',
+            icon: 'i-lucide-smile',
+          },
+        ],
       },
       {
         label: 'Мероприятия',
-        description: 'Список мероприятий проходящих в нашей библиотеке.',
         icon: 'i-lucide-cloud-download',
       },
       {
         label: 'Объединения',
         icon: 'i-lucide-smile',
-        description: 'Кружки по интересам .',
       },
     ],
   },
@@ -78,18 +112,17 @@ const items = ref<NavigationMenuItem[]>([
     children: [
       {
         label: 'Услуги',
-        description: 'Список услуг предостовляемый нашей библиотекой.',
+
         icon: 'i-lucide-house',
       },
       {
         label: 'Мероприятия',
-        description: 'Список мероприятий проходящих в нашей библиотеке.',
+
         icon: 'i-lucide-cloud-download',
       },
       {
         label: 'Объединения',
         icon: 'i-lucide-smile',
-        description: 'Кружки по интересам .',
       },
     ],
   },
@@ -101,35 +134,29 @@ const items = ref<NavigationMenuItem[]>([
   {
     label: 'Конкурсы',
     icon: 'i-heroicons-gift',
-    children: [{}],
+    children: [],
   },
   {
     label: 'Проекты',
     icon: 'i-fluent-projection-screen-16-regular',
-    children: [{}],
+    children: [],
   },
   {
     label: 'О библиотеке',
     icon: 'i-heroicons-exclamation-circle',
-    children: [{}],
+    children: [],
   },
   {
     label: 'Коллегам',
     icon: 'i-heroicons-user-group',
-    children: [{}],
+    children: [],
   },
   {
     label: 'Документы',
     icon: 'i-heroicons-document',
-    children: [{}],
+    children: [],
   },
 ]);
-const { data: menus }: MenuResponse = await $fetch(
-  'http://api.infomania.ru/api/menu',
-  {
-    params: { pageSize: 50, type: 'COMMON' },
-  }
-);
 </script>
 
 <style scoped></style>

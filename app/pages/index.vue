@@ -16,6 +16,7 @@
     </div>
     <PagesComponentsIndexCatalogSearch />
     <PagesComponentsIndexBookShelf />
+    <PagesComponentsIndexNewsCarousel />
     <!--    <CustomSwiper />-->
   </div>
 </template>

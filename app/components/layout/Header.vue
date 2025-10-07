@@ -31,37 +31,72 @@
       </div>
     </div>
 
-    <div>
+    <div class="flex flex-row gap-2">
       <UButton
-        color="none"
+        v-for="(link, index) in socialLinks"
+        :key="index"
         class="text-4xl"
-        @click="
-          navigateTo('https://vk.com/oub_nsk', { open: { target: '_blank' } })
-        "
+        :to="link.link"
       >
-        <Icon name="i-simple-icons-vk"></Icon>
-      </UButton>
-      <UButton color="none" class="text-4xl">
-        <Icon name="i-simple-icons-vk"></Icon>
+        <Icon v-if="link.icon" :name="link.icon" />
+        <img class="h-9 w-9" v-else :src="link.src" alt="" />
       </UButton>
     </div>
 
     <div class="flex gap-2">
-      <UButton variant="soft" class="text-4xl">
-        <Icon name="i-heroicons-academic-cap"></Icon>
-      </UButton>
-      <UButton variant="soft" class="text-4xl">
-        <Icon name="i-mynaui-wheelchair-solid"></Icon>
-      </UButton>
-      <UButton variant="soft" class="text-4xl">
-        <Icon name="i-heroicons-eye"></Icon>
-      </UButton>
+      <UPopover
+        v-for="(link, index) in navigateLinks"
+        :key="index"
+        mode="hover"
+      >
+        <UButton class="text-4xl" :to="link.link">
+          <Icon :name="link.icon" />
+        </UButton>
+
+        <template #content>
+          <div class="p-1">{{ link.popover }}</div>
+        </template>
+      </UPopover>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
 import { ModalsLibraryOnMap, ModalsWorktimeLibrary } from '#components';
+
+const navigateLinks = [
+  {
+    icon: 'i-heroicons-academic-cap',
+    popover:
+      'Сведения об организации, осуществляющей образовательную деятельность',
+    link: '/',
+  },
+  {
+    icon: 'i-mynaui-wheelchair-solid',
+    popover: 'Доступная среда',
+    link: '/',
+  },
+  {
+    icon: 'i-heroicons-eye',
+    popover: 'Версия для слабовидящих',
+    link: '/',
+  },
+  {
+    icon: 'i-heroicons-outline-search',
+    popover: 'Поиск по сайту',
+    link: '/',
+  },
+];
+const socialLinks = [
+  {
+    icon: 'i-bxl-vk',
+    link: 'https://vk.com/oub_nsk',
+  },
+  {
+    icon: 'i-ix-telegram-logo',
+    link: 'https://t.me/oub_nsk',
+  },
+];
 </script>
 
 <style scoped></style>

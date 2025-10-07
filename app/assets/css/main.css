@@ -1,20 +1,10 @@
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@font-face {
-    font-family: 'RootUI';
-    src: url('../fonts/pt-root-ui_regular.woff2') format('woff2');
-    src: url('../fonts/pt-root-ui_regular.woff') format('woff');
-    font-weight: 400;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'RootUI';
-    src: url('../fonts/pt-root-ui_bold.woff2') format('woff2');
-    src: url('../fonts/pt-root-ui_bold.woff') format('woff');
-    font-weight: 700;
-    font-display: swap;
+@theme {
+    --breakpoint-xs: 30rem;
+    --breakpoint-2xl: 100rem;
+    --breakpoint-3xl: 110rem;
 }
 
 html {
@@ -25,8 +15,6 @@ body {
     @apply bg-neutral-100;
     font-family: 'Montserrat', serif;
     font-weight: 400;
-
-
 }
 
 :root {

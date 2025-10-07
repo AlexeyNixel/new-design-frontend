@@ -1,16 +1,24 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt'],
-  css: ['~/assets/css/main.css'],
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE,
     },
   },
+  modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt', '@nuxtjs/google-fonts'],
+  css: ['~/assets/css/main.css'],
+
   ui: {
     colorMode: false,
   },
+
+  googleFonts: {
+    families: {
+      Montserrat: { wght: [400, 700] },
+    },
+  },
+
   dayjs: {
     locales: ['ru'],
     defaultLocale: 'ru',

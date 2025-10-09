@@ -6,8 +6,10 @@
       <LayoutHeader />
     </div>
     <PagesComponentsIndexMainNavigation />
-    <main class="base-layout flex-[1_0_auto] mx-auto">
-      <slot />
+    <main class="flex-[1_0_auto]">
+      <CommonContentContainer>
+        <slot />
+      </CommonContentContainer>
     </main>
     <LayoutFooter />
   </div>

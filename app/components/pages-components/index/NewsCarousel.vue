@@ -1,20 +1,16 @@
 <template>
-  <div>
-    <h1>События</h1>
+  <div class="flex gap-5">
+    <NuxtLink
+      class="flex py-5 flip items-center bg-red-500 p-2 text-white hover:bg-red-600 hover:cursor-pointer font-bold text-lg"
+    >
+      <span> Все события </span>
+      <Icon name="i-heroicons-arrow-up-16-solid" />
+    </NuxtLink>
 
-    <div class="flex gap-5">
-      <NuxtLink
-        class="flex py-5 flip items-center bg-red-500 p-2 text-white hover:bg-red-600 hover:cursor-pointer font-bold text-lg"
-      >
-        <span> Все события </span>
-        <Icon name="i-heroicons-arrow-up-16-solid" />
-      </NuxtLink>
-
-      <div class="w-full">
-        <UCarousel arrows loop :items="entry" :ui="ui" v-slot="{ item }">
-          <EntryCard :entry="item" />
-        </UCarousel>
-      </div>
+    <div class="w-full">
+      <UCarousel arrows loop :items="entry" :ui="ui" v-slot="{ item }">
+        <EntryCard :entry="item" />
+      </UCarousel>
     </div>
   </div>
 </template>

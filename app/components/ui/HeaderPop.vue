@@ -1,11 +1,11 @@
 <template>
   <UPopover mode="hover">
     <div
-      class="grid grid-cols-[auto_minmax(120px,_180px)] gap-2 p-1 items-center justify-center rounded-xl transition hover:bg-primary hover:text-white hover:cursor-pointer"
+      class="grid grid-cols-[auto_minmax(120px,_180px)] gap-2 p-1 items-center justify-center rounded-xl transition hover:ring-2 ring-primary hover:cursor-pointer"
     >
       <Icon :name="icon" :class="`text-${size}`" />
       <div>
-        <span class="">{{ label }}</span>
+        <span class="text-sm">{{ label }}</span>
       </div>
     </div>
 

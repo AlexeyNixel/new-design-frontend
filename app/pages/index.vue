@@ -1,23 +1,32 @@
 <template>
   <div class="flex flex-col gap-5">
-    <div class="grid grid-cols-3 gap-5">
-      <div class="col-span-2">
-        <PagesComponentsIndexMainCarousel />
-      </div>
+    <CommonContentContainer>
+      <div class="grid grid-cols-3 gap-5">
+        <div class="col-span-2">
+          <PagesComponentsIndexMainCarousel />
+        </div>
 
-      <div class="col-span-1 flex flex-col gap-5 w-full">
-        <div class="bg-white rounded-xl shadow p-4 w-full h-1/3">
-          <PagesComponentsIndexInfoBanner />
-        </div>
-        <div class="bg-white p-4 rounded-xl shadow flex-1 h-2/3">
-          <PagesComponentsIndexEventCalendar />
+        <div class="col-span-1 flex flex-col gap-5 w-full">
+          <div class="bg-white rounded-xl shadow p-4 w-full h-1/3">
+            <PagesComponentsIndexInfoBanner />
+          </div>
+          <div class="bg-white p-4 rounded-xl shadow flex-1 h-2/3">
+            <PagesComponentsIndexEventCalendar />
+          </div>
         </div>
       </div>
-    </div>
-    <PagesComponentsIndexCatalogSearch />
-    <PagesComponentsIndexBookShelf />
-    <PagesComponentsIndexNewsCarousel />
-    <!--    <CustomSwiper />-->
+      <div class="my-5">
+        <PagesComponentsIndexCatalogSearch class="w-full" />
+      </div>
+    </CommonContentContainer>
+
+    <CommonContentContainer title="Книги" bgGray>
+      <PagesComponentsIndexBookShelf />
+    </CommonContentContainer>
+
+    <CommonContentContainer title="События">
+      <PagesComponentsIndexNewsCarousel />
+    </CommonContentContainer>
   </div>
 </template>
 

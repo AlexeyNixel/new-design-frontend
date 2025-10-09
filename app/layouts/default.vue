@@ -5,11 +5,13 @@
     <div class="base-layout w-full mx-auto">
       <LayoutHeader />
     </div>
-    <PagesComponentsIndexMainNavigation />
+
+    <div class="my-4">
+      <PagesComponentsIndexMainNavigation />
+    </div>
+
     <main class="flex-[1_0_auto]">
-      <CommonContentContainer>
-        <slot />
-      </CommonContentContainer>
+      <slot />
     </main>
     <LayoutFooter />
   </div>

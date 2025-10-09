@@ -1,8 +1,8 @@
 <template>
   <UPopover
-    :mode="mode"
+    mode="hover"
     :content="{ side: side }"
-    class="transition hover:cursor-pointer hover:bg-red-600"
+    class="transition hover:cursor-pointer"
   >
     <UButton
       :label="label"

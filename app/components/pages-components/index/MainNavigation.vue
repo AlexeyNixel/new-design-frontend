@@ -1,36 +1,11 @@
 <template>
-  <div class="bg-primary my-4 p-2">
-    <div class="flex justify-between mx-auto max-w-[1710px]">
-      <UiCustomPopover
-        v-for="(menu, index) in menus"
-        :key="index"
-        :label="menu.label"
-        :icon="menu.icon"
-        side="bottom"
-        mode="click"
-      >
-        <div class="flex flex-col">
-          <UiCustomPopover
-            v-if="menu.children"
-            v-for="(child, childIdx) in menu.children"
-            :key="childIdx"
-            :label="child.label"
-            :icon="child.icon"
-            side="right"
-            mode="hover"
-          >
-            <UButton
-              v-if="child.children"
-              v-for="(item, itemIdx) in child.children"
-              variant="link"
-              :key="itemIdx"
-              :label="item.label"
-              :icon="item.icon"
-            />
-          </UiCustomPopover>
-        </div>
-      </UiCustomPopover>
-    </div>
+  <div class="w-full bg-primary">
+    <UNavigationMenu
+      color="info"
+      :ui="ui"
+      :items="items"
+      class="text-white max-w-[1710px] mx-auto"
+    />
   </div>
 </template>
 
@@ -48,6 +23,99 @@ interface MenuResponse {
   data: Menu[];
   meta: any;
 }
+
+const ui = {
+  root: '[&>div]:w-full',
+  label: 'text-white',
+  item: '[&>button]:text-white [&>button]:font-bold',
+  linkLeadingIcon: 'text-white',
+};
+
+const items = [
+  {
+    label: 'Читателям',
+    icon: 'i-lucide-book-open',
+    to: '',
+    children: [
+      {
+        label: 'Ответы на вопросы',
+        icon: 'i-lucide-house',
+      },
+      {
+        label: 'Пушкинская карта',
+        icon: 'i-lucide-cloud-download',
+      },
+      {
+        label: 'Ассортимент услуг',
+        icon: 'i-lucide-smile',
+      },
+      {
+        label: 'Сервисные услуги',
+        icon: 'i-lucide-smile',
+      },
+      {
+        label: 'Личный кабинет',
+        icon: 'i-lucide-smile',
+      },
+      {
+        label: 'Виртуальная справка',
+        icon: 'i-lucide-smile',
+      },
+      {
+        label: 'Правила пользования',
+        icon: 'i-lucide-smile',
+      },
+      {
+        label: 'Правила выдачи книг из фонда',
+        icon: 'i-lucide-smile',
+      },
+      {
+        label: 'Обратная связь',
+        icon: 'i-lucide-smile',
+      },
+    ],
+  },
+  {
+    label: 'Ресурсы',
+    icon: 'i-lucide-book-open',
+    to: '',
+    children: [
+      {
+        label: '123',
+      },
+    ],
+  },
+  {
+    label: 'Пространства',
+    icon: 'i-lucide-box',
+    to: '',
+  },
+  {
+    label: 'Конкурсы',
+    icon: 'i-heroicons-gift',
+    to: '',
+  },
+  {
+    label: 'Проекты',
+    icon: 'i-fluent-projection-screen-16-regular',
+    to: '',
+  },
+  {
+    label: 'О библиотеке',
+    icon: 'i-heroicons-exclamation-circle',
+    to: '',
+  },
+  {
+    label: 'Коллегам',
+    icon: 'i-heroicons-user-group',
+    to: '',
+  },
+  {
+    label: 'Документы',
+    icon: 'i-heroicons-document',
+    to: '',
+  },
+];
 
 const menus = ref([
   {
@@ -108,7 +176,7 @@ const menus = ref([
   },
   {
     label: 'Ресурсы',
-    icon: 'i-lucide-database',
+    icon: 'i-lucide-book-open',
     children: [
       {
         label: 'Услуги',

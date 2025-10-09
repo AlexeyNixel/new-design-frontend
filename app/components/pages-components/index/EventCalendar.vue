@@ -39,7 +39,7 @@ function getColorByDate(date: Date) {
 
 <template>
   <div class="flex">
-    <UCalendar class="w-4/5" color="primary">
+    <UCalendar class="w-full" color="primary">
       <template #day="{ day }">
         <UTooltip
           :text="
@@ -58,8 +58,8 @@ function getColorByDate(date: Date) {
         </UTooltip>
       </template>
     </UCalendar>
-    <div class="w-[60%] text-wrap">
-      * последний день месяца — технический день
-    </div>
+    <!--    <div class="w-[60%] text-wrap">-->
+    <!--      * последний день месяца — технический день-->
+    <!--    </div>-->
   </div>
 </template>

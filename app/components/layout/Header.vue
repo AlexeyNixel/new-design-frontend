@@ -37,6 +37,7 @@
         :key="index"
         class="text-4xl"
         :to="link.link"
+        variant="soft"
       >
         <Icon v-if="link.icon" :name="link.icon" />
         <img class="h-9 w-9" v-else :src="link.src" alt="" />
@@ -49,12 +50,12 @@
         :key="index"
         mode="hover"
       >
-        <UButton class="text-4xl" :to="link.link">
+        <UButton class="text-4xl" :to="link.link" variant="soft">
           <Icon :name="link.icon" />
         </UButton>
 
         <template #content>
-          <div class="p-1">{{ link.popover }}</div>
+          <div class="py-1 px-2 text-sm">{{ link.popover }}</div>
         </template>
       </UPopover>
     </div>

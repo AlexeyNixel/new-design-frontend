@@ -19,16 +19,18 @@ body {
 
 :root {
     /*--ui-text-muted: white;*/
-    --color-primary-50: #0b0f1dff;
-    --color-primary-100: #0c1120ff;
-    --color-primary-200: #0d1323ff;
-    --color-primary-300: #0e1527ff;
-    --color-primary-400: #0f172bff;
+    --color-primary-50: #e9fafd;
+    --color-primary-100: #c2f0f9;
+    --color-primary-200: #9be7f5;
+    --color-primary-300: #73ddf1;
+    --color-primary-400: #4cd4ed;
     --color-primary-500: #25cae9;
-    --color-primary-600: #2c3345ff;
-    --color-primary-700: #484f5fff;
-    --color-primary-800: #808692ff;
-    --color-primary-900: #f1f5f9ff;
+    --color-primary-600: #1d9fb7;
+    --color-primary-700: #157486;
+    --color-primary-800: #0d4954;
+    --color-primary-900: #061e23;
+
+
 
     h1 {
         @apply font-bold text-3xl mb-2;

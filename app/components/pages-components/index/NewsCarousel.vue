@@ -1,7 +1,7 @@
 <template>
   <div class="flex gap-5">
     <NuxtLink
-      class="flex py-5 flip items-center bg-red-500 p-2 text-white hover:bg-red-600 hover:cursor-pointer font-bold text-lg"
+      class="flex py-5 flip items-center bg-primary p-2 text-white transition hover:bg-primary-300 hover:cursor-pointer font-bold text-lg"
     >
       <span> Все события </span>
       <Icon name="i-heroicons-arrow-up-16-solid" />

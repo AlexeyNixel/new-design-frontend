@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <UBreadcrumb :items="items" />
+  <CommonContentContainer>
+    <UBreadcrumb :ui="ui" class="text-black" :items="items" />
     <header class="flex justify-between items-center">
       <h1 class="my-2 text-2xl font-bold">{{ entry.title }}</h1>
       <div class="font-bold">
@@ -8,12 +8,17 @@
       </div>
     </header>
 
-    <div class="indent-10" v-html="entry.content"></div>
+    <div class="ck-content indent-10" v-html="entry.content"></div>
     <USeparator class="my-5" color="primary" />
-  </div>
+  </CommonContentContainer>
 </template>
 <script setup lang="ts">
+import 'ckeditor5/ckeditor5.css';
 import { useEntryApi } from '~~/services/api/entryService';
+
+const ui = {
+  link: '[&>span]:text-black text-black',
+};
 
 const route = useRoute();
 const entryApi = useEntryApi();

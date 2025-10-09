@@ -15,12 +15,17 @@ body {
     @apply bg-neutral-100;
     font-family: 'Montserrat', serif;
     font-weight: 400;
+    
+    a:hover {
+        text-decoration: underline;
+    }
+    
 }
 
 :root {
     /*--ui-text-muted: white;*/
-    --color-primary-50: #e9fafd;
-    --color-primary-100: #c2f0f9;
+    --color-primary-50: #1d9fb7;
+    --color-primary-100: #06434f;
     --color-primary-200: #9be7f5;
     --color-primary-300: #73ddf1;
     --color-primary-400: #4cd4ed;

@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-vue": "^7.3.0",
     "@nuxt/ui": "^4.0.0",
     "@nuxtjs/google-fonts": "^3.2.0",
     "dayjs-nuxt": "^2.1.11",

@@ -1,6 +1,6 @@
 import { useRuntimeConfig } from 'nuxt/app';
 
-interface ApiResponse<T = any> {
+export interface ApiResponse<T = any> {
   data: T;
   meta?: {
     page: number;

@@ -11,14 +11,21 @@
   },
   "dependencies": {
     "@ckeditor/ckeditor5-vue": "^7.3.0",
+    "@nuxt/content": "^3.7.1",
     "@nuxt/ui": "^4.0.0",
     "@nuxtjs/google-fonts": "^3.2.0",
+    "@tailwindcss/vite": "^4.1.14",
+    "better-sqlite3": "^12.4.1",
     "dayjs-nuxt": "^2.1.11",
     "nuxt": "^4.1.2",
     "nuxt-swiper": "^2.0.1",
     "prettier": "^3.6.2",
+    "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3",
     "vue": "^3.5.22",
     "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "sass": "^1.93.2"
   }
 }

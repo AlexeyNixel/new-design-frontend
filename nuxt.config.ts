@@ -1,3 +1,5 @@
+import tailwindcss from '@tailwindcss/vite';
+
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -6,7 +8,13 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE,
     },
   },
-  modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt', '@nuxtjs/google-fonts'],
+  modules: [
+    '@nuxt/ui',
+    'nuxt-swiper',
+    'dayjs-nuxt',
+    '@nuxtjs/google-fonts',
+    '@nuxt/content',
+  ],
   css: ['~/assets/css/main.css'],
 
   ui: {
@@ -24,6 +32,7 @@ export default defineNuxtConfig({
     defaultLocale: 'ru',
   },
   vite: {
+    plugins: [tailwindcss()],
     server: {
       proxy: {
         '/site': {

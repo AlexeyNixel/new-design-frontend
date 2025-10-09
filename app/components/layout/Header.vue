@@ -85,7 +85,7 @@ const navigateLinks = [
   {
     icon: 'i-heroicons-outline-search',
     popover: 'Поиск по сайту',
-    link: '/',
+    link: '/entry',
   },
 ];
 const socialLinks = [

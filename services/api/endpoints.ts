@@ -9,4 +9,5 @@ export const API_ENDPOINTS = {
   file: '/api/file/',
   document: '/api/document/',
   book: '/api/book/',
+  video: '/api/video/',
 };

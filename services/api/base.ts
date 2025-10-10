@@ -17,7 +17,7 @@ export const useApi = () => {
 
   const get = async <T>(
     endpoint: string,
-    options: any
+    options?: any
   ): Promise<ApiResponse<T>> => {
     try {
       const res: { data: any; meta: any } = await $fetch(baseApi + endpoint, {

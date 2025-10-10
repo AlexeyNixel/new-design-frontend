@@ -70,7 +70,7 @@ const navigateLinks = [
     icon: 'i-heroicons-academic-cap',
     popover:
       'Сведения об организации, осуществляющей образовательную деятельность',
-    link: '/',
+    link: '/information',
   },
   {
     icon: 'i-mynaui-wheelchair-solid',

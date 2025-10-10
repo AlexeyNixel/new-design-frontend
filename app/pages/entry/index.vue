@@ -11,6 +11,59 @@
           class="w-full"
           icon="i-lucide-search"
           v-model="search"
+          @keydown.enter="handleSearchEntries"
+        >
+          <template #trailing>
+            <UPopover>
+              <UButton
+                color="neutral"
+                variant="link"
+                size="sm"
+                icon="i-heroicons-outline-filter"
+                aria-label="Фильтры поиска"
+              />
+
+              <template #content>
+                <div>
+                  <EntryFilter />
+                </div>
+              </template>
+            </UPopover>
+          </template>
+        </UInput>
+        <UButton class="ml-2" @click="handleSearchEntries">Найти</UButton>
+      </div>
+
+      <EntryTile
+        v-if="entries?.data"
+        v-for="entry in entries.data"
+        :key="entry.id"
+        :entry="entry"
+      />
+
+      <UPagination
+        show-edges
+        @update:page="handleSearchEntries"
+        v-model:page="page"
+        :total="entries?.meta?.total"
+        class="flex items-center justify-center"
+      />
+    </CommonContentContainer>
+  </div>
+</template>
+<template>
+  <div>
+    <CommonContentContainer>
+      <UBreadcrumb :ui="ui" class="text-black mb-4" :items="items" />
+
+      <div class="flex mb-8">
+        <UInput
+          color="primary"
+          size="xl"
+          placeholder="Поиск новостей"
+          class="w-full"
+          icon="i-lucide-search"
+          v-model="search"
         />
         <UButton class="ml-2" @click="handleSearchEntries">Найти</UButton>
       </div>

@@ -134,6 +134,9 @@ useSeoMeta({
 </script>
 
 <style scoped>
+:deep(p) {
+  @apply indent-4 mb-2;
+}
 @import '~/assets/css/main.css';
 
 .news-article {

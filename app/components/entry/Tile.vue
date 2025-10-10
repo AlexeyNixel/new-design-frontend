@@ -4,7 +4,7 @@
     class="news-tile"
   >
     <div class="news-preview">
-      <img :src="entry.preview.path" :alt="entry.title" loading="lazy" />
+      <img :src="entry?.preview?.path" :alt="entry.title" loading="lazy" />
     </div>
 
     <div class="news-content">
@@ -54,7 +54,7 @@ const formateDate = useFormateDate();
 }
 
 .news-content {
-  @apply p-6 flex flex-col justify-between;
+  @apply p-6 flex flex-col justify-between w-full;
 }
 
 .news-title {

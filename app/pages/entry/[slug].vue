@@ -136,6 +136,10 @@ useSeoMeta({
 <style scoped>
 @import '~/assets/css/main.css';
 
+:deep(p) {
+  @apply indent-12 mb-2;
+}
+
 .news-article {
   @apply max-w-4xl mx-auto;
 }

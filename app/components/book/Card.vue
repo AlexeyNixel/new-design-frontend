@@ -1,9 +1,9 @@
 <template>
   <NuxtLink
     :to="{ name: 'book-slug', params: { slug: book.id } }"
-    class="h-full"
+    class="h-full flex justify-center mt-10"
   >
-    <img :src="book.preview.preview" :alt="book.title" class="h-[500px]" />
+    <img :src="book.preview.preview" :alt="book.title" class="h-[400px]" />
   </NuxtLink>
 </template>
 <script setup lang="ts">

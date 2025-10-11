@@ -28,12 +28,12 @@
       <PagesComponentsIndexNewsCarousel />
     </CommonContentContainer>
 
-    <CommonContentContainer>
+    <CommonContentContainer bgGray>
       <div class="flex gap-5">
-        <CommonContentContainer title="Викторины">
+        <CommonContentContainer title="Викторины" bgGray>
           <PagesComponentsIndexExhibitionContent />
         </CommonContentContainer>
-        <CommonContentContainer title="Викторины">
+        <CommonContentContainer title="Викторины" bgGray>
           <PagesComponentsIndexExhibitionContent />
         </CommonContentContainer>
       </div>

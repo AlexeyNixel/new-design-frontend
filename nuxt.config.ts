@@ -8,13 +8,7 @@ export default defineNuxtConfig({
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE,
     },
   },
-  modules: [
-    '@nuxt/ui',
-    'nuxt-swiper',
-    'dayjs-nuxt',
-    '@nuxtjs/google-fonts',
-    '@nuxt/content',
-  ],
+  modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt', '@nuxtjs/google-fonts'],
   css: ['~/assets/css/main.css'],
 
   ui: {

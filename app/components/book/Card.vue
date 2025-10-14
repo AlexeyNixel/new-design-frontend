@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="{ name: 'book-slug', params: { slug: book.id } }"
+    :to="{ name: 'books-slug', params: { slug: book.id } }"
     class="h-full flex justify-center mt-10"
   >
     <img :src="book.preview.preview" :alt="book.title" class="h-[400px]" />

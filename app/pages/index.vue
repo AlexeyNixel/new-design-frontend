@@ -27,6 +27,17 @@
     <CommonContentContainer title="События">
       <PagesComponentsIndexNewsCarousel />
     </CommonContentContainer>
+
+    <CommonContentContainer bgGray>
+      <div class="flex gap-5">
+        <CommonContentContainer title="Викторины" bgGray>
+          <PagesComponentsIndexExhibitionContent />
+        </CommonContentContainer>
+        <CommonContentContainer title="Викторины" bgGray>
+          <PagesComponentsIndexExhibitionContent />
+        </CommonContentContainer>
+      </div>
+    </CommonContentContainer>
   </div>
 </template>
 

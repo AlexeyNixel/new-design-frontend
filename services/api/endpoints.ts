@@ -4,9 +4,10 @@ export const API_ENDPOINTS = {
   menuItem: '/api/menu-item/',
   department: '/api/department/',
   rubric: '/api/rubric/',
-  affiche: '/api/affiche/',
+  event: '/api/affiche/',
   slides: '/api/slides/',
   file: '/api/file/',
   document: '/api/document/',
   book: '/api/book/',
+  video: '/api/video/',
 };

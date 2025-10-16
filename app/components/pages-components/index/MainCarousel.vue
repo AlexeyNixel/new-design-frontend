@@ -3,6 +3,7 @@
     arrows
     loop
     dots
+    :autoplay="{ delay: 6000 }"
     :ui="ui"
     v-slot="{ item }"
     :items="slides"

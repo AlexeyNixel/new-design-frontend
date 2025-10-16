@@ -36,7 +36,7 @@
         </div>
       </header>
 
-      <main class="news-content">
+      <main ref="contentRef" class="news-content">
         <div class="ck-content" v-html="entry.content"></div>
       </main>
 
@@ -69,11 +69,16 @@
 </template>
 
 <script setup lang="ts">
+import { ModalsCommon } from '#components';
 import 'ckeditor5/ckeditor5.css';
 import { useEntryApi } from '~~/services/api/entryService';
 
 const { $toast } = useNuxtApp();
 const route = useRoute();
+const overlay = useOverlay();
+const contentRef = ref();
+
+const modal = overlay.create(ModalsCommon);
 
 const formattedDate = useFormateDate();
 
@@ -89,8 +94,6 @@ const { data: entry } = await entryApi.getBySlugEntry(
     include: 'department',
   }
 );
-
-console.log(entry.content.length);
 
 const breadcrumbItems = ref([
   {
@@ -122,6 +125,24 @@ const shareNews = () => {
     copyLink();
   }
 };
+
+onMounted(() => {
+  if (import.meta.client) {
+    contentRef.value.addEventListener('click', (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+
+      if (target.tagName === 'IMG' && target instanceof HTMLImageElement) {
+        const images = contentRef.value.querySelectorAll('img');
+        const arrImageLink: string[] = Array.from(images).map(
+          (image: HTMLImageElement | string) => image.src
+        );
+
+        const startIndex = arrImageLink.findIndex((img) => img === target.src);
+        modal.open({ imgLinks: arrImageLink, startIndex: startIndex });
+      }
+    });
+  }
+});
 
 useSeoMeta({
   title: entry.title,

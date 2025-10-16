@@ -10,9 +10,9 @@
       </div>
 
       <div class="h-full">
-        <h3 class="h-full text-wrap wrap-anywhere p-2 shadow">
+        <div class="h-full text-wrap wrap-anywhere p-2 shadow text-lg">
           {{ entry.title }}
-        </h3>
+        </div>
       </div>
     </div>
   </NuxtLink>

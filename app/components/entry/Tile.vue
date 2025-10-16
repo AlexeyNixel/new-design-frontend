@@ -9,7 +9,7 @@
 
     <div class="news-content">
       <h2 class="news-title">{{ entry.title }}</h2>
-      <p class="news-description">{{ entry.desc }}</p>
+      <p class="news-description" v-html="entry.desc"></p>
 
       <div class="news-meta">
         <span class="news-date">{{ entry.department.title }}</span>

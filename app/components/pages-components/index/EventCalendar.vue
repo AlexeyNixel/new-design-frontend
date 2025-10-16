@@ -75,33 +75,37 @@ const changeMonth = async (direction: 'prev' | 'next') => {
 </script>
 
 <template>
-  <UCalendar
-    class="w-full"
-    v-model="calendarDate"
-    :yearControls="false"
-    :monthControls="false"
-  >
-    <template #day="{ day }">
-      <UTooltip>
-        <UButton
-          :variant="!!getColorByDate(day.toDate('UTC')) ? 'soft' : 'link'"
-          :color="getColorByDate(day.toDate('UTC')) || 'neutral'"
-          class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
-        >
-          {{ day.day }}
-        </UButton>
-      </UTooltip>
-    </template>
-  </UCalendar>
-  <UButton
-    icon="i-heroicons-arrow-left-16-solid"
-    @click="changeMonth('prev')"
-  />
+  <div>
+    <UCalendar
+      class="w-full"
+      v-model="calendarDate"
+      :yearControls="false"
+      :monthControls="false"
+    >
+      <template #day="{ day }">
+        <UTooltip>
+          <UButton
+            :variant="!!getColorByDate(day.toDate('UTC')) ? 'soft' : 'link'"
+            :color="getColorByDate(day.toDate('UTC')) || 'neutral'"
+            class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
+          >
+            {{ day.day }}
+          </UButton>
+        </UTooltip>
+      </template>
+    </UCalendar>
+    <div class="flex gap-8 mt-2 justify-end">
+      <UButton
+        icon="i-heroicons-arrow-left-16-solid"
+        @click="changeMonth('prev')"
+      />
 
-  <UButton
-    icon="i-heroicons-arrow-right-16-solid"
-    @click="changeMonth('next')"
-  />
+      <UButton
+        icon="i-heroicons-arrow-right-16-solid"
+        @click="changeMonth('next')"
+      />
+    </div>
+  </div>
 </template>
 
 <style scoped>

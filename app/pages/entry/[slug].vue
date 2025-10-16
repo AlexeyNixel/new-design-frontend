@@ -2,17 +2,21 @@
   <CommonContentContainer>
     <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-6" />
 
-    <article class="news-article">
-      <header class="news-header">
-        <div class="news-meta">
+    <article class="max-w-4xl mx-auto animate-fade-in-up">
+      <header class="mb-8">
+        <div class="mb-6">
           <UBadge
             :label="entry.department.title"
             color="primary"
             variant="soft"
             class="mb-3"
           />
-          <h1 class="news-title">{{ entry.title }}</h1>
-          <div class="news-info">
+          <h1
+            class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
+          >
+            {{ entry.title }}
+          </h1>
+          <div class="flex flex-wrap gap-4 text-sm mb-4">
             <div
               class="flex items-center gap-4 text-gray-600 dark:text-gray-400"
             >
@@ -29,7 +33,7 @@
               </div>
               <div class="flex items-center gap-1">
                 <UIcon name="i-heroicons-user" class="w-4 h-4" />
-                <span> Алексей Печенкин</span>
+                <span>Алексей Печенкин</span>
               </div>
             </div>
           </div>
@@ -40,7 +44,7 @@
         <div class="ck-content" v-html="entry.content"></div>
       </main>
 
-      <footer class="news-footer">
+      <footer class="mt-8">
         <USeparator class="my-6" />
 
         <div class="flex justify-between items-center">
@@ -149,104 +153,14 @@ useSeoMeta({
   description: entry.desc || entry.title,
   ogTitle: entry.title,
   ogDescription: entry.desc || entry.title,
-  // ogImage: entry.preview.path,
   twitterCard: 'summary_large_image',
 });
 </script>
 
-<style scoped>
-:deep(p) {
-  @apply indent-4 mb-2;
-}
+<style>
 @import '~/assets/css/main.css';
 
-:deep(p) {
-  @apply indent-12 mb-2;
-}
-
-.news-article {
-  @apply max-w-4xl mx-auto;
-}
-
-.news-header {
-  @apply mb-8;
-}
-
-.news-title {
-  @apply text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight;
-}
-
-.news-meta {
-  @apply mb-6;
-}
-
-.news-info {
-  @apply flex flex-wrap gap-4 text-sm mb-4;
-}
-
-.news-content {
-  /* Стили для улучшенного отображения контента CKEditor */
-  :deep(.ck-content) {
-    @apply leading-relaxed;
-
-    h2,
-    h3,
-    h4 {
-      @apply mt-8 mb-4 font-bold;
-    }
-
-    h2 {
-      @apply text-2xl;
-    }
-    h3 {
-      @apply text-xl;
-    }
-    h4 {
-      @apply text-lg;
-    }
-
-    p {
-      @apply mb-4 text-justify;
-    }
-
-    blockquote {
-      @apply border-l-4 border-primary-500 bg-primary-50 dark:bg-primary-900/20 pl-4 py-2 my-4 italic;
-    }
-
-    img {
-      @apply rounded-lg shadow-md mx-auto my-6;
-    }
-
-    ul,
-    ol {
-      @apply my-4 pl-6;
-    }
-
-    li {
-      @apply mb-2;
-    }
-
-    table {
-      @apply w-full border-collapse my-6;
-    }
-
-    th,
-    td {
-      @apply border border-gray-300 dark:border-gray-600 px-4 py-2;
-    }
-
-    th {
-      @apply bg-gray-50 dark:bg-gray-700 font-semibold;
-    }
-  }
-}
-
-.news-footer {
-  @apply mt-8;
-}
-
-/* Анимации */
-.news-article {
+.animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out;
 }
 
@@ -258,21 +172,6 @@ useSeoMeta({
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .news-title {
-    @apply text-2xl;
-  }
-
-  .news-info {
-    @apply flex-col gap-2;
-  }
-
-  .news-footer {
-    @apply flex-col gap-4;
   }
 }
 </style>

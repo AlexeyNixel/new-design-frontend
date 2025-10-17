@@ -158,8 +158,6 @@ useSeoMeta({
 </script>
 
 <style>
-@import '~/assets/css/main.css';
-
 .animate-fade-in-up {
   animation: fadeInUp 0.6s ease-out;
 }

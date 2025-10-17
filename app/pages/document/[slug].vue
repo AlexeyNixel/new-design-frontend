@@ -67,13 +67,6 @@ const { data: document } = await documentApi.getBySlugDocument(
   { include: 'document' }
 );
 
-onMounted(() => {
-  const iframe = documentRef.value.querySelectorAll('iframe');
-
-  console.log(iframe);
-  iframe[0].setAttribute('height', 100);
-});
-
 // SEO
 useSeoMeta({
   title: document.document.title,

@@ -1,6 +1,6 @@
 <template>
   <header class="flex justify-between items-center mt-4">
-    <NuxtLink to="/" class="text-primary text-5xl font-bold">НОМБ</NuxtLink>
+    <NuxtLink to="/" class="text-[#ff3700] text-5xl font-bold">НОМБ</NuxtLink>
 
     <div class="flex gap-10">
       <UiHeaderPop

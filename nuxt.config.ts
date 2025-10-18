@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     },
   },
   modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt', '@nuxtjs/google-fonts'],
-  css: ['~/assets/css/main.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/feedback-gos.css'],
 
   ui: {
     colorMode: false,

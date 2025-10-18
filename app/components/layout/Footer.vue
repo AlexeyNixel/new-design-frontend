@@ -70,26 +70,26 @@
     </div>
 
     <!-- Копирайт -->
-    <div class="flex justify-between border-t border-gray-800">
-      <NuxtLink
-        to="/document/antikorrupcionnaya-politika"
-        class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-400 text-sm"
-      >
-        Антикоррупционная политика
-      </NuxtLink>
-      <NuxtLink
-        to="/document/politika-obrabotki-i-zashity-personalnyh-dannyh"
-        class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-400 text-sm"
-      >
-        Политика обработки и защиты персональных данных
-      </NuxtLink>
-      <div
-        class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-400 text-sm"
-      >
-        © {{ currentYear }} Новосибирская областная молодежная библиотека. Все
-        права защищены.
-      </div>
-    </div>
+    <!--    <div class="flex justify-between border-t border-gray-800">-->
+    <!--      <NuxtLink-->
+    <!--        to="/document/antikorrupcionnaya-politika"-->
+    <!--        class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-400 text-sm"-->
+    <!--      >-->
+    <!--        Антикоррупционная политика-->
+    <!--      </NuxtLink>-->
+    <!--      <NuxtLink-->
+    <!--        to="/document/politika-obrabotki-i-zashity-personalnyh-dannyh"-->
+    <!--        class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-400 text-sm"-->
+    <!--      >-->
+    <!--        Политика обработки и защиты персональных данных-->
+    <!--      </NuxtLink>-->
+    <!--      <div-->
+    <!--        class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-400 text-sm"-->
+    <!--      >-->
+    <!--        © {{ currentYear }} Новосибирская областная молодежная библиотека. Все-->
+    <!--        права защищены.-->
+    <!--      </div>-->
+    <!--    </div>-->
   </footer>
 </template>
 

@@ -5,6 +5,7 @@
       :ui="ui"
       :items="items"
       class="text-white max-w-[1710px] mx-auto"
+      collapsed
     />
   </div>
 </template>

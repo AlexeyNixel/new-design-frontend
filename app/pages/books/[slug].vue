@@ -3,30 +3,32 @@
     <!-- Хлебные крошки -->
     <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-6" />
 
-    <div class="book-page">
+    <div class="max-w-6xl mx-auto">
       <!-- Основная информация о книге -->
-      <div class="book-layout">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start lg:gap-6">
         <!-- Левая колонка - обложка и мета-информация -->
-        <div class="book-cover-section">
-          <div class="book-cover-container">
+        <div class="lg:col-span-1">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-2xl sm:p-4 sm:rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+          >
             <img
               :src="book.preview.path"
               :alt="book.title"
-              class="book-cover"
+              class="w-full max-w-sm mx-auto rounded-lg shadow-md object-cover"
             />
-            <div class="book-badges">
+            <div class="flex flex-wrap gap-2 mt-4 justify-center">
               <UBadge
                 v-if="book.category"
                 :label="book.category"
                 color="primary"
                 variant="soft"
-                class="book-badge"
+                class="text-sm"
               />
               <UBadge
                 v-if="book.storagePlace"
                 :label="book.storagePlace"
                 variant="outline"
-                class="book-badge"
+                class="text-sm"
               />
             </div>
           </div>
@@ -45,14 +47,27 @@
         </div>
 
         <!-- Правая колонка - детали книги -->
-        <div class="book-details">
-          <header class="book-header">
-            <h1 class="book-title">{{ book.title }}</h1>
-            <p v-if="book.desc" class="book-description">{{ book.desc }}</p>
+        <div class="lg:col-span-2 space-y-6">
+          <header
+            class="bg-white dark:bg-gray-800 rounded-2xl sm:p-4 sm:rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
+          >
+            <h1
+              class="text-3xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
+            >
+              {{ book.title }}
+            </h1>
+            <p
+              v-if="book.desc"
+              class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
+            >
+              {{ book.desc }}
+            </p>
           </header>
 
           <!-- Контент книги -->
-          <div class="book-content">
+          <div
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 sm:p-4 sm:rounded-xl"
+          >
             <div class="ck-content" v-html="book.content"></div>
           </div>
         </div>
@@ -102,107 +117,7 @@ useSeoMeta({
 </script>
 
 <style scoped>
-@import '~/assets/css/main.css';
-
-.book-page {
-  @apply max-w-6xl mx-auto;
-}
-
-.book-layout {
-  @apply grid grid-cols-1 lg:grid-cols-3 gap-8 items-start;
-}
-
-.book-cover-section {
-  @apply lg:col-span-1;
-}
-
-.book-cover-container {
-  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700;
-}
-
-.book-cover {
-  @apply w-full max-w-sm mx-auto rounded-lg shadow-md object-cover;
-  aspect-ratio: 2/3;
-}
-
-.book-badges {
-  @apply flex flex-wrap gap-2 mt-4 justify-center;
-}
-
-.book-badge {
-  @apply text-sm;
-}
-
-.book-details {
-  @apply lg:col-span-2 space-y-6;
-}
-
-.book-header {
-  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700;
-}
-
-.book-title {
-  @apply text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight;
-}
-
-.book-description {
-  @apply text-lg text-gray-700 dark:text-gray-300 leading-relaxed;
-}
-
-.book-content {
-  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700;
-}
-
-/* Стили для контента книги */
-:deep(.ck-content) {
-  @apply leading-relaxed text-gray-700 dark:text-gray-300;
-
-  h2,
-  h3,
-  h4 {
-    @apply mt-6 mb-4 font-bold text-gray-900 dark:text-white;
-  }
-
-  h2 {
-    @apply text-2xl;
-  }
-  h3 {
-    @apply text-xl;
-  }
-  h4 {
-    @apply text-lg;
-  }
-
-  p {
-    @apply mb-4 leading-7;
-  }
-
-  blockquote {
-    @apply border-l-4 border-primary-500 bg-primary-50 dark:bg-primary-900/20 pl-4 py-2 my-4 italic text-gray-600 dark:text-gray-400;
-  }
-
-  ul,
-  ol {
-    @apply my-4 pl-6 space-y-2;
-  }
-
-  li {
-    @apply mb-1;
-  }
-
-  strong {
-    @apply font-semibold text-gray-900 dark:text-white;
-  }
-
-  em {
-    @apply italic;
-  }
-}
-
 /* Анимации */
-.book-layout {
-  animation: fadeInUp 0.6s ease-out;
-}
 
 @keyframes fadeInUp {
   from {
@@ -213,33 +128,5 @@ useSeoMeta({
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-/* Адаптивность */
-@media (max-width: 1023px) {
-  .book-layout {
-    @apply gap-6;
-  }
-
-  .book-title {
-    @apply text-2xl;
-  }
-}
-
-@media (max-width: 767px) {
-  .book-cover-container,
-  .book-header,
-  .book-content {
-    @apply p-4 rounded-xl;
-  }
-}
-
-/* Ховер-эффекты */
-.book-cover {
-  transition: transform 0.3s ease;
-}
-
-.book-cover:hover {
-  transform: scale(1.02);
 }
 </style>

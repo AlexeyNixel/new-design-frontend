@@ -3,13 +3,11 @@
     <div
       class="flex flex-row items-center justify-start gap-2 p-2 rounded-xl transition hover:ring-2 ring-primary hover:cursor-pointer w-full"
     >
-      <Icon
-        :name="icon"
-        :class="`text-${size.split(' ')[0]} lg:text-${size.split(' ')[1] || size.split(' ')[0]}`"
-      />
-      <div class="min-w-0 flex-1">
-        <span class="text-xs lg:text-sm leading-tight break-words">
+      <Icon :name="icon" class="text-xl lg:text-4xl" />
+      <div class="min-w-max flex-1">
+        <span class="text-xs lg:text-sm break-words leading-0">
           {{ label }}
+          <slot />
         </span>
       </div>
     </div>
@@ -26,7 +24,7 @@
 withDefaults(
   defineProps<{
     icon: string;
-    label: string;
+    label?: string;
     size?: string;
     isPopover?: boolean;
     modal?: Component;

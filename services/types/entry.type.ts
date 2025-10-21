@@ -16,4 +16,8 @@ export interface Entry {
   departmentId: string;
   pinned: boolean;
   preview: File;
+  department: {
+    title: string;
+    id: string;
+  };
 }

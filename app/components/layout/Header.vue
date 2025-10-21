@@ -3,12 +3,14 @@
     class="flex flex-col lg:flex-row justify-between items-start lg:items-center mt-4 gap-4 lg:gap-0 px-4 lg:px-0"
   >
     <!-- Логотип -->
-    <NuxtLink
+    <UButton
+      variant="link"
+      color="primary"
       to="/"
-      class="text-primary text-3xl lg:text-5xl font-bold w-full lg:w-auto text-center lg:text-left"
+      class="text-primary text-3xl lg:text-5xl font-bold w-full lg:w-auto text-center lg:text-left transition fill-primary hover:opacity-75"
     >
-      НОМБ
-    </NuxtLink>
+      <Logo class="w-48 h-max" />
+    </UButton>
 
     <!-- Контактная информация -->
     <div
@@ -25,11 +27,17 @@
         />
         <UiHeaderPop
           icon="i-heroicons-clock"
-          label="ВТ-ПТ — 10.00-20.00 СБ-ВС — 10.00-19.00 ПН — выходной день"
+          label=""
           size="2xl lg:5xl"
           :modal="ModalsWorktimeLibrary"
           class="flex-1"
-        />
+        >
+          <div class="leading-[18px]">
+            ВТ-ПТ — 10.00-20.00 <br />
+            СБ-ВС — 10.00-19.00 <br />
+            ПН — выходной день
+          </div>
+        </UiHeaderPop>
       </div>
 
       <!-- Телефон и email -->

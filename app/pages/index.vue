@@ -29,7 +29,7 @@
     </CommonContentContainer>
 
     <CommonContentContainer title="События">
-      <!--      <NewsCarousel />-->
+      <NewsCarousel />
     </CommonContentContainer>
 
     <CommonContentContainer bgGray>
@@ -43,16 +43,16 @@
       </div>
     </CommonContentContainer>
 
-    <!--    <CommonContentContainer>-->
-    <!--      <div class="flex">-->
-    <!--        <div class="w-1/2">-->
-    <!--          <FeedbackGos class="h-full" />-->
-    <!--        </div>-->
-    <!--        <div class="w-1/2">-->
-    <!--          <img src="/banner.png" alt="" />-->
-    <!--        </div>-->
-    <!--      </div>-->
-    <!--    </CommonContentContainer>-->
+    <CommonContentContainer>
+      <div class="flex gap-8">
+        <div class="w-1/2 h-[450px]">
+          <FeedbackGos class="h-full shadow overflow-hidden rounded-xl" />
+        </div>
+        <div class="w-1/2 shadow overflow-hidden rounded-xl">
+          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
+        </div>
+      </div>
+    </CommonContentContainer>
   </div>
 </template>
 

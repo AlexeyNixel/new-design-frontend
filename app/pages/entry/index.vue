@@ -61,6 +61,7 @@ import { useEntryApi } from '~~/services/api/entryService';
 import type { Entry } from '~~/services/types/entry.type';
 import type { ApiResponse } from '~~/services/api/base';
 import type { Filters } from '~/components/entry/Filter.vue';
+import dayjs from 'dayjs';
 
 const entryApi = useEntryApi();
 const { query } = useRoute();
@@ -96,6 +97,8 @@ const handleSearchEntries = async () => {
       department: filters.value.department,
       search: search.value || undefined,
       page: page.value,
+      fromDate: filters.value.year + '-01-01T00:00:00.000Z',
+      toDate: filters.value.year + '-12-31T00:00:00.000Z',
     });
   } catch (error) {
     console.error(error);

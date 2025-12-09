@@ -2,7 +2,11 @@
   <NuxtLink :to="{ name: 'entry-slug', params: { slug: entry.slug } }">
     <div class="relative flex flex-col h-full bg-white w-full">
       <div class="w-full h-full">
-        <img class="object-cover h-[300px]" :src="entry.preview.path" alt="" />
+        <img
+          class="object-cover h-[300px]"
+          :src="entry?.preview?.path"
+          alt=""
+        />
       </div>
 
       <div class="absolute top-5 right-0 bg-gray-200 text-black font-bold p-2">

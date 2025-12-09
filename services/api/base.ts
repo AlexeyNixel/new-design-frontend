@@ -35,6 +35,20 @@ export const useApi = () => {
     }
   };
 
+  const getWithoutPagination = async <T>(
+    endpoint: string,
+    options?: any
+  ): Promise<ApiResponse<T>> => {
+    try {
+      return await $fetch(baseApi + endpoint, {
+        method: 'GET',
+        ...options,
+      });
+    } catch (e) {
+      throw 'Неправильный запрос';
+    }
+  };
+
   const getOne = async <T>(
     endpoint: string,
     slug: string,
@@ -57,5 +71,6 @@ export const useApi = () => {
   return {
     get,
     getOne,
+    getWithoutPagination,
   };
 };

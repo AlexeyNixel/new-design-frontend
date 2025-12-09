@@ -7,9 +7,9 @@ export const useEntryApi = () => {
 
   return {
     getAllEntry: (params?: any) =>
-      api.get<Entry[]>(API_ENDPOINTS.entry, { params: params }),
+      api.get<Entry[]>(API_ENDPOINTS.post, { params: params }),
 
     getBySlugEntry: (slug: string, params?: any) =>
-      api.getOne<Entry>(API_ENDPOINTS.entry, slug, { params: params }),
+      api.getOne<Entry>(API_ENDPOINTS.post, slug, { params: params }),
   };
 };

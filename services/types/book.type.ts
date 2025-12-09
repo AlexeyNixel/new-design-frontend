@@ -16,3 +16,12 @@ export interface Book {
   isVideo: boolean;
   preview: File;
 }
+
+export interface BookCollections {
+  id: string;
+  label: string;
+  isDeleted: boolean;
+  previewFileId: string;
+  createdAt: string;
+  preview: File;
+}

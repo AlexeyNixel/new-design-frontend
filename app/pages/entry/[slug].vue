@@ -5,12 +5,15 @@
     <article class="max-w-4xl mx-auto animate-fade-in-up">
       <header class="mb-8">
         <div class="mb-6">
-          <UBadge
-            :label="entry.department.title"
-            color="primary"
-            variant="soft"
-            class="mb-3"
-          />
+          <div class="flex gap-2">
+            <UBadge
+              v-for="tag in entry.tags"
+              :label="tag.label"
+              color="primary"
+              variant="soft"
+              class="mb-3"
+            />
+          </div>
           <h1
             class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
           >
@@ -33,7 +36,7 @@
               </div>
               <div class="flex items-center gap-1">
                 <UIcon name="i-heroicons-user" class="w-4 h-4" />
-                <span>Алексей Печенкин</span>
+                <span>{{ entry.department.title }}</span>
               </div>
             </div>
           </div>
@@ -98,6 +101,8 @@ const { data: entry } = await entryApi.getBySlugEntry(
     include: 'department',
   }
 );
+
+console.log(entry);
 
 const breadcrumbItems = ref([
   {

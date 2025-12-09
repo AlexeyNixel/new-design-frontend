@@ -61,7 +61,6 @@ import { useEntryApi } from '~~/services/api/entryService';
 import type { Entry } from '~~/services/types/entry.type';
 import type { ApiResponse } from '~~/services/api/base';
 import type { Filters } from '~/components/entry/Filter.vue';
-import dayjs from 'dayjs';
 
 const entryApi = useEntryApi();
 const { query } = useRoute();
@@ -92,14 +91,11 @@ const filters = ref<Filters>({
 const handleSearchEntries = async () => {
   try {
     entries.value = await entryApi.getAllEntry({
-      include: 'preview,department',
-      orderBy: filters.value.sort,
-      department: filters.value.department,
+      include: 'preview, department',
       search: search.value || undefined,
       page: page.value,
-      fromDate: filters.value.year + '-01-01T00:00:00.000Z',
-      toDate: filters.value.year + '-12-31T00:00:00.000Z',
     });
+    console.log(entries.value);
   } catch (error) {
     console.error(error);
   }
@@ -111,7 +107,6 @@ const handleNavigate = async (localPage?: number) => {
   navigateTo({
     name: 'entry',
     query: {
-      department: filters.value.department,
       year: filters.value.year,
       sort: filters.value.sort,
       page: page.value,

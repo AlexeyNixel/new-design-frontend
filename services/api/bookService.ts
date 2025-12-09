@@ -1,5 +1,5 @@
 import { useApi } from './base';
-import { type Book } from '../types/book.type';
+import { type Book, type BookCollections } from '../types/book.type';
 import { API_ENDPOINTS } from './endpoints';
 
 export const useBookApi = () => {
@@ -11,5 +11,8 @@ export const useBookApi = () => {
 
     getOneBook: (id: string, params?: any) =>
       api.getOne<Book>(API_ENDPOINTS.book, id, { params: params }),
+
+    getAllCollections: (params?: any) =>
+      api.get<BookCollections[]>(API_ENDPOINTS.bookCollection, { params }),
   };
 };

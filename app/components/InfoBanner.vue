@@ -1,35 +1,39 @@
 <template>
-  <UCarousel
-    arrows
-    loop
-    :ui="ui"
-    :items="notifications"
-    v-slot="{ item }"
-    class="h-full"
-  >
-    <div class="flex flex-col justify-between h-full">
-      <div>
-        <h3 class="font-bold text-xl mb-2">{{ item.title }}</h3>
-        <p>{{ item.message }}</p>
+  <div>
+    <UCarousel
+      v-if="notifications"
+      arrows
+      loop
+      :ui="ui"
+      :items="notifications"
+      v-slot="{ item }"
+      class="h-full"
+    >
+      <div class="flex flex-col justify-between h-full">
+        <div>
+          <h3 class="font-bold text-xl mb-2">{{ item.title }}</h3>
+          <p>{{ item.description }}</p>
+        </div>
+        <NuxtLink>Подробнее</NuxtLink>
       </div>
-      <NuxtLink>Подробнее</NuxtLink>
+    </UCarousel>
+    <div v-else>
+      <div class="flex flex-col justify-between h-full">
+        <div>
+          <h3 class="font-bold text-xl mb-2">Новых уведомлений нет</h3>
+          <p>Тут может появиться важная информация</p>
+        </div>
+      </div>
     </div>
-  </UCarousel>
+  </div>
 </template>
 
 <script setup lang="ts">
-const notifications = [
-  {
-    title: 'Время работы библиотеки изменилось!',
-    message: 'Время работы библиотеки изменилось!',
-    link: '/',
-  },
-  {
-    title: 'Время работы библиотеки не изменилось!',
-    message: 'Время работы библиотеки не изменилось!',
-    link: '/',
-  },
-];
+import { useNotificationApi } from '~~/services/api/notification.api';
+
+const notificationApi = useNotificationApi();
+
+const { data: notifications } = await notificationApi.getAllNotifications();
 
 const ui = {
   viewport: 'h-full rounded',

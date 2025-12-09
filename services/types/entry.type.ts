@@ -8,7 +8,7 @@ export interface Entry {
   updatedAt: string;
   publishedAt: string;
   title: string;
-  desc: string;
+  description: string;
   content: string;
   slug: string;
   published: boolean;

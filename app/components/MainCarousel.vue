@@ -9,8 +9,8 @@
     :items="slides"
     class="h-[500px] rounded-xl shadow"
   >
-    <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.entry.slug } }">
-      <img :src="item.image.preview" alt="" class="h-full rounded-xl" />
+    <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.post.slug } }">
+      <img :src="item.image.path" alt="" class="h-full rounded-xl" />
     </NuxtLink>
   </UCarousel>
 </template>
@@ -29,9 +29,7 @@ const ui = {
   dot: 'w-6 h-1',
 };
 const { data: slides } = await slideService.getAllSlides({
-  orderBy: '-createdAt',
-  pageSize: 5,
-  include: 'image,entry',
+  limit: 5,
 });
 </script>
 

@@ -6,32 +6,37 @@ import dayjs from 'dayjs';
 
 const eventApi = useEventApi();
 const events = ref<Event[]>();
-const eventMap = ref(new Map<string, Event[]>());
-const calendarDate = shallowRef(new CalendarDate(2025, 10, 20));
+const now = new Date();
+const calendarDate = shallowRef(
+  new CalendarDate(now.getFullYear(), now.getMonth() + 1, now.getDate())
+);
+
+const isLoading = ref(false);
+
+const eventsByDate = ref<{ [key: string]: Event[] }>({});
 
 const fetchEvents = async (date: Date | any) => {
   const startDay = dayjs(date).startOf('month').format();
   const endDay = dayjs(date).endOf('month').format();
 
-  eventMap.value.clear();
+  eventsByDate.value = {};
 
   const { data } = await eventApi.getAllEvents({
-    pageSize: 100,
-    fromDate: startDay,
-    toDate: endDay,
-    orderBy: '-eventDate',
+    limit: 100,
+    startDate: startDay,
+    endDate: endDay,
   });
 
   events.value = data;
 
   if (Array.isArray(events.value)) {
-    events.value.forEach((event) => {
-      const date = dayjs(event.eventDate).format('YYYY-MM-DD');
+    events.value.forEach((event: Event) => {
+      const date = dayjs(event.eventTime).format('YYYY-MM-DD');
 
-      if (eventMap.value.has(date)) {
-        eventMap.value.get(date)!.push(event);
+      if (eventsByDate.value[date]) {
+        eventsByDate.value[date].push(event);
       } else {
-        eventMap.value.set(date, [event]);
+        eventsByDate.value[date] = [event];
       }
     });
   }
@@ -41,7 +46,7 @@ await fetchEvents(new Date());
 
 const isEvent = (date: Date) => {
   const dateString = dayjs(date).format('YYYY-MM-DD');
-  return eventMap.value.get(dateString);
+  return eventsByDate.value[dateString];
 };
 
 const isWeekend = (date: Date) => {
@@ -83,15 +88,37 @@ const changeMonth = async (direction: 'prev' | 'next') => {
       :monthControls="false"
     >
       <template #day="{ day }">
-        <UTooltip>
+        <UPopover mode="hover" :content="{ side: 'top' }">
           <UButton
-            :variant="!!getColorByDate(day.toDate('UTC')) ? 'soft' : 'link'"
-            :color="getColorByDate(day.toDate('UTC')) || 'neutral'"
+            :color="!!isEvent(day) ? 'secondary' : ''"
+            variant="soft"
             class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
           >
             {{ day.day }}
           </UButton>
-        </UTooltip>
+
+          <template v-if="isEvent(day)" #content>
+            <div class="p-1 flex flex-col gap-2">
+              <div
+                class="text-sm text-neutral-400 flex items-center justify-center"
+              >
+                {{ dayjs(day).format('dd, MMM DD, YYYY') }}
+              </div>
+              <div
+                v-for="event in isEvent(day)"
+                :key="event.id"
+                class="flex gap-2 text-sm"
+              >
+                <div class="text-primary font-bold">
+                  {{ dayjs(event.eventTime.slice(0, 19)).format('HH:ss') }}
+                </div>
+                <div>
+                  {{ event.title }}
+                </div>
+              </div>
+            </div>
+          </template>
+        </UPopover>
       </template>
     </UCalendar>
     <div class="flex gap-8 mt-2 justify-end">

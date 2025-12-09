@@ -9,16 +9,16 @@ export default defineNuxtConfig({
     },
   },
   modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt', '@nuxtjs/google-fonts'],
-  css: ['~/assets/css/main.css', '~/assets/css/feedback-gos.css'],
+  css: [
+    '~/assets/css/main.css',
+    '~/assets/css/fonts.css',
+    '~/assets/css/ck-content.css',
+    '~/assets/css/theme.css',
+    '~/assets/css/feedback-gos.css',
+  ],
 
   ui: {
     colorMode: false,
-  },
-
-  googleFonts: {
-    families: {
-      Montserrat: { wght: [400, 700] },
-    },
   },
 
   dayjs: {
@@ -30,6 +30,10 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         '/site': {
+          target: 'http://192.168.0.41:10001/',
+          changeOrigin: true,
+        },
+        '/dev': {
           target: 'http://192.168.0.41:10001/',
           changeOrigin: true,
         },

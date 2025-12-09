@@ -17,7 +17,7 @@
       <h2 class="text-2xl font-bold text-neutral-700 mb-3 overflow-hidden">
         {{ entry.title }}
       </h2>
-      <p class="text-neutral-700 mb-4 grow hidden" v-html="entry.desc"></p>
+      <div v-html="entry.description" class="text-neutral-700 mb-4 grow" />
 
       <div
         class="flex justify-between items-center my-auto pt-4 border-t-1 border-t-neutral-200"
@@ -39,7 +39,6 @@ defineProps<{
 const formateDate = useFormateDate();
 
 const notFoundImage = (e: any) => {
-  console.log(123);
   e.target.src = 'https://cdn1.flamp.ru/b1aea1d7e4be8c57b1e414678d5756f0.png';
 };
 </script>

@@ -8,7 +8,7 @@
     </NuxtLink>
 
     <div class="w-full">
-      <UCarousel arrows loop :items="entry" :ui="ui" v-slot="{ item }">
+      <UCarousel arrows :items="entry" :ui="ui" v-slot="{ item }">
         <EntryCard :entry="item" />
       </UCarousel>
     </div>
@@ -31,9 +31,8 @@ const ui = {
 const entryApi = useEntryApi();
 
 const { data: entry } = await entryApi.getAllEntry({
-  pageSize: 12,
+  limit: 12,
   include: 'preview',
-  orderBy: '-createdAt',
 });
 </script>
 

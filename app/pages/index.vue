@@ -32,16 +32,16 @@
       <NewsCarousel />
     </CommonContentContainer>
 
-    <CommonContentContainer bgGray>
-      <div class="flex gap-5">
-        <CommonContentContainer title="Викторины" bgGray>
-          <ExhibitionContent />
-        </CommonContentContainer>
-        <CommonContentContainer title="Викторины" bgGray>
-          <ExhibitionContent />
-        </CommonContentContainer>
-      </div>
-    </CommonContentContainer>
+    <!--        <CommonContentContainer bgGray>-->
+    <!--          <div class="flex gap-5">-->
+    <!--            <CommonContentContainer title="Викторины" bgGray>-->
+    <!--              <ExhibitionContent />-->
+    <!--            </CommonContentContainer>-->
+    <!--            <CommonContentContainer title="Викторины" bgGray>-->
+    <!--              <ExhibitionContent />-->
+    <!--            </CommonContentContainer>-->
+    <!--          </div>-->
+    <!--        </CommonContentContainer>-->
 
     <CommonContentContainer>
       <div class="flex gap-8">

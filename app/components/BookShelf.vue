@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import type { TabsItem } from '#ui/components/Tabs.vue';
-import { BookList } from '#components';
+import { BookCollections, BookList } from '#components';
 
 const items: TabsItem[] = [
   {
@@ -19,7 +19,7 @@ const items: TabsItem[] = [
   {
     label: 'Подборки',
     icon: 'i-heroicons-rectangle-stack',
-    component: '',
+    component: BookCollections,
   },
   {
     label: 'Видеообзоры',

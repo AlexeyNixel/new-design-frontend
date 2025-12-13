@@ -3,10 +3,14 @@
     :to="{ name: 'books-slug', params: { slug: book.id } }"
     class="h-full flex justify-center mt-10"
   >
-    <div class="flex flex-col">
-      <img :src="book?.preview?.path" :alt="book.title" class="h-[400px]" />
-      <h3>{{ book.title }}</h3>
-    </div>
+    <UPopover mode="hover">
+      <div class="flex flex-col">
+        <img :src="book?.preview?.path" :alt="book.title" class="h-[400px]" />
+      </div>
+      <template #content>
+        <div class="p-2">{{ book.title }}</div>
+      </template>
+    </UPopover>
   </NuxtLink>
 </template>
 <script setup lang="ts">

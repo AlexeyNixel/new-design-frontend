@@ -4,7 +4,7 @@ export interface Book {
   id: string;
   oldId: number;
   title: string;
-  desc: string;
+  description: string;
   content: string;
   fileId: string;
   createdAt: string;

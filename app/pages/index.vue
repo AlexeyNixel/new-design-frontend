@@ -15,7 +15,7 @@
           <div
             class="bg-white p-4 rounded-xl shadow w-full sm:w-1/2 xl:w-full xl:h-2/3"
           >
-            <EventCalendar />
+            <!--            <EventCalendar />-->
           </div>
         </div>
       </div>

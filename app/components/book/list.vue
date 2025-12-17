@@ -30,5 +30,4 @@ const { data: books } = await bookApi.getAllBooks({
   include: 'preview',
   pageSize: 9,
 });
-console.log(books);
 </script>

@@ -102,8 +102,6 @@ const { data: entry } = await entryApi.getBySlugEntry(
   }
 );
 
-console.log(entry);
-
 const breadcrumbItems = ref([
   {
     label: 'Главная',
@@ -162,19 +160,8 @@ useSeoMeta({
 });
 </script>
 
-<style>
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+<style scoped>
+:deep(.ck-content .table p) {
+  text-indent: 0 !important;
 }
 </style>

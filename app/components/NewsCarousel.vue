@@ -8,8 +8,14 @@
     </NuxtLink>
 
     <div class="w-full">
-      <UCarousel arrows :items="entry" :ui="ui" v-slot="{ item }">
-        <EntryCard :entry="item" />
+      <UCarousel
+        arrows
+        :items="entry"
+        :ui="ui"
+        v-slot="{ item, index }"
+        @select="handleSelect"
+      >
+        <EntryCard :class="`index-${index}`" :entry="item" />
       </UCarousel>
     </div>
   </div>
@@ -17,6 +23,8 @@
 
 <script setup lang="ts">
 import { useEntryApi } from '~~/services/api/entryService';
+
+const currentIndex = ref();
 
 const ui = {
   root: 'h-full flex',
@@ -34,10 +42,18 @@ const { data: entry } = await entryApi.getAllEntry({
   limit: 12,
   include: 'preview',
 });
+
+const handleSelect = (index: number) => {
+  currentIndex.value = index;
+};
 </script>
 
 <style scoped>
 .flip {
   writing-mode: sideways-lr;
+}
+
+.index-0 {
+  width: 50%;
 }
 </style>

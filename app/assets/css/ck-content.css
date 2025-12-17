@@ -4,7 +4,7 @@
 .ck-content {
     @apply leading-relaxed text-justify;
     a {
-        @apply text-primary-600 font-bold hover:underline;
+        @apply text-primary-600 underline hover:opacity-70 transition;
     }
 
     h2,

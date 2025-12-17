@@ -1,13 +1,29 @@
 <template>
   <div class="w-full bg-primary">
-    <UNavigationMenu
-      color="info"
-      :ui="ui"
-      :items="items"
-      label-key="title"
-      class="text-white max-w-[1710px] mx-auto"
-      collapsed
-    />
+    <div class="max-w-[1710px] mx-auto flex justify-between p-2">
+      <div v-for="item in items" :key="item.id">
+        <UDropdownMenu
+          :items="item.children"
+          label-key="title"
+          class="bg-transparent border-0 ring-0 text-white hover:bg-primary/100"
+        >
+          <!--          <template #item="{ item }">-->
+          <!--            <UButton-->
+          <!--              variant="link"-->
+          <!--              :icon="item.icon"-->
+          <!--              :label="item.title"-->
+          <!--              :to="item.url"-->
+          <!--            ></UButton>-->
+          <!--          </template>-->
+          <UButton
+            :label="item.title"
+            color="neutral"
+            variant="outline"
+            :icon="item.icon"
+          />
+        </UDropdownMenu>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,6 +54,7 @@ const ui = {
 const navigationApi = useNavigationApi();
 
 const items = await navigationApi.getAllNavigation();
+console.log(items);
 </script>
 
 <style scoped></style>

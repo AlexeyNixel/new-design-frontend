@@ -91,7 +91,6 @@ const departmentApi = useDepartmentApi();
 const { data: departments } = await departmentApi.getAllDepartments();
 const departmentOptions = ref<SelectItem[]>([]);
 
-console.log(departments);
 //
 // const sortOptions = ref<SelectItem[]>([
 //   {

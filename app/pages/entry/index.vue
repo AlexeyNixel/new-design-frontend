@@ -95,7 +95,6 @@ const handleSearchEntries = async () => {
       search: search.value || undefined,
       page: page.value,
     });
-    console.log(entries.value);
   } catch (error) {
     console.error(error);
   }

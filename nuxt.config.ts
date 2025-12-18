@@ -26,13 +26,30 @@ export default defineNuxtConfig({
     locales: ['ru'],
     defaultLocale: 'ru',
   },
+  nitro: {
+    devProxy: {
+      '/site': {
+        target: 'http://192.168.0.41:10001',
+        changeOrigin: true,
+      },
+    },
+
+    // Для production тоже нужно настроить routeRules
+    routeRules: {
+      '/site/**': {
+        proxy: 'http://192.168.0.41:10001/site/**',
+      },
+    },
+  },
+
   vite: {
     plugins: [tailwindcss()],
     server: {
       proxy: {
         '/site': {
-          target: 'http://192.168.0.41:10001/',
+          target: 'http://192.168.0.41:10001',
           changeOrigin: true,
+          rewrite: (path) => path,
         },
         '/dev': {
           target: 'http://192.168.0.41:10001/',

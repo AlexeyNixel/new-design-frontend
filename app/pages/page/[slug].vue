@@ -110,7 +110,7 @@ const route = useRoute();
 
 // Загружаем данные страницы
 const { data: page } = await useFetch<Page>(
-  `http://localhost:3333/api/page/${route.params.slug}`
+  `http://api2.infomania.ru/api/page/${route.params.slug}`
 );
 
 // Форматирование даты

@@ -20,14 +20,14 @@ export const useApi = () => {
     options?: any
   ): Promise<ApiResponse<T>> => {
     try {
-      const res: { data: any; meta: any } = await $fetch(baseApi + endpoint, {
+      const { data } = await useFetch(baseApi + endpoint, {
         method: 'GET',
         ...options,
       });
 
       return {
-        data: res.data,
-        meta: res.meta,
+        data: data.value.data,
+        meta: data.value.meta,
         status: 200,
       };
     } catch (e) {
@@ -40,10 +40,11 @@ export const useApi = () => {
     options?: any
   ): Promise<ApiResponse<T>> => {
     try {
-      return await $fetch(baseApi + endpoint, {
+      const { data } = await useFetch(baseApi + endpoint, {
         method: 'GET',
         ...options,
       });
+      return data.value as ApiResponse<T>;
     } catch (e) {
       throw 'Неправильный запрос';
     }
@@ -55,12 +56,12 @@ export const useApi = () => {
     options: any
   ): Promise<ApiResponse<T>> => {
     try {
-      const res: any = await $fetch(baseApi + endpoint + slug, {
+      const { data }: any = await useFetch(baseApi + endpoint + slug, {
         method: 'GET',
         ...options,
       });
       return {
-        data: res,
+        data: data.value,
         status: 200,
       };
     } catch (e) {

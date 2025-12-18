@@ -17,6 +17,10 @@ export default defineNuxtConfig({
     '~/assets/css/feedback-gos.css',
   ],
 
+  fonts: {
+    provider: 'bunny',
+  },
+
   ui: {
     colorMode: false,
   },
@@ -46,6 +50,11 @@ export default defineNuxtConfig({
           changeOrigin: true,
           //@ts-ignore
           rewrite: (path) => path.replace(/^\/entry/, ''),
+        },
+        '/api': {
+          target: 'http://api2.infomania.ru',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ''),
         },
       },
     },

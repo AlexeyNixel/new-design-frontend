@@ -65,11 +65,11 @@ export default defineNuxtConfig({
           //@ts-ignore
           rewrite: (path) => path.replace(/^\/entry/, ''),
         },
-        '/api': {
-          target: 'http://api2.infomania.ru',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ''),
-        },
+        // '/api': {
+        //   target: 'http://api2.infomania.ru',
+        //   changeOrigin: true,
+        //   rewrite: (path) => path.replace(/^\/api/, ''),
+        // },
       },
     },
   },

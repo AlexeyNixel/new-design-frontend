@@ -54,7 +54,6 @@ const ui = {
 const navigationApi = useNavigationApi();
 
 const items = await navigationApi.getAllNavigation();
-console.log(items);
 </script>
 
 <style scoped></style>

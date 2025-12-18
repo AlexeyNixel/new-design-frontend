@@ -17,12 +17,9 @@ export default defineNuxtConfig({
     '~/assets/css/feedback-gos.css',
   ],
 
-  fonts: {
-    provider: 'bunny',
-  },
-
   ui: {
     colorMode: false,
+    fonts: false,
   },
 
   dayjs: {

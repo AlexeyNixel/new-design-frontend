@@ -49,7 +49,6 @@ export default defineNuxtConfig({
         '/site': {
           target: 'http://192.168.0.41:10001',
           changeOrigin: true,
-          rewrite: (path) => path,
         },
         '/dev': {
           target: 'http://192.168.0.41:10001/',
@@ -59,17 +58,6 @@ export default defineNuxtConfig({
           target: 'http://192.168.0.41:10001/site',
           changeOrigin: true,
         },
-        '/news': {
-          target: 'http://dev.infomania.ru/',
-          changeOrigin: true,
-          //@ts-ignore
-          rewrite: (path) => path.replace(/^\/entry/, ''),
-        },
-        // '/api': {
-        //   target: 'http://api2.infomania.ru',
-        //   changeOrigin: true,
-        //   rewrite: (path) => path.replace(/^\/api/, ''),
-        // },
       },
     },
   },

@@ -22,6 +22,10 @@ export const useApi = () => {
     try {
       const { data } = await useFetch(baseApi + endpoint, {
         method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         ...options,
       });
 
@@ -42,6 +46,10 @@ export const useApi = () => {
     try {
       const { data } = await useFetch(baseApi + endpoint, {
         method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         ...options,
       });
       return data.value as ApiResponse<T>;
@@ -58,6 +66,10 @@ export const useApi = () => {
     try {
       const { data }: any = await useFetch(baseApi + endpoint + slug, {
         method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         ...options,
       });
       return {

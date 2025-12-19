@@ -18,7 +18,7 @@ const fetchEvents = async (date: Date | any) => {
 
   eventsByDate.value = {};
 
-  const { data } = await $fetch('http://localhost:3300/api/event', {
+  const { data } = await $fetch('http://api2.infomania.ru/api/event', {
     params: {
       startDate: startDay,
       endDate: endDay,

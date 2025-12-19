@@ -4,14 +4,11 @@ import type { Event } from '~~/services/types/event.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
 
-const eventApi = useEventApi();
 const events = ref<Event[]>();
 const now = new Date();
 const calendarDate = shallowRef(
   new CalendarDate(now.getFullYear(), now.getMonth() + 1, now.getDate())
 );
-
-const isLoading = ref(false);
 
 const eventsByDate = ref<{ [key: string]: Event[] }>({});
 
@@ -21,10 +18,12 @@ const fetchEvents = async (date: Date | any) => {
 
   eventsByDate.value = {};
 
-  const { data } = await eventApi.getAllEvents({
-    limit: 100,
-    startDate: startDay,
-    endDate: endDay,
+  const { data } = await $fetch('http://localhost:3300/api/event', {
+    params: {
+      startDate: startDay,
+      endDate: endDay,
+      limit: 100,
+    },
   });
 
   events.value = data;
@@ -42,15 +41,13 @@ const fetchEvents = async (date: Date | any) => {
   }
 };
 
-await fetchEvents(new Date());
-
 const isEvent = (date: Date) => {
   const dateString = dayjs(date).format('YYYY-MM-DD');
   return eventsByDate.value[dateString];
 };
 
 const isWeekend = (date: Date) => {
-  const day = date.getDay();
+  const day = dayjs(date).get('day');
   return day === 1;
 };
 
@@ -65,7 +62,7 @@ const getColorByDate = (date: Date) => {
     return 'info';
   }
 
-  return undefined;
+  return 'undefined';
 };
 
 const changeMonth = async (direction: 'prev' | 'next') => {
@@ -77,6 +74,10 @@ const changeMonth = async (direction: 'prev' | 'next') => {
 
   await fetchEvents(calendarDate.value);
 };
+
+onMounted(async () => {
+  await fetchEvents(new Date());
+});
 </script>
 
 <template>
@@ -88,14 +89,20 @@ const changeMonth = async (direction: 'prev' | 'next') => {
       :monthControls="false"
     >
       <template #day="{ day }">
-        <UPopover mode="hover" :content="{ side: 'top' }">
-          <UButton
-            :color="!!isEvent(day) ? 'secondary' : ''"
-            variant="soft"
-            class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
-          >
-            {{ day.day }}
-          </UButton>
+        <UPopover
+          mode="hover"
+          :content="{ side: 'bottom' }"
+          v-if="isEvent(day)"
+        >
+          <UChip :text="isEvent(day)?.length" size="xl">
+            <UButton
+              :color="getColorByDate(day)"
+              variant="soft"
+              class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
+            >
+              {{ day.day }}
+            </UButton>
+          </UChip>
 
           <template v-if="isEvent(day)" #content>
             <div class="p-1 flex flex-col gap-2">
@@ -119,6 +126,13 @@ const changeMonth = async (direction: 'prev' | 'next') => {
             </div>
           </template>
         </UPopover>
+        <UButton
+          :color="getColorByDate(day)"
+          class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
+          variant="soft"
+          v-else
+          >{{ day.day }}</UButton
+        >
       </template>
     </UCalendar>
     <div class="flex gap-8 mt-2 justify-end">

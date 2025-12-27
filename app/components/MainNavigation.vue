@@ -2,26 +2,7 @@
   <div class="w-full bg-primary">
     <div class="max-w-[1710px] mx-auto flex justify-between p-2">
       <div v-for="item in items" :key="item.id">
-        <UDropdownMenu
-          :items="item.children"
-          label-key="title"
-          class="bg-transparent border-0 ring-0 text-white hover:bg-primary/100"
-        >
-          <!--          <template #item="{ item }">-->
-          <!--            <UButton-->
-          <!--              variant="link"-->
-          <!--              :icon="item.icon"-->
-          <!--              :label="item.title"-->
-          <!--              :to="item.url"-->
-          <!--            ></UButton>-->
-          <!--          </template>-->
-          <UButton
-            :label="item.title"
-            color="neutral"
-            variant="outline"
-            :icon="item.icon"
-          />
-        </UDropdownMenu>
+        <MyPopover :navigation="item" />
       </div>
     </div>
   </div>
@@ -29,6 +10,7 @@
 
 <script setup lang="ts">
 import { useNavigationApi } from '~~/services/api/main-navigation.api';
+import MyPopover from '~/components/ui/MyPopover.vue';
 
 interface Menu {
   id: string;
@@ -54,6 +36,19 @@ const ui = {
 const navigationApi = useNavigationApi();
 
 const items = await navigationApi.getAllNavigation();
+
+const dropdownItems = [
+  { id: 1, label: 'Мой профиль', icon: 'i-heroicons-user-circle' },
+  { id: 2, label: 'Сообщения', icon: 'i-heroicons-envelope', to: '/messages' },
+  { id: 3, label: 'Уведомления', icon: 'i-heroicons-bell', disabled: true },
+  { type: 'separator' },
+  {
+    id: 4,
+    label: 'Выйти',
+    icon: 'i-heroicons-arrow-right-on-rectangle',
+    color: 'red',
+  },
+];
 </script>
 
 <style scoped></style>

@@ -28,7 +28,7 @@
       <BookShelf />
     </CommonContentContainer>
 
-    <CommonContentContainer title="События">
+    <CommonContentContainer title="Новости">
       <NewsCarousel />
     </CommonContentContainer>
 

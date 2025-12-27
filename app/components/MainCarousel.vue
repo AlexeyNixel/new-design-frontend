@@ -10,7 +10,7 @@
     class="h-[500px] rounded-xl shadow"
   >
     <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.post.slug } }">
-      <img :src="item.image.path" alt="" class="h-full rounded-xl" />
+      <img :src="item.image.path" alt="" class="h-[600px] rounded-xl" />
     </NuxtLink>
   </UCarousel>
 </template>

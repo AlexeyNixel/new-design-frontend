@@ -36,6 +36,8 @@
       <UButton class="ml-2" @click="handleNavigate()">Найти</UButton>
     </div>
 
+    {{ filters.department }}
+
     <div>
       <div v-if="entries?.data && entries.data.length > 0">
         <EntryTile
@@ -84,8 +86,8 @@ const search = ref((query.search as string) || undefined);
 
 const filters = ref<Filters>({
   department: (query.department as string) || undefined,
-  sort: (query.sort as string) || '-createdAt',
-  year: (query.year as string) || undefined,
+  // sort: (query.sort as string) || '-createdAt',
+  // year: (query.year as string) || undefined,
 });
 
 const handleSearchEntries = async () => {
@@ -94,10 +96,9 @@ const handleSearchEntries = async () => {
       include: 'preview, department',
       search: search.value || undefined,
       page: page.value,
+      department: filters.value.department,
     });
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) {}
 };
 
 const handleNavigate = async (localPage?: number) => {

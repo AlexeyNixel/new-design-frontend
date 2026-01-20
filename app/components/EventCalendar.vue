@@ -4,6 +4,7 @@ import type { Event } from '~~/services/types/event.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
 
+const config = useRuntimeConfig();
 const events = ref<Event[]>();
 const now = new Date();
 const calendarDate = shallowRef(
@@ -18,7 +19,7 @@ const fetchEvents = async (date: Date | any) => {
 
   eventsByDate.value = {};
 
-  const { data } = await $fetch('http://api2.infomania.ru/api/event', {
+  const { data } = await $fetch(config.public.apiBaseUrl + '/api/event', {
     params: {
       startDate: startDay,
       endDate: endDay,

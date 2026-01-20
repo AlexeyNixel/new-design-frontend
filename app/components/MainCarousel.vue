@@ -9,7 +9,13 @@
     :items="slides"
     class="h-[500px] rounded-xl shadow"
   >
-    <NuxtLink :to="{ name: 'entry-slug', params: { slug: item.post.slug } }">
+    <NuxtLink
+      v-if="item?.post"
+      :to="{ name: 'entry-slug', params: { slug: item.post?.slug } }"
+    >
+      <img :src="item.image.path" alt="" class="h-[600px] rounded-xl" />
+    </NuxtLink>
+    <NuxtLink v-else :to="item.url">
       <img :src="item.image.path" alt="" class="h-[600px] rounded-xl" />
     </NuxtLink>
   </UCarousel>

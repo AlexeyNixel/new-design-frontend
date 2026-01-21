@@ -84,6 +84,7 @@
                   <template v-for="child in item.children" :key="child.id">
                     <UButton
                       :to="child.to"
+                      :target="child.target"
                       color="white"
                       variant="ghost"
                       class="w-full justify-start px-4 py-2 text-sm rounded-none hover:bg-gray-50 dark:hover:bg-gray-700"

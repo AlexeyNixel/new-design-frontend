@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useEventApi } from '~~/services/api/eventService';
 import type { Event } from '~~/services/types/event.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
 
+const currentEvent = ref();
 const config = useRuntimeConfig();
 const events = ref<Event[]>();
 const now = new Date();
@@ -82,7 +82,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <UCalendar
       class="w-full"
       v-model="calendarDate"
@@ -100,6 +100,7 @@ onMounted(async () => {
               :color="getColorByDate(day)"
               variant="soft"
               class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
+              @click="currentEvent = isEvent(day)"
             >
               {{ day.day }}
             </UButton>
@@ -127,6 +128,7 @@ onMounted(async () => {
             </div>
           </template>
         </UPopover>
+
         <UButton
           :color="getColorByDate(day)"
           class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
@@ -147,6 +149,7 @@ onMounted(async () => {
         @click="changeMonth('next')"
       />
     </div>
+    <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
   </div>
 </template>
 

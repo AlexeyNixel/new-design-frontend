@@ -10,4 +10,5 @@ export interface Event {
   phone: string;
   slug: string;
   title: string;
+  age: number;
 }

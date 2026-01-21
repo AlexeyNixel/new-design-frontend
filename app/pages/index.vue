@@ -1,12 +1,12 @@
 <template>
   <div class="flex flex-col gap-5">
     <CommonContentContainer>
-      <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
-        <div class="col-span-1 xl:col-span-4">
+      <div class="grid grid-cols-1 xl:grid-cols-7 gap-5">
+        <div class="col-span-1 xl:col-span-5">
           <MainCarousel class="h-full" />
         </div>
 
-        <div class="flex flex-row xl:flex-col col-span-1 gap-5">
+        <div class="flex flex-row xl:flex-col col-span-2 gap-5">
           <div
             class="bg-white p-4 rounded-xl shadow hidden sm:block w-1/2 xl:w-full xl:h-1/3"
           >

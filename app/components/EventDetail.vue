@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Event } from '~~/services/types/event.type';
 import dayjs from 'dayjs';
+import { IBillboardPlaces } from '~/constants/billboardPlaces';
 
 const selectedEvent = ref<Event | null>();
 
@@ -12,6 +13,10 @@ const emits = defineEmits(['update:modelValue']);
 
 const closeWindow = () => {
   emits('update:modelValue', null);
+};
+
+const formatTime = (date: Date | string) => {
+  return dayjs(date.toString().slice(0, 19)).format('HH:mm');
 };
 </script>
 
@@ -29,12 +34,12 @@ const closeWindow = () => {
     <div v-if="!selectedEvent" class="h-full overflow-y-auto">
       <UButton
         variant="link"
-        class="flex items-center mb-5 odd:bg-neutral-200 rounded p-2"
+        class="flex items-center mb-5 odd:bg-neutral-200 w-full rounded p-2"
         v-for="item in modelValue"
         @click="selectedEvent = item"
       >
         <div class="text-primary font-bold">
-          {{ dayjs(item.eventTime.slice(0, 19)).format('HH:ss') }}
+          {{ formatTime(item.eventTime) }}
         </div>
         <p class="ml-2">
           {{ item.title }}
@@ -57,25 +62,20 @@ const closeWindow = () => {
 
         <!-- Информация о времени и месте -->
         <div class="event-detail-meta space-y-2 text-gray-700">
-          <div class="flex items-center gap-2">
-            <UIcon
-              name="i-heroicons-calendar-20-solid"
-              class="w-4 h-4 text-gray-400"
-            />
-            <span>{{ selectedEvent.eventTime }}</span>
+          <div class="flex gap-2 items-center">
             <UIcon
               name="i-heroicons-clock-20-solid"
-              class="w-4 h-4 text-gray-400 ml-3"
+              class="w-4 h-4 text-gray-400"
             />
-            <span>{{ selectedEvent.eventTime }}</span>
+            <span>{{ formatTime(selectedEvent.eventTime) }}</span>
           </div>
 
-          <div v-if="selectedEvent.eventPlace" class="flex items-center gap-2">
+          <div v-if="selectedEvent.place" class="flex items-center gap-2">
             <UIcon
               name="i-heroicons-map-pin-20-solid"
               class="w-4 h-4 text-gray-400"
             />
-            <span>{{ selectedEvent.eventPlace }}</span>
+            <span>{{ IBillboardPlaces[selectedEvent.place] }}</span>
           </div>
 
           <div v-if="selectedEvent.phone" class="flex items-center gap-2">
@@ -92,6 +92,14 @@ const closeWindow = () => {
           </div>
         </div>
       </header>
+
+      <div v-if="selectedEvent.content" class="event-description mb-6">
+        <div class="text-lg font-semibold mb-3 text-gray-800">Описание</div>
+        <div
+          class="text-gray-700 whitespace-pre-line"
+          v-html="selectedEvent.content"
+        ></div>
+      </div>
     </div>
   </div>
 </template>

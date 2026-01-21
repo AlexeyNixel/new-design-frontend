@@ -24,7 +24,12 @@
       </div>
     </CommonContentContainer>
 
-    <CommonContentContainer title="Книги" bgGray>
+    <CommonContentContainer
+      title="Книги"
+      bgGray
+      link="/books"
+      link-label="Полный список книг"
+    >
       <BookShelf />
     </CommonContentContainer>
 

@@ -1,14 +1,11 @@
 export interface Event {
-  desc: string;
-  entryId: string;
-  eventDate: Date;
-  eventPlace: string;
-  eventTime: Date;
   id: string;
-  isDeleted: boolean;
-  oldId: number;
-  phone: string;
-  slug: string;
   title: string;
+  content: string;
+  phone: string;
   age: number;
+  place: string;
+  eventTime: Date;
+  isDeleted: boolean;
+  createdAt: Date;
 }

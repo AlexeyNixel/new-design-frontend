@@ -15,7 +15,7 @@
           <div
             class="bg-white p-4 rounded-xl shadow w-full sm:w-1/2 xl:w-full xl:h-2/3"
           >
-            <!--            <EventCalendar />-->
+            <EventCalendar />
           </div>
         </div>
       </div>
@@ -24,40 +24,40 @@
       </div>
     </CommonContentContainer>
 
-    <!--    <CommonContentContainer-->
-    <!--      title="Книги"-->
-    <!--      bgGray-->
-    <!--      link="/books"-->
-    <!--      link-label="Полный список книг"-->
-    <!--    >-->
-    <!--      <BookShelf />-->
-    <!--    </CommonContentContainer>-->
+    <CommonContentContainer
+      title="Книги"
+      bgGray
+      link="/books"
+      link-label="Полный список книг"
+    >
+      <BookShelf />
+    </CommonContentContainer>
 
-    <!--    <CommonContentContainer title="Новости">-->
-    <!--      <NewsCarousel />-->
-    <!--    </CommonContentContainer>-->
+    <CommonContentContainer title="Новости">
+      <NewsCarousel />
+    </CommonContentContainer>
 
-    <!--        <CommonContentContainer bgGray>-->
-    <!--          <div class="flex gap-5">-->
-    <!--            <CommonContentContainer title="Викторины" bgGray>-->
-    <!--              <ExhibitionContent />-->
-    <!--            </CommonContentContainer>-->
-    <!--            <CommonContentContainer title="Викторины" bgGray>-->
-    <!--              <ExhibitionContent />-->
-    <!--            </CommonContentContainer>-->
-    <!--          </div>-->
+    <!--    <CommonContentContainer bgGray>-->
+    <!--      <div class="flex gap-5">-->
+    <!--        <CommonContentContainer title="Викторины" bgGray>-->
+    <!--          <ExhibitionContent />-->
     <!--        </CommonContentContainer>-->
-
-    <!--    <CommonContentContainer>-->
-    <!--      <div class="flex gap-8">-->
-    <!--        <div class="w-1/2 h-[450px]">-->
-    <!--          <FeedbackGos class="h-full shadow overflow-hidden rounded-xl" />-->
-    <!--        </div>-->
-    <!--        <div class="w-1/2 shadow overflow-hidden rounded-xl">-->
-    <!--          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />-->
-    <!--        </div>-->
+    <!--        <CommonContentContainer title="Викторины" bgGray>-->
+    <!--          <ExhibitionContent />-->
+    <!--        </CommonContentContainer>-->
     <!--      </div>-->
     <!--    </CommonContentContainer>-->
+
+    <CommonContentContainer>
+      <div class="flex gap-8">
+        <div class="w-1/2 h-[450px]">
+          <FeedbackGos class="h-full shadow overflow-hidden rounded-xl" />
+        </div>
+        <div class="w-1/2 shadow overflow-hidden rounded-xl">
+          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
+        </div>
+      </div>
+    </CommonContentContainer>
   </div>
 </template>
 

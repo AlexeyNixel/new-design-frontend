@@ -7,7 +7,7 @@
     <UButton
       :label="label"
       :icon="icon"
-      variant="link"
+      variant="soft"
       color="neutral"
     ></UButton>
 

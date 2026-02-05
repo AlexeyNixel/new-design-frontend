@@ -12,6 +12,7 @@
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
         Новости и события
       </h1>
+      <UButton @click="activeGrid = !activeGrid">Сменить</UButton>
     </div>
 
     <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
@@ -49,7 +50,7 @@
               class="w-full"
               :ui="{ icon: { trailing: { pointer: '' } } }"
               size="lg"
-              @change="handleSearchChange"
+              @keydown.enter="handleSearchChange"
             >
               <template #trailing>
                 <UButton
@@ -228,41 +229,26 @@
       <div class="lg:w-2/3 xl:w-3/4">
         <!-- Список новостей -->
         <div v-if="entries?.data && entries.data.length > 0">
-          <div class="flex flex-col gap-6">
-            <EntryTile
-              v-for="entry in entries.data"
-              :key="entry.id"
-              :entry="entry"
-            />
+          <div
+            class="gap-6"
+            :class="activeGrid ? 'grid grid-cols-4' : 'flex flex-col'"
+          >
+            <template v-for="entry in entries.data" :key="entry.id">
+              <EntryTile v-if="!activeGrid" :entry="entry" />
+              <EntryCard v-else :entry="entry" />
+            </template>
           </div>
 
           <!-- Пагинация -->
           <div class="mt-8 pt-6 border-t border-gray-100">
             <UPagination
               show-edges
-              :ui="{
-                wrapper: 'flex items-center gap-1',
-                base: 'min-w-8 w-8 h-8',
-                rounded: 'rounded-lg',
-                default: {
-                  color: 'primary',
-                  activeButton: {
-                    color: 'primary',
-                  },
-                },
-              }"
               @update:page="handleNavigate"
               v-model:page="page"
               :page-count="10"
               :total="entries?.meta?.total || 0"
               class="flex items-center justify-center"
             />
-
-            <!-- Информация о страницах -->
-            <div class="text-center text-sm text-gray-500 mt-4">
-              Показано {{ entries.data.length }} из
-              {{ entries.meta?.total }} новостей
-            </div>
           </div>
         </div>
 
@@ -298,6 +284,8 @@ import type { Entry } from '~~/services/types/entry.type';
 import type { ApiResponse } from '~~/services/api/base';
 import type { Department } from '~~/services/types/department.type';
 import { useDepartmentApi } from '~~/services/api/departmentService';
+
+const activeGrid = ref(false);
 
 const entryApi = useEntryApi();
 const departmentApi = useDepartmentApi();
@@ -376,6 +364,20 @@ const selectedTags = computed(() => {
 
 const selectedTagsCount = computed(() => filters.value.tags.length);
 
+const handleSearchChange = async () => {
+  entries.value = await entryApi.getAllEntry({
+    include: 'preview, department',
+    search: search.value || undefined,
+    // page: page.value,
+    // department: filters.value.department,
+    // date: filters.value.date,
+    // dateFrom: filters.value.dateFrom,
+    // dateTo: filters.value.dateTo,
+    // tags: filters.value.tags.length > 0 ? filters.value.tags : undefined,
+    // sort: filters.value.sort,
+  });
+};
+
 // Методы
 const isTagSelected = (tag: Tag) => {
   return filters.value.tags.includes(tag.id.toString());
@@ -422,7 +424,7 @@ const handleFilterChange = () => {
 const handleNavigate = async (newPage?: number) => {
   page.value = newPage || 1;
   updateUrl();
-  loadEntries();
+  await loadEntries();
 
   if (process.client) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -463,9 +465,9 @@ const loadEntries = async () => {
     // Загружаем записи
     entries.value = await entryApi.getAllEntry({
       include: 'preview, department',
-      // search: search.value || undefined,
-      // page: page.value,
-      // department: filters.value.department,
+      search: search.value || undefined,
+      page: page.value,
+      department: filters.value.department,
       // date: filters.value.date,
       // dateFrom: filters.value.dateFrom,
       // dateTo: filters.value.dateTo,

@@ -80,12 +80,12 @@ const navigateLinks = [
   {
     icon: 'i-heroicons-outline-search',
     label: 'Поиск по сайту',
-    link: '/',
+    link: '/entry',
   },
   {
     icon: 'i-mynaui-wheelchair-solid',
     label: 'Доступная среда',
-    link: '/',
+    link: '/entry/dostupnaya-sreda-03-32-22-10-22',
   },
   {
     icon: 'i-heroicons-academic-cap',

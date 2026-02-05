@@ -36,7 +36,11 @@
       <BookShelf />
     </CommonContentContainer>
 
-    <CommonContentContainer title="Игры" link-label="Полный список игр" link="/"
+    <CommonContentContainer
+      bg-gray
+      title="Игры"
+      link-label="Полный список игр"
+      link="/"
       ><GameCarousel
     /></CommonContentContainer>
 

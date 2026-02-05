@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="`/games/${game.id}`"
-    class="group h-full bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col w-full max-w-[280px] hover:-translate-y-2 border border-gray-100"
+    class="min-h-[600px] group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full max-w-[320px] hover:-translate-y-2 border border-gray-100"
   >
     <!-- Обертка для изображения -->
     <div
@@ -16,30 +16,19 @@
         @error="handleImageError"
       />
 
-      <!-- Бейдж статуса -->
-      <div class="absolute top-3 left-3">
-        <span
-          :class="[
-            'px-3 py-1 rounded-full text-xs font-semibold shadow-md',
-            game.status === 1
-              ? 'bg-green-500/90 text-white'
-              : game.status === 0
-                ? 'bg-yellow-500/90 text-white'
-                : 'bg-red-500/90 text-white',
-          ]"
-        >
-          {{
-            game.status_desc || (game.status === 1 ? 'Доступно' : 'Недоступно')
-          }}
-        </span>
-      </div>
+      <UBadge
+        :label="
+          game.status_desc || (game.status === 1 ? 'Доступно' : 'Недоступно')
+        "
+        color="success"
+        class="absolute top-3 left-3 rounded-full"
+      />
 
-      <!-- Год выпуска -->
-      <div
-        class="absolute top-3 right-3 bg-black/70 backdrop-blur-sm text-white text-sm font-bold px-3 py-1.5 rounded-full"
-      >
-        {{ game.game_year || 'N/A' }}
-      </div>
+      <UBadge
+        v-if="game.game_year"
+        class="absolute top-3 right-3 bg-black/70 font-bold px-3 py-1.5 rounded-full"
+        :label="game.game_year"
+      />
 
       <!-- Индикатор количества игроков -->
       <div
@@ -54,9 +43,9 @@
           </div>
           <div class="flex items-center gap-1">
             <Icon name="i-heroicons-clock" class="w-4 h-4 text-primary" />
-            <span class="font-bold text-gray-900"
-              >{{ game.game_duration }} мин</span
-            >
+            <span class="font-bold text-gray-900">{{
+              game.game_duration
+            }}</span>
           </div>
           <div class="flex items-center gap-1">
             <Icon name="i-heroicons-cake" class="w-4 h-4 text-primary" />
@@ -77,19 +66,14 @@
       <!-- Жанры -->
       <div v-if="game.genres" class="mb-4">
         <div class="flex flex-wrap gap-2">
-          <span
-            v-for="(genre, index) in game.genres.split(', ').slice(0, 3)"
+          <UBadge
+            v-for="(genre, index) in takeGameGenres(game.genres)"
             :key="index"
-            class="inline-block bg-gray-100 text-gray-700 text-xs px-2.5 py-1 rounded-full hover:bg-gray-200 transition-colors"
+            :label="genre"
+            color="info"
+            variant="soft"
           >
-            {{ genre.trim() }}
-          </span>
-          <span
-            v-if="game.genres.split(', ').length > 3"
-            class="text-gray-400 text-xs self-center"
-          >
-            +{{ game.genres.split(', ').length - 3 }}
-          </span>
+          </UBadge>
         </div>
       </div>
 
@@ -100,21 +84,8 @@
         v-html="game.short_description"
       />
 
-      <!-- Дополнительная информация -->
       <div class="pt-4 border-t border-gray-100 mt-auto">
         <div class="flex items-center justify-between">
-          <!-- Локация -->
-          <div v-if="game.place" class="flex items-center gap-2">
-            <div
-              class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center"
-            >
-              <Icon name="i-heroicons-map-pin" class="w-4 h-4 text-primary" />
-            </div>
-            <span class="text-sm text-gray-700 truncate max-w-[100px]">{{
-              game.place
-            }}</span>
-          </div>
-
           <!-- Кнопка подробнее -->
           <div class="flex items-center text-primary font-semibold text-sm">
             <span>Подробнее</span>
@@ -141,6 +112,10 @@ const baseUrlImage = 'http://infomania.ru/gamelibrary/img/game-cover/';
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
   target.src = 'https://placehold.co/280x320/6b7280/ffffff?text=Нет+обложки';
+};
+
+const takeGameGenres = (genres: string) => {
+  return genres.split(';');
 };
 </script>
 

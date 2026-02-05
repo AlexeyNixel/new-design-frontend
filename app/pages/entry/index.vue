@@ -324,7 +324,7 @@ const search = ref<string>((route.query.search as string) || '');
 const departments = ref<Department[]>([]);
 const tags = ref<Tag[]>([]);
 
-tags.value = await $fetch('http://localhost:3300/api/tags');
+tags.value = await $fetch('http://api2.infomania.ru/api/tags');
 tags.value = tags.value.data;
 
 // Фильтры

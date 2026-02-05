@@ -1,29 +1,100 @@
 <template>
   <NuxtLink
     :to="{ name: 'entry-slug', params: { slug: entry.slug } }"
-    class="bg-white rounded overflow-hidden shadow-primary-200 mb-8 transition-all flex items-stretch min-h-64 hover:-translate-y-1 hover:shadow-xl hover:transform: scale(1.05);"
+    class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row items-stretch min-h-64 hover:-translate-y-2 border border-gray-100"
   >
-    <div class="w-72 min-w-72 overflow-hidden relative shrink-0">
+    <!-- Изображение с эффектами -->
+    <div
+      class="md:w-72 min-w-72 h-64 md:h-auto overflow-hidden relative shrink-0"
+    >
       <img
-        class="w-full h-full object-cover transition hover:transform: scale(1.05);"
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         :onerror="notFoundImage"
         :src="entry?.preview?.path"
         :alt="entry.title"
         loading="lazy"
       />
+
+      <!-- Градиентная накладка -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-60 md:opacity-0 group-hover:opacity-60 transition-opacity duration-300"
+      ></div>
+
+      <!-- Дата в стиле карточки -->
+      <div
+        class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg"
+      >
+        <div class="flex flex-col items-center">
+          <span class="text-sm font-semibold text-gray-500">
+            {{ formateDate(entry.publishedAt, 'MMM') }}
+          </span>
+          <span class="text-2xl font-bold text-gray-800">
+            {{ formateDate(entry.publishedAt, 'DD') }}
+          </span>
+          <span class="text-xs text-gray-500">
+            {{ formateDate(entry.publishedAt, 'YYYY') }}
+          </span>
+        </div>
+      </div>
     </div>
 
-    <div class="p-6 flex flex-col justify-between w-full">
-      <h2 class="text-2xl font-bold text-neutral-700 mb-3 overflow-hidden">
-        {{ entry.title }}
-      </h2>
-      <div v-html="entry.description" class="text-neutral-700 mb-4 grow" />
+    <!-- Контент -->
+    <div class="p-5 md:p-6 flex flex-col justify-between flex-1">
+      <!-- Заголовок и описание -->
+      <div>
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2"
+        >
+          {{ entry.title }}
+        </h2>
 
-      <div
-        class="flex justify-between items-center my-auto pt-4 border-t-1 border-t-neutral-200"
-      >
-        <span class="news-date">{{ entry.department.title }}</span>
-        <span class="news-date">{{ formateDate(entry.publishedAt) }}</span>
+        <div
+          v-html="entry.description"
+          class="text-gray-600 mb-4 line-clamp-3 prose prose-sm max-w-none"
+        />
+      </div>
+
+      <!-- Нижняя панель -->
+      <div class="pt-4 border-t border-gray-100 mt-auto">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+          <!-- Департамент -->
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg flex items-center justify-center"
+            >
+              <Icon
+                name="i-heroicons-building-office-20-solid"
+                class="w-5 h-5 text-primary"
+              />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500">Отдел</div>
+              <div class="font-medium text-gray-800">
+                {{ entry.department?.title }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Дополнительная информация -->
+          <div class="flex items-center gap-6 text-sm">
+            <!-- Дата -->
+            <div class="flex items-center text-gray-600">
+              <Icon name="i-heroicons-calendar-20-solid" class="w-4 h-4 mr-2" />
+              <span>{{ formateDate(entry.publishedAt, 'DD MMMM YYYY') }}</span>
+            </div>
+
+            <!-- Кнопка читать -->
+            <div class="flex items-center text-primary font-semibold">
+              <span class="mr-2">Подробнее</span>
+              <Icon
+                name="i-heroicons-arrow-right-20-solid"
+                class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </NuxtLink>
@@ -36,64 +107,29 @@ defineProps<{
   entry: Entry;
 }>();
 
-const formateDate = useFormateDate();
+// Хелпер для форматирования даты
+const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
+  const date = new Date(dateString);
+  const options: any = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+
+  if (format === 'MMM') {
+    return date.toLocaleDateString('ru-RU', { month: 'short' });
+  } else if (format === 'DD') {
+    return date.getDate().toString();
+  } else if (format === 'YYYY') {
+    return date.getFullYear().toString();
+  }
+
+  return date.toLocaleDateString('ru-RU', options);
+};
 
 const notFoundImage = (e: any) => {
   e.target.src = 'https://cdn1.flamp.ru/b1aea1d7e4be8c57b1e414678d5756f0.png';
 };
 </script>
 
-<style scoped>
-@import '~/assets/css/main.css';
-
-.news-tile:hover .news-preview img {
-  transform: scale(1.05);
-}
-
-.news-date {
-  color: #888;
-  font-size: 0.9rem;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .news-tile {
-    flex-direction: column;
-    min-height: auto;
-  }
-
-  .news-preview {
-    width: 100%;
-    min-width: 100%;
-    height: 200px;
-  }
-
-  .news-content {
-    padding: 20px;
-  }
-
-  .news-title {
-    font-size: 1.3rem;
-  }
-
-  .news-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .news-preview {
-    height: 180px;
-  }
-
-  .news-content {
-    padding: 16px;
-  }
-
-  .news-title {
-    font-size: 1.2rem;
-  }
-}
-</style>
+<style scoped></style>

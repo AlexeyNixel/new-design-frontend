@@ -1,12 +1,5 @@
 <template>
-  <div class="flex gap-5">
-    <NuxtLink
-      class="flex py-5 flip items-center bg-primary p-2 text-white transition hover:bg-primary-300 hover:cursor-pointer font-bold text-lg"
-    >
-      <span> Все события </span>
-      <Icon name="i-heroicons-arrow-up-16-solid" />
-    </NuxtLink>
-
+  <div class="flex w-full">
     <div class="w-full">
       <UCarousel
         arrows
@@ -40,7 +33,7 @@ const entryApi = useEntryApi();
 
 const { data: entry } = await entryApi.getAllEntry({
   limit: 12,
-  include: 'preview',
+  include: 'preview, department',
 });
 
 const handleSelect = (index: number) => {
@@ -51,9 +44,5 @@ const handleSelect = (index: number) => {
 <style scoped>
 .flip {
   writing-mode: sideways-lr;
-}
-
-.index-0 {
-  width: 50%;
 }
 </style>

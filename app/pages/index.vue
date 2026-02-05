@@ -24,18 +24,21 @@
       </div>
     </CommonContentContainer>
 
+    <CommonContentContainer bg-gray title="Новости">
+      <NewsCarousel />
+    </CommonContentContainer>
+
     <CommonContentContainer
       title="Книги"
-      bgGray
       link="/books"
       link-label="Полный список книг"
     >
       <BookShelf />
     </CommonContentContainer>
 
-    <CommonContentContainer title="Новости">
-      <NewsCarousel />
-    </CommonContentContainer>
+    <CommonContentContainer title="Игры" link-label="Полный список игр" link="/"
+      ><GameCarousel
+    /></CommonContentContainer>
 
     <!--    <CommonContentContainer bgGray>-->
     <!--      <div class="flex gap-5">-->

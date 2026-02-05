@@ -2,7 +2,6 @@ import { type File } from './file.type';
 
 export interface Entry {
   id: string;
-  oldId: number;
   fileId: string;
   createdAt: string;
   updatedAt: string;

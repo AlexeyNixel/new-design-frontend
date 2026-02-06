@@ -1,23 +1,17 @@
 <template>
-  <div class="flex w-full">
-    <div class="w-full">
-      <UCarousel
-        arrows
-        :items="entry"
-        :ui="ui"
-        v-slot="{ item, index }"
-        @select="handleSelect"
-      >
-        <EntryCard :class="`index-${index}`" :entry="item" />
-      </UCarousel>
-    </div>
-  </div>
+  <UCarousel
+    arrows
+    :items="entry"
+    :ui="ui"
+    v-slot="{ item }"
+    class="h-full m-4"
+  >
+    <EntryCard :entry="item" />
+  </UCarousel>
 </template>
 
 <script setup lang="ts">
 import { useEntryApi } from '~~/services/api/entryService';
-
-const currentIndex = ref();
 
 const ui = {
   root: 'h-full flex',
@@ -35,14 +29,6 @@ const { data: entry } = await entryApi.getAllEntry({
   limit: 12,
   include: 'preview, department',
 });
-
-const handleSelect = (index: number) => {
-  currentIndex.value = index;
-};
 </script>
 
-<style scoped>
-.flip {
-  writing-mode: sideways-lr;
-}
-</style>
+<style scoped></style>

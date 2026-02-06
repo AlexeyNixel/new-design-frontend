@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 import { useGameApi } from '~~/services/api/game.api';
-import CustomSwiper from '~/components/ui/CustomSwiper.vue';
 
 const ui = {
   root: 'h-full flex',

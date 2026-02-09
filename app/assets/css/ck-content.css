@@ -2,49 +2,49 @@
 @import '@nuxt/ui';
 
 .ck-content {
-    @apply leading-relaxed text-justify;
-    a {
-        @apply text-primary-600 underline hover:opacity-70 transition;
-    }
+  @apply leading-relaxed text-justify;
+  a {
+    @apply text-primary-600 underline hover:opacity-70 transition;
+  }
 
-    h2,
-    h3,
-    h4 {
-        @apply mt-8 mb-4 font-bold scroll-mt-20;
-    }
+  h2,
+  h3,
+  h4 {
+    @apply mt-8 mb-4 font-bold scroll-mt-20;
+  }
 
-    h2 {
-        @apply text-2xl border-b border-gray-200 dark:border-gray-700 pb-2;
-    }
-    h3 {
-        @apply text-xl;
-    }
-    h4 {
-        @apply text-lg;
-    }
+  h2 {
+    @apply text-2xl border-b border-gray-200 dark:border-gray-700 pb-2;
+  }
+  h3 {
+    @apply text-xl;
+  }
+  h4 {
+    @apply text-lg;
+  }
 
-    p {
-        @apply indent-12 mb-4 leading-7;
-    }
+  p {
+    @apply indent-12 mb-4 leading-7;
+  }
 
-    blockquote {
-        @apply border-l-4 border-primary-500 bg-primary-50 dark:bg-primary-900/20 pl-6 py-4 my-6 italic text-gray-700 dark:text-gray-300;
-    }
+  blockquote {
+    @apply border-l-4 border-primary-500 bg-primary-50 dark:bg-primary-900/20 pl-6 py-4 my-6 italic text-gray-700 dark:text-gray-300;
+  }
 
-    img {
-        @apply rounded-lg shadow-md mx-auto my-8 max-w-full h-auto;
-    }
+  img {
+    @apply rounded-lg shadow-md mx-auto my-8 max-w-full h-auto;
+  }
 
-    ul,
-    ol {
-        @apply my-6 pl-6 space-y-2;
-    }
+  ul,
+  ol {
+    @apply my-6 pl-6 space-y-2;
+  }
 
-    li {
-        @apply mb-2;
-    }
+  li {
+    @apply mb-2;
+  }
 
-    table {
+  /* table {
         @apply w-full border-collapse my-8 rounded-lg overflow-hidden shadow-sm;
     }
 
@@ -59,17 +59,17 @@
 
     tr:nth-child(even) {
         @apply bg-gray-50/50 dark:bg-gray-700/50;
-    }
+    } */
 
-    code {
-        @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono;
-    }
+  code {
+    @apply bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-sm font-mono;
+  }
 
-    pre {
-        @apply bg-gray-900 text-gray-100 p-4 rounded-lg my-6 overflow-x-auto;
-    }
+  pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg my-6 overflow-x-auto;
+  }
 
-    pre code {
-        @apply bg-transparent p-0 text-inherit;
-    }
+  pre code {
+    @apply bg-transparent p-0 text-inherit;
+  }
 }

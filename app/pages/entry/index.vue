@@ -48,7 +48,6 @@
               placeholder="Введите запрос..."
               icon="i-heroicons-magnifying-glass-20-solid"
               class="w-full"
-              :ui="{ icon: { trailing: { pointer: '' } } }"
               size="lg"
               @keydown.enter="handleSearchChange"
             >
@@ -66,55 +65,6 @@
                 </UButton>
               </template>
             </UInput>
-          </div>
-
-          <!-- Фильтр по дате -->
-          <div class="mb-6">
-            <h3
-              class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
-            >
-              <Icon name="i-heroicons-calendar" class="w-4 h-4" />
-              Дата публикации
-            </h3>
-            <div class="space-y-2">
-              <UButton
-                v-for="dateFilter in dateFilters"
-                :key="dateFilter.value"
-                @click="toggleDateFilter(dateFilter.value)"
-                :color="
-                  filters.date === dateFilter.value ? 'primary' : 'neutral'
-                "
-                :variant="filters.date === dateFilter.value ? 'solid' : 'ghost'"
-                size="sm"
-                class="w-full justify-start"
-              >
-                <Icon :name="dateFilter.icon" class="w-4 h-4 mr-2" />
-                {{ dateFilter.label }}
-              </UButton>
-            </div>
-
-            <!-- Кастомный диапазон дат -->
-            <!--            <div class="mt-4 pt-4 border-t border-gray-100">-->
-            <!--              <label class="block text-sm font-medium text-gray-700 mb-2"-->
-            <!--                >Период</label-->
-            <!--              >-->
-            <!--              <div class="grid grid-cols-2 gap-2">-->
-            <!--                <UInput-->
-            <!--                  v-model="filters.dateFrom"-->
-            <!--                  type="date"-->
-            <!--                  placeholder="От"-->
-            <!--                  size="sm"-->
-            <!--                  @change="handleDateRangeChange"-->
-            <!--                />-->
-            <!--                <UInput-->
-            <!--                  v-model="filters.dateTo"-->
-            <!--                  type="date"-->
-            <!--                  placeholder="До"-->
-            <!--                  size="sm"-->
-            <!--                  @change="handleDateRangeChange"-->
-            <!--                />-->
-            <!--              </div>-->
-            <!--            </div>-->
           </div>
 
           <!-- Фильтр по отделам -->
@@ -191,7 +141,7 @@
                   <div class="flex items-center gap-2">
                     <div
                       class="w-2 h-2 rounded-full"
-                      :style="{ backgroundColor: tag.color || '#3b82f6' }"
+                      :style="{ backgroundColor: '#3b82f6' }"
                     />
                     <span
                       class="text-sm"
@@ -204,7 +154,6 @@
                       {{ tag.title }}
                     </span>
                   </div>
-                  <span class="text-xs text-gray-400">{{ tag.count }}</span>
                 </div>
               </div>
             </div>
@@ -214,9 +163,9 @@
           <div class="pt-4 border-t border-gray-100">
             <h3 class="text-sm font-semibold text-gray-900 mb-3">Сортировка</h3>
             <USelect
-              v-model="filters.sort"
               placeholder="Сначала новые"
-              :items="sortOptions"
+              v-model="filters.sort"
+              :items="SORT_OPTIONS"
               size="md"
               @change="handleFilterChange"
               class="w-full"
@@ -282,14 +231,15 @@
 import { useEntryApi } from '~~/services/api/entryService';
 import type { Entry } from '~~/services/types/entry.type';
 import type { ApiResponse } from '~~/services/api/base';
-import type { Department } from '~~/services/types/department.type';
 import { useDepartmentApi } from '~~/services/api/departmentService';
 
-const activeGrid = ref(false);
+interface Tag {
+  id: string;
+  title: string;
+}
 
 const entryApi = useEntryApi();
 const departmentApi = useDepartmentApi();
-
 const route = useRoute();
 
 const BREADCRUMB_ITEMS = [
@@ -305,80 +255,55 @@ const BREADCRUMB_ITEMS = [
   },
 ];
 
+const SORT_OPTIONS = [
+  { label: 'Сначала новые', value: 'desc' },
+  { label: 'Сначала старые', value: 'asc' },
+];
+
 // Состояние
+const activeGrid = ref(false);
 const entries = ref<ApiResponse<Entry[]>>();
 const page = ref(Number(route.query.page) || 1);
 const search = ref<string>((route.query.search as string) || '');
-const departments = ref<Department[]>([]);
-const tags = ref<Tag[]>([]);
+const sortFilters = ref('-publishedAt');
 
-tags.value = await $fetch('http://api2.infomania.ru/api/tags');
-tags.value = tags.value.data;
+const { data: tags } = await entryApi.getAllTags();
+const { data: departments } = await departmentApi.getAllDepartments();
 
-// Фильтры
 const filters = ref({
   date: (route.query.date as string) || undefined,
   dateFrom: (route.query.dateFrom as string) || undefined,
   dateTo: (route.query.dateTo as string) || undefined,
   department: (route.query.department as string) || undefined,
-  sort: (route.query.sort as string) || '-publishedAt',
   tags: (route.query.tags as string)?.split(',') || ([] as string[]),
+  sort: (route.query.sort as string) || 'desc',
 });
 
-// Опции фильтров
-const dateFilters = [
-  { label: 'Сегодня', value: 'today', icon: 'i-heroicons-calendar-days' },
-  { label: 'На этой неделе', value: 'week', icon: 'i-heroicons-calendar-week' },
-  {
-    label: 'В этом месяце',
-    value: 'month',
-    icon: 'i-heroicons-calendar-month',
-  },
-  { label: 'В этом году', value: 'year', icon: 'i-heroicons-calendar-year' },
-];
-
-const sortOptions = [
-  { label: 'Сначала новые', value: '-publishedAt' },
-  { label: 'Сначала старые', value: 'publishedAt' },
-  { label: 'По алфавиту (А-Я)', value: 'title' },
-  { label: 'По алфавиту (Я-А)', value: '-title' },
-];
-
-// Компьютед свойства
 const hasActiveFilters = computed(() => {
   return (
     !!filters.value.date ||
     !!filters.value.department ||
     filters.value.tags.length > 0 ||
     !!filters.value.dateFrom ||
-    !!filters.value.dateTo ||
-    filters.value.sort !== '-publishedAt'
+    !!filters.value.dateTo
   );
 });
 
 const selectedTags = computed(() => {
-  return tags.value.filter((tag) =>
-    filters.value.tags.includes(tag.id.toString())
-  );
+  return tags.filter((tag) => filters.value.tags.includes(tag.id.toString()));
 });
 
 const selectedTagsCount = computed(() => filters.value.tags.length);
 
 const handleSearchChange = async () => {
+  updateUrl();
   entries.value = await entryApi.getAllEntry({
     include: 'preview, department',
     search: search.value || undefined,
-    // page: page.value,
-    // department: filters.value.department,
-    // date: filters.value.date,
-    // dateFrom: filters.value.dateFrom,
-    // dateTo: filters.value.dateTo,
-    // tags: filters.value.tags.length > 0 ? filters.value.tags : undefined,
-    // sort: filters.value.sort,
+    department: filters.value.department,
   });
 };
 
-// Методы
 const isTagSelected = (tag: Tag) => {
   return filters.value.tags.includes(tag.id.toString());
 };
@@ -396,19 +321,14 @@ const toggleTag = (tag: Tag) => {
   handleFilterChange();
 };
 
-const toggleDateFilter = (value: string) => {
-  filters.value.date = filters.value.date === value ? undefined : value;
-  handleFilterChange();
-};
-
 const clearFilters = () => {
   filters.value = {
     date: undefined,
     dateFrom: undefined,
     dateTo: undefined,
     department: undefined,
-    sort: '-publishedAt',
     tags: [],
+    sort: 'desc',
   };
   search.value = '';
   page.value = 1;
@@ -426,22 +346,21 @@ const handleNavigate = async (newPage?: number) => {
   updateUrl();
   await loadEntries();
 
-  if (process.client) {
+  if (import.meta.client) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 };
 
 const updateUrl = () => {
   const query: any = {};
-
   if (page.value > 1) query.page = page.value;
   if (search.value) query.search = search.value;
   if (filters.value.date) query.date = filters.value.date;
   if (filters.value.dateFrom) query.dateFrom = filters.value.dateFrom;
   if (filters.value.dateTo) query.dateTo = filters.value.dateTo;
   if (filters.value.department) query.department = filters.value.department;
-  if (filters.value.sort !== '-publishedAt') query.sort = filters.value.sort;
   if (filters.value.tags.length > 0) query.tags = filters.value.tags.join(',');
+  if (filters.value.sort) query.sort = filters.value.sort;
 
   navigateTo({
     name: 'entry',
@@ -451,38 +370,20 @@ const updateUrl = () => {
 
 const loadEntries = async () => {
   try {
-    // Загружаем отделы и теги (если еще не загружены)
-    if (departments.value.length === 0) {
-      const depts = await departmentApi.getAllDepartments();
-      departments.value = depts.data || [];
-    }
-    //
-    // if (tags.value.length === 0) {
-    //   const tagsData = await entryApi.getTags();
-    //   tags.value = tagsData.data || [];
-    // }
-
-    // Загружаем записи
     entries.value = await entryApi.getAllEntry({
       include: 'preview, department',
       search: search.value || undefined,
       page: page.value,
       department: filters.value.department,
-      // date: filters.value.date,
-      // dateFrom: filters.value.dateFrom,
-      // dateTo: filters.value.dateTo,
-      // tags: filters.value.tags.length > 0 ? filters.value.tags : undefined,
-      // sort: filters.value.sort,
+      sortOrder: filters.value.sort,
     });
   } catch (error) {
     console.error('Error loading entries:', error);
   }
 };
 
-// Инициализация
 await loadEntries();
 
-// Наблюдатели
 watch(
   () => route.query,
   (newQuery) => {
@@ -494,45 +395,12 @@ watch(
       dateFrom: (newQuery.dateFrom as string) || undefined,
       dateTo: (newQuery.dateTo as string) || undefined,
       department: (newQuery.department as string) || undefined,
-      sort: (newQuery.sort as string) || '-publishedAt',
       tags: (newQuery.tags as string)?.split(',') || [],
+      sort: newQuery.sort as string,
     };
   },
   { immediate: true }
 );
 </script>
 
-<style scoped>
-/* Стили для скроллбара в списке тегов */
-.max-h-60::-webkit-scrollbar {
-  width: 4px;
-}
-
-.max-h-60::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 4px;
-}
-
-.max-h-60::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-.max-h-60::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
-}
-
-/* Плавные переходы */
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
-}
-
-/* Стикей для фильтров на десктопе */
-@media (min-width: 1024px) {
-  .sticky {
-    position: sticky;
-  }
-}
-</style>
+<style scoped></style>

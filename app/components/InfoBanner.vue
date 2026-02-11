@@ -1,27 +1,32 @@
 <template>
-  <div>
-    <UCarousel
-      v-if="notifications"
-      arrows
-      loop
-      :ui="ui"
-      :items="notifications"
-      v-slot="{ item }"
-      class="h-full"
+  <div class="h-full bg-white rounded-xl shadow overflow-hidden">
+    <header
+      class="flex items-center gap-3 bg-gradient-to-r from-amber-500 to-amber-400 px-4 py-3 text-white"
     >
-      <div class="flex flex-col justify-between h-full">
-        <div>
-          <h3 class="font-bold text-xl mb-2">{{ item.title }}</h3>
-          <p>{{ item.description }}</p>
+      <Icon class="text-xl" name="i-heroicons-bell-alert" />
+      <h3 class="!m-0">Важные уведомления</h3>
+    </header>
+
+    <div class="p-4 flex flex-col gap-4">
+      <div class="p-2 flex items-center gap-3 bg-amber-400/10 rounded-lg">
+        <div class="w-10 h-10 flex items-center justify-center">
+          <Icon
+            class="w-6 h-6 text-amber-600"
+            name="i-heroicons-exclamation-triangle"
+          />
         </div>
-        <NuxtLink>Подробнее</NuxtLink>
-      </div>
-    </UCarousel>
-    <div v-else>
-      <div class="flex flex-col justify-between h-full">
         <div>
-          <h3 class="font-bold text-xl mb-2">Новых уведомлений нет</h3>
-          <p>Тут может появиться важная информация</p>
+          <div>Технические работы</div>
+          <div class="text-sm text-neutral-500">Завтра с 10:00 до 12:00</div>
+        </div>
+      </div>
+      <div class="p-2 flex items-center gap-3 bg-success/10 rounded-lg">
+        <div class="w-10 h-10 flex items-center justify-center">
+          <Icon class="w-6 h-6 text-success" name="i-heroicons-calendar" />
+        </div>
+        <div>
+          <div>Турнир по настолкам</div>
+          <div class="text-sm text-neutral-500">Регистрация открыта</div>
         </div>
       </div>
     </div>

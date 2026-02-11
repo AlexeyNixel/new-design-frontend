@@ -44,7 +44,7 @@
       </header>
 
       <main ref="contentRef" class="news-content">
-        <div class="ck-content tiptap" v-html="entry.content"></div>
+        <div class="tiptap" v-html="entry.content"></div>
       </main>
 
       <footer class="mt-8">

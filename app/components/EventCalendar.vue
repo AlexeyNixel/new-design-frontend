@@ -82,76 +82,50 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="relative">
-    <UCalendar
-      class="w-full"
-      v-model="calendarDate"
-      :yearControls="false"
-      :monthControls="false"
-    >
-      <template #day="{ day }">
-        <div v-if="isEvent(day)">
-          <UChip :text="isEvent(day)?.length" size="xl">
-            <UButton
-              :color="getColorByDate(day)"
-              variant="soft"
-              class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white cursor-pointer"
-              @click="currentEvent = isEvent(day)"
-            >
-              {{ day.day }}
-            </UButton>
-          </UChip>
-        </div>
+  <div>
+    <div class="relative">
+      <header
+        class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-4 py-3 text-white rounded-t-xl overflow-hidden"
+      >
+        <Icon class="text-xl" name="i-heroicons-calendar-days" />
+        <h3 class="!m-0">Календарь событий</h3>
+      </header>
+      <UCalendar
+        class="w-full p-4"
+        v-model="calendarDate"
+        :yearControls="false"
+        :monthControls="false"
+        :ui="{
+          heading: 'font-bold text-[16px]',
+        }"
+      >
+        <template #day="{ day }">
+          <div v-if="isEvent(day)">
+            <UChip :text="isEvent(day)?.length" size="xl">
+              <UButton
+                :color="getColorByDate(day)"
+                variant="soft"
+                class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white cursor-pointer"
+                @click="currentEvent = isEvent(day)"
+              >
+                {{ day.day }}
+              </UButton>
+            </UChip>
+          </div>
 
-        <!--        <UPopover-->
-        <!--          mode="hover"-->
-        <!--          :content="{ side: 'bottom' }"-->
-        <!--          v-if="isEvent(day)"-->
-        <!--        >-->
-        <!--          <UChip :text="isEvent(day)?.length" size="xl">-->
-        <!--            <UButton-->
-        <!--              :color="getColorByDate(day)"-->
-        <!--              variant="soft"-->
-        <!--              class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"-->
-        <!--              @click="currentEvent = isEvent(day)"-->
-        <!--            >-->
-        <!--              {{ day.day }}-->
-        <!--            </UButton>-->
-        <!--          </UChip>-->
-
-        <!--          <template v-if="isEvent(day)" #content>-->
-        <!--            <div class="p-1 flex flex-col gap-2">-->
-        <!--              <div-->
-        <!--                class="text-sm text-neutral-400 flex items-center justify-center"-->
-        <!--              >-->
-        <!--                {{ dayjs(day).format('dd, MMM DD, YYYY') }}-->
-        <!--              </div>-->
-        <!--              <div-->
-        <!--                v-for="event in isEvent(day)"-->
-        <!--                :key="event.id"-->
-        <!--                class="flex gap-2 text-sm"-->
-        <!--              >-->
-        <!--                <div class="text-primary font-bold">-->
-        <!--                  {{ dayjs(event.eventTime.slice(0, 19)).format('HH:ss') }}-->
-        <!--                </div>-->
-        <!--                <div>-->
-        <!--                  {{ event.title }}-->
-        <!--                </div>-->
-        <!--              </div>-->
-        <!--            </div>-->
-        <!--          </template>-->
-        <!--        </UPopover>-->
-
-        <UButton
-          :color="getColorByDate(day)"
-          class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
-          variant="soft"
-          v-else
-          >{{ day.day }}</UButton
-        >
-      </template>
-    </UCalendar>
-    <div class="flex gap-8 mt-2 justify-end">
+          <UButton
+            :color="getColorByDate(day)"
+            class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
+            variant="soft"
+            v-else
+          >
+            {{ day.day }}
+          </UButton>
+        </template>
+      </UCalendar>
+      <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
+    </div>
+    <div class="flex gap-8 mt-2 p-4 justify-end">
       <UButton
         icon="i-heroicons-arrow-left-16-solid"
         @click="changeMonth('prev')"
@@ -162,7 +136,6 @@ onMounted(async () => {
         @click="changeMonth('next')"
       />
     </div>
-    <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
   </div>
 </template>
 

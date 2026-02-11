@@ -11,5 +11,6 @@ export const API_ENDPOINTS = {
   bookCollection: '/api/book-collection/',
   notification: '/api/notification/',
   game: '/api/games/',
+  genres: '/api/games/genres',
   tag: '/api/tags/',
 };

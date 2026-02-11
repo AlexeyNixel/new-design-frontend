@@ -3,17 +3,15 @@
     <CommonContentContainer>
       <div class="grid grid-cols-1 xl:grid-cols-7 gap-5">
         <div class="col-span-1 xl:col-span-5">
-          <MainCarousel class="h-full" />
+          <MainCarousel />
         </div>
 
         <div class="flex flex-row xl:flex-col col-span-2 gap-5">
-          <div
-            class="bg-white p-4 rounded-xl shadow hidden sm:block w-1/2 xl:w-full xl:h-1/3"
-          >
+          <div class="hidden sm:block w-1/2 xl:w-full xl:h-1/2">
             <InfoBanner />
           </div>
           <div
-            class="bg-white p-4 rounded-xl shadow w-full sm:w-1/2 xl:w-full xl:h-2/3"
+            class="bg-white rounded-xl shadow w-full sm:w-1/2 xl:w-full xl:h-2/3"
           >
             <EventCalendar />
           </div>
@@ -24,7 +22,7 @@
       </div>
     </CommonContentContainer>
 
-    <CommonContentContainer bg-gray title="Новости">
+    <CommonContentContainer bg-gray title="Последние новости">
       <NewsCarousel />
     </CommonContentContainer>
 
@@ -38,7 +36,7 @@
 
     <CommonContentContainer
       bg-gray
-      title="Игры"
+      title="Игровая библиотека"
       link-label="Полный список игр"
       link="/"
       ><GameCarousel

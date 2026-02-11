@@ -69,7 +69,7 @@
           <UBadge
             v-for="(genre, index) in takeGameGenres(game.genres)"
             :key="index"
-            :label="genre"
+            :label="GENRES[genre]"
             color="info"
             variant="soft"
           >
@@ -102,6 +102,9 @@
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
+import { GameGenres } from '~/constants/gameGenres';
+
+const GENRES = GameGenres;
 
 const props = defineProps<{
   game: Game;
@@ -115,7 +118,7 @@ const handleImageError = (e: Event) => {
 };
 
 const takeGameGenres = (genres: string) => {
-  return genres.split(';');
+  return genres.split('; ');
 };
 </script>
 

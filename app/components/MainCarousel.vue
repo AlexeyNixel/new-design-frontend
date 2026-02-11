@@ -1,24 +1,27 @@
 <template>
-  <UCarousel
-    arrows
-    loop
-    dots
-    :autoplay="{ delay: 6000 }"
-    :ui="ui"
-    v-slot="{ item }"
-    :items="slides"
-    class="h-[500px] rounded-xl shadow"
-  >
-    <NuxtLink
-      v-if="item?.post"
-      :to="{ name: 'entry-slug', params: { slug: item.post?.slug } }"
+  <div class="h-full">
+    <UCarousel
+      arrows
+      loop
+      dots
+      :autoplay="{ delay: 6000 }"
+      :ui="ui"
+      v-slot="{ item }"
+      :items="slides"
+      class="rounded-xl shadow overflow-hidden h-full"
     >
-      <img :src="item.image.path" alt="" class="h-[600px] rounded-xl" />
-    </NuxtLink>
-    <NuxtLink v-else :to="item.url">
-      <img :src="item.image.path" alt="" class="h-[600px] rounded-xl" />
-    </NuxtLink>
-  </UCarousel>
+      <NuxtLink
+        v-if="item?.post"
+        :to="{ name: 'entry-slug', params: { slug: item.post?.slug } }"
+        class="h-full"
+      >
+        <img :src="item.image.path" alt="" class="min-h-[600px] h-full" />
+      </NuxtLink>
+      <NuxtLink v-else :to="item.url">
+        <img :src="item.image.path" alt="" class="min-h-[600px] h-full" />
+      </NuxtLink>
+    </UCarousel>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -26,7 +29,7 @@ import { useSlides } from '~~/services/api/slidesService';
 
 const slideService = useSlides();
 const ui = {
-  viewport: 'h-full rounded-xl',
+  viewport: 'h-full rounded-b-xl',
   item: 'h-full',
   container: 'h-full',
   prev: 'rounded ml-[60px] bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',

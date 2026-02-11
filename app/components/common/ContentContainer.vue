@@ -1,8 +1,8 @@
 <template>
   <div :class="bgGray ? 'bg-neutral-200' : 'bg-neutral-100'">
     <div class="max-w-[1710px] mx-auto mb-10">
-      <div class="flex justify-between items-center my-8">
-        <h1>{{ title }}</h1>
+      <div v-if="title" class="flex justify-between items-center my-8">
+        <h2>{{ title }}</h2>
         <div v-if="link" class="flex items-center">
           <NuxtLink :to="link" class="mr-2"> {{ linkLabel }} </NuxtLink>
           <Icon name="mingcute:arrow-right-line"></Icon>

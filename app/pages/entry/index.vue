@@ -12,7 +12,6 @@
       <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
         Новости и события
       </h1>
-      <UButton @click="activeGrid = !activeGrid">Сменить</UButton>
     </div>
 
     <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
@@ -176,28 +175,89 @@
 
       <!-- Основной контент -->
       <div class="lg:w-2/3 xl:w-3/4">
+        <div class="flex items-center justify-end mb-4">
+          <div class="flex items-center gap-4">
+            <!-- Переключатель вида -->
+            <div class="flex items-center gap-3 bg-gray-100 rounded-xl p-1">
+              <UButton
+                variant="soft"
+                @click="activeGrid = false"
+                :class="[
+                  'flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200',
+                  !activeGrid
+                    ? 'bg-white shadow-md text-primary font-medium'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+                ]"
+                icon="i-heroicons-bars-3-bottom-left"
+                aria-label="Плиточный вид"
+              />
+
+              <UButton
+                variant="soft"
+                @click="activeGrid = true"
+                icon="i-heroicons-squares-2x2"
+                :class="[
+                  'flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200',
+                  activeGrid
+                    ? 'bg-white shadow-md text-primary font-medium'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+                ]"
+                aria-label="Сеточный вид"
+              />
+            </div>
+          </div>
+        </div>
+
         <!-- Список новостей -->
         <div v-if="entries?.data && entries.data.length > 0">
+          <!-- Сетка -->
           <div
-            class="gap-6"
-            :class="activeGrid ? 'grid grid-cols-4' : 'flex flex-col'"
+            v-if="activeGrid"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            <template v-for="entry in entries.data" :key="entry.id">
-              <EntryTile v-if="!activeGrid" :entry="entry" />
-              <EntryCard v-else :entry="entry" />
-            </template>
+            <EntryCard
+              v-for="entry in entries.data"
+              :key="entry.id"
+              :entry="entry"
+              class="h-full"
+            />
+          </div>
+
+          <!-- Список -->
+          <div v-else class="flex flex-col gap-6">
+            <EntryTile
+              v-for="entry in entries.data"
+              :key="entry.id"
+              :entry="entry"
+            />
           </div>
 
           <!-- Пагинация -->
-          <div class="mt-8 pt-6 border-t border-gray-100">
+          <div class="mt-10 pt-8 border-t border-gray-100">
             <UPagination
               show-edges
               @update:page="handleNavigate"
               v-model:page="page"
               :page-count="10"
               :total="entries?.meta?.total || 0"
+              :ui="{
+                wrapper: 'flex items-center gap-1',
+                base: 'min-w-8 w-8 h-8',
+                rounded: 'rounded-lg',
+                default: {
+                  color: 'primary',
+                  activeButton: {
+                    color: 'primary',
+                  },
+                },
+              }"
               class="flex items-center justify-center"
             />
+
+            <div class="text-center text-sm text-gray-500 mt-4">
+              Показано {{ entries.data.length }} из
+              {{ entries.meta?.total }} новостей
+            </div>
           </div>
         </div>
 

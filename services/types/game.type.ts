@@ -16,3 +16,8 @@ export interface Game {
   status: number;
   status_desc: string;
 }
+
+export interface Genres {
+  tag: string;
+  desc: string;
+}

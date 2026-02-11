@@ -12,7 +12,7 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/main.css',
     '~/assets/css/fonts.css',
-    '~/assets/css/ck-content.css',
+    '~/assets/css/editor.css',
     '~/assets/css/theme.css',
     '~/assets/css/feedback-gos.css',
   ],

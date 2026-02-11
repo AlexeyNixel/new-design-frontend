@@ -40,7 +40,7 @@
             @apply rounded-lg shadow-md mx-auto my-8 max-w-full h-auto;
         }
         a {
-            @apply text-link underline hover:opacity-70 transition;
+            @apply text-primary-600 underline hover:opacity-70 transition;
         }
         p {
             @apply indent-12 mb-4 leading-7;

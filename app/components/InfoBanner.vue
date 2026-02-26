@@ -1,23 +1,34 @@
 <template>
-  <div class="h-full bg-white rounded-xl shadow overflow-hidden">
+  <div class="h-full bg-white rounded-xl shadow">
     <header
-      class="flex items-center gap-3 bg-gradient-to-r from-amber-500 to-amber-400 px-4 py-3 text-white"
+      class="flex items-center gap-3 rounded-t-xl bg-gradient-to-r from-amber-500 to-amber-400 px-4 py-3 text-white"
     >
       <Icon class="text-xl" name="i-heroicons-bell-alert" />
       <h3 class="!m-0">Важные уведомления</h3>
     </header>
-
     <div class="p-4 flex flex-col gap-4">
-      <div class="p-2 flex items-center gap-3 bg-amber-400/10 rounded-lg">
+      <div class="p-2 flex items-center gap-3 bg-warning-400/10 rounded-lg">
         <div class="w-10 h-10 flex items-center justify-center">
           <Icon
-            class="w-6 h-6 text-amber-600"
-            name="i-heroicons-exclamation-triangle"
+            class="w-6 h-6 text-warning-600"
+            name="qlementine-icons:tool-16"
           />
         </div>
         <div>
           <div>Технические работы</div>
           <div class="text-sm text-neutral-500">Завтра с 10:00 до 12:00</div>
+        </div>
+      </div>
+      <div class="p-2 flex items-center gap-3 bg-error-400/10 rounded-lg">
+        <div class="w-10 h-10 flex items-center justify-center">
+          <Icon
+            class="w-6 h-6 text-error-600"
+            name="i-heroicons-exclamation-triangle"
+          />
+        </div>
+        <div>
+          <div>Библиотека не работает</div>
+          <div class="text-sm text-neutral-500">Завтра весь день</div>
         </div>
       </div>
       <div class="p-2 flex items-center gap-3 bg-success/10 rounded-lg">

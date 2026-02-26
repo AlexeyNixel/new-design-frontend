@@ -2,9 +2,7 @@
 @import '@nuxt/ui';
 
 @theme {
-  --breakpoint-xs: 30rem;
-  --breakpoint-2xl: 100rem;
-  --breakpoint-3xl: 110rem;
+
 }
 
 html {

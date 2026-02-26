@@ -82,57 +82,60 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <div class="relative">
-      <header
-        class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-4 py-3 text-white rounded-t-xl overflow-hidden"
-      >
-        <Icon class="text-xl" name="i-heroicons-calendar-days" />
-        <h3 class="!m-0">Календарь событий</h3>
-      </header>
-      <UCalendar
-        class="w-full p-4"
-        v-model="calendarDate"
-        :yearControls="false"
-        :monthControls="false"
-        :ui="{
-          heading: 'font-bold text-[16px]',
-        }"
-      >
-        <template #day="{ day }">
-          <div v-if="isEvent(day)">
-            <UChip :text="isEvent(day)?.length" size="xl">
-              <UButton
-                :color="getColorByDate(day)"
-                variant="soft"
-                class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white cursor-pointer"
-                @click="currentEvent = isEvent(day)"
-              >
-                {{ day.day }}
-              </UButton>
-            </UChip>
-          </div>
+  <div class="bg-white shadow rounded-xl relative">
+    <header
+      class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-4 py-3 text-white rounded-t-xl overflow-hidden"
+    >
+      <Icon class="text-xl" name="i-heroicons-calendar-days" />
+      <h3 class="!m-0">Календарь событий</h3>
+    </header>
+    <UCalendar
+      class="relative w-full p-4"
+      v-model="calendarDate"
+      :yearControls="false"
+      :monthControls="false"
+      @update:placeholder="console.log(123)"
+      :ui="{
+        heading: 'font-bold text-[16px]',
+      }"
+    >
+      <template #day="{ day }">
+        <div v-if="isEvent(day)">
+          <UChip :text="isEvent(day)?.length" size="xl">
+            <UButton
+              :color="getColorByDate(day)"
+              variant="soft"
+              class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white cursor-pointer"
+              @click="currentEvent = isEvent(day)"
+            >
+              {{ day.day }}
+            </UButton>
+          </UChip>
+        </div>
 
-          <UButton
-            :color="getColorByDate(day)"
-            class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
-            variant="soft"
-            v-else
-          >
-            {{ day.day }}
-          </UButton>
-        </template>
-      </UCalendar>
-      <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
-    </div>
-    <div class="flex gap-8 mt-2 p-4 justify-end">
+        <UButton
+          :color="getColorByDate(day)"
+          class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
+          variant="soft"
+          v-else
+        >
+          {{ day.day }}
+        </UButton>
+      </template>
+    </UCalendar>
+    <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
+    <div class="absolute top-18 flex w-full gap-4 justify-between">
       <UButton
-        icon="i-heroicons-arrow-left-16-solid"
+        class="ml-4"
+        variant="link"
+        icon="i-iconoir-nav-arrow-left"
         @click="changeMonth('prev')"
       />
 
       <UButton
-        icon="i-heroicons-arrow-right-16-solid"
+        class="mr-4"
+        variant="link"
+        icon="i-iconoir-nav-arrow-right"
         @click="changeMonth('next')"
       />
     </div>

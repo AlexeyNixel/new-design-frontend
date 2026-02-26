@@ -110,6 +110,32 @@
             />
           </div>
         </div>
+
+        <div
+          v-if="game?.rules_file"
+          class="bg-white rounded-xl shadow p-4 lg:p-6 gap-5 flex flex-col h-max"
+        >
+          <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
+            <Icon name="i-heroicons-book-open" class="w-6 h-6 text-primary" />
+            Правила игры
+          </h3>
+
+          <div class="flex items-center gap-4">
+            <div class="flex-1">
+              <p class="text-gray-600 mb-4">
+                Загрузите файл с правилами игры для ознакомления
+              </p>
+            </div>
+            <NuxtLink
+              :to="BASE_URL_RULE + game.rules_file"
+              target="_blank"
+              class="inline-flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold"
+            >
+              <Icon name="i-heroicons-arrow-down-tray" class="w-5 h-5" />
+              Скачать правила
+            </NuxtLink>
+          </div>
+        </div>
       </div>
     </div>
   </CommonContentContainer>
@@ -122,6 +148,7 @@ import { GameGenres } from '~/constants/gameGenres';
 const route = useRoute();
 const gameApi = useGameApi();
 const BASE_URL_IMAGE = 'http://infomania.ru/gamelibrary/img/game-cover/';
+const BASE_URL_RULE = 'http://infomania.ru/gamelibrary/files/rules/';
 
 const GENRES = GameGenres;
 
@@ -136,5 +163,6 @@ const ui = {
 };
 
 const { data: game } = await gameApi.getOneGames(route.params.slug as string);
+console.log(game);
 const { data: otherGames } = await gameApi.getAllGames({ limit: 8 });
 </script>

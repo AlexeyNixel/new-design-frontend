@@ -1,6 +1,6 @@
 <template>
   <UButton
-    color="primary"
+    color="warning"
     :icon="
       direction === 'left'
         ? 'i-heroicons-arrow-left-20-solid'

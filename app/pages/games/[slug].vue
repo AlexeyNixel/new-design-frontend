@@ -13,9 +13,36 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="col-span-2 space-y-6">
         <div
-          class="flex bg-white items-center justify-center w-full overflow-hidden rounded-xl shadow"
+          class="flex bg-white items-center justify-center w-full overflow-hidden rounded-xl shadow min-h-[500px]"
         >
-          <img class="w-1/2" :src="BASE_URL_IMAGE + game.cover_file" alt="" />
+          <div class="flex flex-row-reverse" v-if="game.id === 'gm28'">
+            <UCarousel
+              ref="carousel"
+              class="h-full flex justify-center mx-auto w-1/2"
+              :items="items"
+              v-slot="{ item }"
+            >
+              <img class="max-h-[450px]" :src="item" alt="" />
+            </UCarousel>
+            <div class="flex flex-col gap-4 p-4 w-1/6">
+              <div
+                v-for="(item, index) in items"
+                :key="index"
+                class="size-28 opacity-65 hover:opacity-100 transition-opacity"
+                :class="{ 'opacity-100': activeIndex === index }"
+                @click="select(index)"
+              >
+                <img :src="item" class="rounded-lg" loading="lazy" alt="" />
+              </div>
+            </div>
+          </div>
+
+          <img
+            class="w-1/2"
+            :src="BASE_URL_IMAGE + game.cover_file"
+            alt=""
+            v-else
+          />
         </div>
 
         <div class="bg-white rounded-xl shadow p-4 lg:p-6">
@@ -102,7 +129,6 @@
           class="bg-white rounded-xl shadow p-4 lg:p-6 gap-5 flex flex-col h-max"
         >
           <h3>Жанры</h3>
-
           <div class="flex gap-3">
             <UBadge
               v-for="item in game.genres.split('; ')"
@@ -152,6 +178,26 @@ const BASE_URL_RULE = 'http://infomania.ru/gamelibrary/files/rules/';
 
 const GENRES = GameGenres;
 
+const activeIndex = ref(0);
+
+const carousel = useTemplateRef('carousel');
+
+function onClickPrev() {
+  activeIndex.value--;
+}
+function onClickNext() {
+  activeIndex.value++;
+}
+function onSelect(index: number) {
+  activeIndex.value = index;
+}
+
+function select(index: number) {
+  activeIndex.value = index;
+
+  carousel.value?.emblaApi?.scrollTo(index);
+}
+
 const ui = {
   root: 'h-full flex',
   viewport: 'h-full ',
@@ -163,6 +209,12 @@ const ui = {
 };
 
 const { data: game } = await gameApi.getOneGames(route.params.slug as string);
-console.log(game);
+
+const items = [
+  'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Newdawn-1980x1980-wm.webp',
+  'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Noviy_Rassvet_02-1980x1980-wm.webp',
+  'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Noviy_Rassvet_03-1980x1980-wm.webp',
+];
+
 const { data: otherGames } = await gameApi.getAllGames({ limit: 8 });
 </script>

@@ -20,6 +20,7 @@ const ui = {
 const gameApi = useGameApi();
 
 const { data: games } = await gameApi.getAllGames();
+// console.log(games);
 </script>
 
 <style scoped></style>

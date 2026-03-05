@@ -7,6 +7,6 @@ export const useNotificationApi = () => {
 
   return {
     getAllNotifications: (params?: any) =>
-      api.get<Notification[]>(API_ENDPOINTS.notification, params),
+      api.get<Notification[]>(API_ENDPOINTS.notification, { params: params }),
   };
 };

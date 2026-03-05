@@ -42,7 +42,7 @@ export const useApi = () => {
   const getWithoutPagination = async <T>(
     endpoint: string,
     options?: any
-  ): Promise<ApiResponse<T>> => {
+  ): Promise<T> => {
     try {
       const { data } = await useFetch(baseApi + endpoint, {
         method: 'GET',
@@ -52,7 +52,7 @@ export const useApi = () => {
         },
         ...options,
       });
-      return data.value as ApiResponse<T>;
+      return data.value as T;
     } catch (e) {
       throw 'Неправильный запрос';
     }

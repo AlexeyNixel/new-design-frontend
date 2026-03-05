@@ -325,7 +325,6 @@ const activeGrid = ref(false);
 const entries = ref<ApiResponse<Entry[]>>();
 const page = ref(Number(route.query.page) || 1);
 const search = ref<string>((route.query.search as string) || '');
-const sortFilters = ref('-publishedAt');
 
 const { data: tags } = await entryApi.getAllTags();
 const { data: departments } = await departmentApi.getAllDepartments();

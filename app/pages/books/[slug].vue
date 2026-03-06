@@ -17,6 +17,7 @@
               class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 border border-gray-200 dark:border-gray-700 overflow-hidden"
             >
               <div
+                v-image-gallery="{ modal }"
                 class="aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800"
               >
                 <img
@@ -266,9 +267,13 @@
 
 <script setup lang="ts">
 import { useBookApi } from '~~/services/api/bookService';
+import { ModalsCommon } from '#components';
 
 const route = useRoute();
 const bookApi = useBookApi();
+
+const overlay = useOverlay();
+const modal = overlay.create(ModalsCommon);
 
 const { data: book } = await bookApi.getOneBook(route.params.slug as string, {
   include: 'preview, collections',

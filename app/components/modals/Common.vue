@@ -7,13 +7,6 @@ defineProps<{
 const carousel = ref();
 const activeIndex = ref(0);
 
-const onClickNext = () => {
-  activeIndex.value++;
-};
-const onClickPrev = () => {
-  activeIndex.value--;
-};
-
 const handleSelectSlide = (index: number) => {
   carousel.value?.emblaApi?.scrollTo(index);
   activeIndex.value = index;
@@ -35,6 +28,9 @@ const handleSelectSlide = (index: number) => {
         v-slot="{ item }"
         :start-index="startIndex || 0"
         arrows
+        :ui="{
+          item: 'm-auto',
+        }"
       >
         <img :src="item" alt="" />
       </UCarousel>

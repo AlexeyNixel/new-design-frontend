@@ -43,8 +43,12 @@
         </div>
       </header>
 
-      <main ref="contentRef" class="news-content">
-        <div class="tiptap" v-html="entry.content"></div>
+      <main class="news-content">
+        <div
+          v-image-gallery="{ modal }"
+          class="tiptap"
+          v-html="entry.content"
+        ></div>
       </main>
 
       <footer class="mt-8">
@@ -58,17 +62,6 @@
             variant="ghost"
             color="primary"
           />
-
-          <div class="flex items-center gap-3">
-            <span class="text-sm text-gray-600">Поделиться:</span>
-            <div class="flex gap-2">
-              <UButton
-                icon="i-heroicons-share"
-                variant="ghost"
-                @click="shareNews"
-              />
-            </div>
-          </div>
         </div>
       </footer>
     </article>
@@ -77,17 +70,13 @@
 
 <script setup lang="ts">
 import { ModalsCommon } from '#components';
-import 'ckeditor5/ckeditor5.css';
 import { useEntryApi } from '~~/services/api/entryService';
 
-const { $toast } = useNuxtApp();
 const route = useRoute();
+const formattedDate = useFormateDate();
 const overlay = useOverlay();
-const contentRef = ref();
 
 const modal = overlay.create(ModalsCommon);
-
-const formattedDate = useFormateDate();
 
 const breadcrumbUI = {
   link: 'text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400',
@@ -120,48 +109,12 @@ const breadcrumbItems = ref([
   },
 ]);
 
-const shareNews = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: entry.title,
-      text: entry.excerpt || entry.title,
-      url: window.location.href,
-    });
-  } else {
-    $toast.success('Ссылка скопирована в буфер обмена');
-    copyLink();
-  }
-};
-
-onMounted(() => {
-  if (import.meta.client) {
-    contentRef.value.addEventListener('click', (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-
-      if (target.tagName === 'IMG' && target instanceof HTMLImageElement) {
-        const images = contentRef.value.querySelectorAll('img');
-        const arrImageLink: string[] = Array.from(images).map(
-          (image: HTMLImageElement | string) => image.src
-        );
-
-        const startIndex = arrImageLink.findIndex((img) => img === target.src);
-        modal.open({ imgLinks: arrImageLink, startIndex: startIndex });
-      }
-    });
-  }
-});
-
 useSeoMeta({
   title: entry.title,
-  description: entry.desc || entry.title,
+  description: entry.description || entry.title,
   ogTitle: entry.title,
-  ogDescription: entry.desc || entry.title,
-  twitterCard: 'summary_large_image',
+  ogDescription: entry.description || entry.title,
 });
 </script>
 
-<style scoped>
-:deep(.ck-content .table p) {
-  text-indent: 0 !important;
-}
-</style>
+<style scoped></style>

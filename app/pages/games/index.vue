@@ -166,7 +166,10 @@ const page = ref(Number(route.query.page) || 1);
 const searchText = ref<string>((route.query.search as string) || '');
 
 const genres = await gameApi.getAllGenres();
-const activeGenres = ref<string[]>([]);
+
+const activeGenres = ref<string[]>(
+  (route.query.genres as string)?.split(',') || []
+);
 
 const selectedGenres = computed(() => {
   return genres.filter((genre) => activeGenres.value.includes(genre.tag));
@@ -176,7 +179,7 @@ const updateUrl = () => {
   const query: any = {};
   if (page.value >= 1) query.page = page.value;
   if (searchText.value) query.search = searchText.value;
-  if (activeGenres.value) query.genres = activeGenres.value;
+  if (activeGenres.value) query.genres = activeGenres.value.join(',');
 
   navigateTo({ name: 'games', query });
 };
@@ -221,6 +224,7 @@ const selectGenres = async (genre: Genres) => {
     activeGenres.value.push(genreId);
   }
 
+  console.log(123);
   updateUrl();
   await fetchData();
 };

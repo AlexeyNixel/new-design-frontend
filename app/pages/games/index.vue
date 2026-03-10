@@ -224,7 +224,6 @@ const selectGenres = async (genre: Genres) => {
     activeGenres.value.push(genreId);
   }
 
-  console.log(123);
   updateUrl();
   await fetchData();
 };

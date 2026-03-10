@@ -70,7 +70,7 @@ const notificationApi = useNotificationApi();
 const notifications = await notificationApi.getAllNotifications({
   limit: 2,
 });
-console.log(notifications);
+
 
 const ui = {
   viewport: 'h-full rounded',

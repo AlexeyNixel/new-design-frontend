@@ -94,7 +94,6 @@ onMounted(async () => {
       v-model="calendarDate"
       :yearControls="false"
       :monthControls="false"
-      @update:placeholder="console.log(123)"
       :ui="{
         heading: 'font-bold text-[16px]',
       }"

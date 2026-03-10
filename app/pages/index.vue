@@ -93,8 +93,6 @@
 
 <script setup lang="ts">
 const config = useRuntimeConfig();
-
-console.log(config.public.apiBaseUrl);
 </script>
 
 <style scoped></style>

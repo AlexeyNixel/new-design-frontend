@@ -33,7 +33,7 @@
                   alt=""
                 />
               </template>
-              <template v-else-if="item.type === 'video'">
+              <!-- <template v-else-if="item.type === 'video'">
                 <div
                   class="relative w-full h-full flex items-center justify-center"
                 >
@@ -47,7 +47,7 @@
                     ></iframe>
                   </div>
                 </div>
-              </template>
+              </template> -->
             </UCarousel>
             <div class="flex flex-col gap-4 p-4 w-1/6">
               <div
@@ -258,12 +258,12 @@ const items = [
     type: 'image',
     src: 'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Noviy_Rassvet_03-1980x1980-wm.webp',
   },
-  {
-    type: 'video',
-    src: 'https://vkvideo.ru/video_ext.php?oid=-187250026&id=456239123&hash=ed3aa8ee4fcd9257&hd=4',
-    allow:
-      'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;',
-  },
+  // {
+  //   type: 'video',
+  //   src: 'https://vkvideo.ru/video_ext.php?oid=-187250026&id=456239123&hash=ed3aa8ee4fcd9257&hd=4',
+  //   allow:
+  //     'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;',
+  // },
 ];
 
 useSeoMeta({
@@ -272,24 +272,4 @@ useSeoMeta({
 });
 </script>
 
-<style scoped>
-/* Дополнительные стили для видео превью */
-.video-thumbnail {
-  position: relative;
-  overflow: hidden;
-}
-
-.video-thumbnail::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 16px solid white;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-}
-</style>
+<style scoped></style>

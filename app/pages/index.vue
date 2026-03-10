@@ -36,7 +36,7 @@
           <!-- КАЛЕНДАРЬ -->
           <div class="w-full sm:w-1/2 xl:w-full xl:flex-[1.5]">
             <div class="h-full min-h-[300px] xl:min-h-0">
-              <EventCalendar />
+              <!-- <EventCalendar /> -->
             </div>
           </div>
         </div>

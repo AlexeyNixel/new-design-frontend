@@ -59,13 +59,13 @@
       <BookShelf />
     </CommonContentContainer>
 
-    <CommonContentContainer
+    <!-- <CommonContentContainer
       bg-gray
       title="Игровая библиотека"
       link-label="Полный список игр"
       link="/games"
       ><GameCarousel
-    /></CommonContentContainer>
+    /></CommonContentContainer> -->
 
     <!--    <CommonContentContainer bgGray>-->
     <!--      <div class="flex gap-5">-->
@@ -91,8 +91,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-const config = useRuntimeConfig();
-</script>
+<script setup lang="ts"></script>
 
 <style scoped></style>

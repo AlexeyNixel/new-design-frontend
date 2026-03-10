@@ -78,7 +78,7 @@
     <!--      </div>-->
     <!--    </CommonContentContainer>-->
 
-    <CommonContentContainer>
+    <!-- <CommonContentContainer>
       <div class="flex gap-8">
         <div class="w-1/2 h-[450px]">
           <FeedbackGos class="h-full shadow overflow-hidden rounded-xl" />
@@ -87,7 +87,7 @@
           <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
         </div>
       </div>
-    </CommonContentContainer>
+    </CommonContentContainer> -->
   </div>
 </template>
 

@@ -59,15 +59,15 @@
       <BookShelf />
     </CommonContentContainer>
 
-    <!-- <CommonContentContainer
+    <CommonContentContainer
       bg-gray
       title="Игровая библиотека"
       link-label="Полный список игр"
       link="/games"
       ><GameCarousel
-    /></CommonContentContainer> -->
+    /></CommonContentContainer>
 
-    <!--    <CommonContentContainer bgGray>-->
+    <!-- <CommonContentContainer bgGray>-->
     <!--      <div class="flex gap-5">-->
     <!--        <CommonContentContainer title="Викторины" bgGray>-->
     <!--          <ExhibitionContent />-->
@@ -76,7 +76,7 @@
     <!--          <ExhibitionContent />-->
     <!--        </CommonContentContainer>-->
     <!--      </div>-->
-    <!--    </CommonContentContainer>-->
+    <!--    </CommonContentContainer> -->
 
     <!-- <CommonContentContainer>
       <div class="flex gap-8">

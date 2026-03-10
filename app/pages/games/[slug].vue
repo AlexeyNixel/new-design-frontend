@@ -33,21 +33,6 @@
                   alt=""
                 />
               </template>
-              <!-- <template v-else-if="item.type === 'video'">
-                <div
-                  class="relative w-full h-full flex items-center justify-center"
-                >
-                  <div class="relative w-full" style="padding-bottom: 56.25%">
-                    <iframe
-                      :src="item.src"
-                      class="absolute top-0 left-0 w-full h-full rounded-lg"
-                      :allow="item.allow"
-                      frameborder="0"
-                      allowfullscreen
-                    ></iframe>
-                  </div>
-                </div>
-              </template> -->
             </UCarousel>
             <div class="flex flex-col gap-4 p-4 w-1/6">
               <div
@@ -265,11 +250,6 @@ const items = [
   //     'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;',
   // },
 ];
-
-useSeoMeta({
-  title: removeHtmlEntities(game.name || ''),
-  description: game.short_description || '',
-});
 </script>
 
 <style scoped></style>

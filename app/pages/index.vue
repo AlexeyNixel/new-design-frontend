@@ -36,7 +36,7 @@
           <!-- КАЛЕНДАРЬ -->
           <div class="w-full sm:w-1/2 xl:w-full xl:flex-[1.5]">
             <div class="h-full min-h-[300px] xl:min-h-0">
-              <!-- <EventCalendar /> -->
+              <EventCalendar />
             </div>
           </div>
         </div>
@@ -78,16 +78,18 @@
     <!--      </div>-->
     <!--    </CommonContentContainer> -->
 
-    <!-- <CommonContentContainer>
+    <CommonContentContainer>
       <div class="flex gap-8">
         <div class="w-1/2 h-[450px]">
-          <FeedbackGos class="h-full shadow overflow-hidden rounded-xl" />
+          <client-only>
+            <FeedbackGos class="h-full shadow overflow-hidden rounded-xl" />
+          </client-only>
         </div>
         <div class="w-1/2 shadow overflow-hidden rounded-xl">
           <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
         </div>
       </div>
-    </CommonContentContainer> -->
+    </CommonContentContainer>
   </div>
 </template>
 

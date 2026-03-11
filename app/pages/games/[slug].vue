@@ -33,6 +33,21 @@
                   alt=""
                 />
               </template>
+              <template v-else-if="item.type === 'video'">
+                <div
+                  class="relative w-full h-full flex items-center justify-center"
+                >
+                  <div class="relative w-full" style="padding-bottom: 56.25%">
+                    <iframe
+                      :src="item.src"
+                      class="absolute top-0 left-0 w-full h-full rounded-lg"
+                      :allow="item.allow"
+                      frameborder="0"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                </div>
+              </template>
             </UCarousel>
             <div class="flex flex-col gap-4 p-4 w-1/6">
               <div
@@ -243,12 +258,12 @@ const items = [
     type: 'image',
     src: 'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Noviy_Rassvet_03-1980x1980-wm.webp',
   },
-  // {
-  //   type: 'video',
-  //   src: 'https://vkvideo.ru/video_ext.php?oid=-187250026&id=456239123&hash=ed3aa8ee4fcd9257&hd=4',
-  //   allow:
-  //     'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;',
-  // },
+  {
+    type: 'video',
+    src: 'https://vkvideo.ru/video_ext.php?oid=-187250026&id=456239123&hash=ed3aa8ee4fcd9257&hd=4',
+    allow:
+      'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;',
+  },
 ];
 </script>
 

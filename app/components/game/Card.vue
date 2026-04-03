@@ -114,7 +114,7 @@ const baseUrlImage = 'http://infomania.ru/gamelibrary/img/game-cover/';
 
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
-  target.src = 'https://placehold.co/280x320/6b7280/ffffff?text=Нет+обложки';
+  target.src = '/placeholder.jpg';
 };
 
 const takeGameGenres = (genres: string) => {

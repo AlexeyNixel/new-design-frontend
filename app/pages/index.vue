@@ -66,6 +66,9 @@
       link="/games"
       ><GameCarousel
     /></CommonContentContainer>
+    <CommonContentContainer>
+      <Achievements />
+    </CommonContentContainer>
 
     <!-- <CommonContentContainer bgGray>-->
     <!--      <div class="flex gap-5">-->

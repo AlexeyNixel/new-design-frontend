@@ -13,4 +13,5 @@ export const API_ENDPOINTS = {
   game: '/api/games/',
   genres: '/api/games/genres',
   tag: '/api/tags/',
+  achievements: '/api/achievements',
 };

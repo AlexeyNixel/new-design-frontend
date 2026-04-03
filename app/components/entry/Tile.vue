@@ -3,22 +3,15 @@
     :to="{ name: 'entry-slug', params: { slug: entry.slug } }"
     class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row items-stretch min-h-64 hover:-translate-y-2 border border-gray-100"
   >
-    <!-- Изображение с эффектами -->
     <div
       class="md:w-72 min-w-72 h-64 md:h-auto overflow-hidden relative shrink-0"
     >
       <img
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        :onerror="notFoundImage"
-        :src="entry?.preview?.path"
+        @error="notFoundImage"
+        :src="imgSrc"
         :alt="entry.title"
-        loading="lazy"
       />
-
-      <!-- Градиентная накладка -->
-      <div
-        class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-60 md:opacity-0 group-hover:opacity-60 transition-opacity duration-300"
-      ></div>
 
       <!-- Дата в стиле карточки -->
       <div
@@ -103,9 +96,13 @@
 <script setup lang="ts">
 import type { Entry } from '~~/services/types/entry.type';
 
-defineProps<{
+const props = defineProps<{
   entry: Entry;
 }>();
+
+const DEFAULT_IMAGE = '/placeholder.jpg';
+
+const imgSrc = ref(props.entry?.preview?.path || DEFAULT_IMAGE);
 
 // Хелпер для форматирования даты
 const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
@@ -127,8 +124,10 @@ const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
   return date.toLocaleDateString('ru-RU', options);
 };
 
-const notFoundImage = (e: any) => {
-  e.target.src = 'https://cdn1.flamp.ru/b1aea1d7e4be8c57b1e414678d5756f0.png';
+const notFoundImage = () => {
+  if (imgSrc.value !== DEFAULT_IMAGE) {
+    imgSrc.value = DEFAULT_IMAGE;
+  }
 };
 </script>
 

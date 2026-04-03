@@ -7,8 +7,9 @@
       <!-- Изображение с эффектом зума -->
       <img
         class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-        :src="entry?.preview?.path"
+        :src="imgSrc"
         :alt="entry.title"
+        @error="notFoundImage"
       />
       <div class="absolute top-4 left-4">
         <div
@@ -64,6 +65,16 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+
+const DEFAULT_IMAGE = '/placeholder.jpg';
+
+const imgSrc = ref(props.entry?.preview?.path || DEFAULT_IMAGE);
+
+const notFoundImage = () => {
+  if (imgSrc.value !== DEFAULT_IMAGE) {
+    imgSrc.value = DEFAULT_IMAGE;
+  }
+};
 </script>
 
 <style scoped></style>

@@ -18,7 +18,7 @@
       <!-- Блок фильтров -->
       <div class="lg:w-1/3 xl:w-1/4">
         <div
-          class="bg-white rounded-2xl shadow-lg border border-gray-100 p-5 md:p-6 sticky top-6"
+          class="bg-white rounded-2xl shadow border border-gray-100 p-5 md:p-6 sticky top-6"
         >
           <!-- Заголовок фильтров -->
           <div
@@ -41,30 +41,6 @@
           </div>
 
           <!-- Поиск -->
-          <div class="mb-6">
-            <UInput
-              v-model="search"
-              placeholder="Введите запрос..."
-              icon="i-heroicons-magnifying-glass-20-solid"
-              class="w-full"
-              size="lg"
-              @keydown.enter="handleSearchChange"
-            >
-              <template #trailing>
-                <UButton
-                  v-if="search"
-                  @click="
-                    search = '';
-                    handleSearchChange();
-                  "
-                  variant="link"
-                  size="xs"
-                >
-                  <Icon name="i-heroicons-x-mark" class="w-4 h-4" />
-                </UButton>
-              </template>
-            </UInput>
-          </div>
 
           <!-- Фильтр по отделам -->
           <div class="mb-6">
@@ -158,6 +134,20 @@
             </div>
           </div>
 
+          <div class="mb-6">
+            <h3
+              class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
+            >
+              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
+              Год
+            </h3>
+            <div class="flex overflow-x-auto w-full gap-4">
+              <UButton variant="soft" class="p-2" v-for="item in 20"
+                >20{{ item }}</UButton
+              >
+            </div>
+          </div>
+
           <!-- Сортировка -->
           <div class="pt-4 border-t border-gray-100">
             <h3 class="text-sm font-semibold text-gray-900 mb-3">Сортировка</h3>
@@ -175,36 +165,43 @@
 
       <!-- Основной контент -->
       <div class="lg:w-2/3 xl:w-3/4">
-        <div class="flex items-center justify-end mb-4">
-          <div class="flex items-center gap-4">
-            <!-- Переключатель вида -->
-            <div class="flex items-center gap-3 bg-gray-100 rounded-xl p-1">
-              <UButton
-                variant="soft"
-                @click="activeGrid = false"
-                :class="[
-                  'flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200',
-                  !activeGrid
-                    ? 'bg-white shadow-md text-primary font-medium'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-                ]"
-                icon="i-heroicons-bars-3-bottom-left"
-                aria-label="Плиточный вид"
-              />
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <div class="w-full">
+            <UInput
+              variant="none"
+              class="w-full rounded-lg bg-white shadow"
+              placeholder="Поиск новостей"
+              icon="i-heroicons-magnifying-glass-20-solid"
+              size="lg"
+              @keydown.enter="handleSearchChange"
+            />
+          </div>
+          <div class="flex gap-3">
+            <UButton
+              variant="soft"
+              @click="activeGrid = false"
+              :class="[
+                'flex items-center px-4 py-2 rounded-lg transition-all duration-200',
+                !activeGrid
+                  ? 'bg-white shadow-md text-primary font-medium'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+              ]"
+              icon="i-heroicons-bars-3-bottom-left"
+              aria-label="Плиточный вид"
+            />
 
-              <UButton
-                variant="soft"
-                @click="activeGrid = true"
-                icon="i-heroicons-squares-2x2"
-                :class="[
-                  'flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-200',
-                  activeGrid
-                    ? 'bg-white shadow-md text-primary font-medium'
-                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
-                ]"
-                aria-label="Сеточный вид"
-              />
-            </div>
+            <UButton
+              variant="soft"
+              @click="activeGrid = true"
+              icon="i-heroicons-squares-2x2"
+              :class="[
+                'flex items-center  px-4 py-2 rounded-lg transition-all duration-200',
+                activeGrid
+                  ? 'bg-white shadow-md text-primary font-medium'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
+              ]"
+              aria-label="Сеточный вид"
+            />
           </div>
         </div>
 
@@ -213,7 +210,7 @@
           <!-- Сетка -->
           <div
             v-if="activeGrid"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             <EntryCard
               v-for="entry in entries.data"
@@ -360,6 +357,7 @@ const handleSearchChange = async () => {
     include: 'preview, department',
     search: search.value || undefined,
     department: filters.value.department,
+    tags: filters.value.tags,
   });
 };
 
@@ -435,6 +433,7 @@ const loadEntries = async () => {
       page: page.value,
       department: filters.value.department,
       sortOrder: filters.value.sort,
+      tags: filters.value.tags,
     });
   } catch (error) {
     console.error('Error loading entries:', error);

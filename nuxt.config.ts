@@ -16,7 +16,19 @@ export default defineNuxtConfig({
     '~/assets/css/theme.css',
     '~/assets/css/feedback-gos.css',
   ],
-
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'preload',
+          as: 'font',
+          href: '/fonts/Montserrat-Regular.woff2',
+          crossorigin: 'anonymous',
+          type: 'font/woff2',
+        },
+      ],
+    },
+  },
   ui: {
     colorMode: false,
     fonts: false,

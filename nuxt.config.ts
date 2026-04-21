@@ -41,7 +41,7 @@ export default defineNuxtConfig({
   nitro: {
     devProxy: {
       '/site': {
-        target: 'http://192.168.0.41:10001',
+        target: 'http://static.infomania.ru',
         changeOrigin: true,
       },
     },
@@ -49,7 +49,7 @@ export default defineNuxtConfig({
     // Для production тоже нужно настроить routeRules
     routeRules: {
       '/site/**': {
-        proxy: 'http://192.168.0.41:10001/site/**',
+        proxy: 'http://static.infomania.ru/site/**',
       },
     },
   },
@@ -59,15 +59,15 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         '/site': {
-          target: 'http://192.168.0.41:10001',
+          target: 'http://static.infomania.ru',
           changeOrigin: true,
         },
         '/dev': {
-          target: 'http://192.168.0.41:10001/',
+          target: 'http://static.infomania.ru/',
           changeOrigin: true,
         },
         '/media': {
-          target: 'http://192.168.0.41:10001/site',
+          target: 'http://static.infomania.ru/site',
           changeOrigin: true,
         },
       },

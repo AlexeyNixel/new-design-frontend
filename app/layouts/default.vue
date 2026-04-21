@@ -6,7 +6,6 @@ import TestHeader from '~/components/layout/test-header.vue';
   <div class="flex flex-col min-h-screen justify-center">
     <div class="max-w-full lg:max-w-[1710px] w-full mx-auto">
       <LayoutHeader />
-      <!--      <test-header />-->
     </div>
 
     <div class="fixed bottom-0 lg:static lg:my-4 z-100">

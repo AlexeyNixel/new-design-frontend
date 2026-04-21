@@ -12,12 +12,12 @@
     <NuxtLink
       v-if="item?.post"
       :to="{ name: 'entry-slug', params: { slug: item.post?.slug } }"
-      class="h-full"
+      class="max-w-7xl h-full"
     >
-      <img :src="item.image.path" alt="" class="lg:min-h-[600px] h-full" />
+      <img :src="item.image.path" alt="" class="w-full h-full" />
     </NuxtLink>
-    <NuxtLink v-else :to="item.url">
-      <img :src="item.image.path" alt="" class="lg:min-h-[600px] h-full" />
+    <NuxtLink class="max-w-7xl h-full" v-else :to="item.url">
+      <img :src="item.image.path" alt="" class="w-full h-full" />
     </NuxtLink>
   </UCarousel>
 </template>

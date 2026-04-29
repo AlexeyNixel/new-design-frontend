@@ -69,11 +69,11 @@
 </template>
 
 <script setup lang="ts">
-import { type post } from '~~/services/types/post.type';
+import type { Entry } from '~~/services/types/entry.type';
 import dayjs from 'dayjs';
 
 interface Props {
-  post: post;
+  post: Entry;
 }
 
 const props = defineProps<Props>();

@@ -76,6 +76,18 @@ const changeMonth = async (direction: 'prev' | 'next') => {
   await fetchEvents(calendarDate.value);
 };
 
+const upcomingEvents = computed(() => {
+  if (!events.value) return [];
+  const now = dayjs();
+  return events.value
+    .filter((event) => dayjs(event.eventTime).isAfter(now))
+    .slice(0, 5);
+});
+
+const formatEventDate = (date: string) => {
+  return dayjs(date).format('DD MMM, HH:mm');
+};
+
 onMounted(async () => {
   await fetchEvents(new Date());
 });
@@ -83,61 +95,101 @@ onMounted(async () => {
 
 <template>
   <div class="bg-white shadow rounded-xl relative">
+    <!-- Заголовок -->
     <header
-      class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-4 py-3 text-white rounded-t-xl overflow-hidden"
+      class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-3 sm:px-4 py-2 sm:py-3 text-white rounded-t-xl"
     >
-      <Icon class="text-xl" name="i-heroicons-calendar-days" />
-      <h3 class="!m-0">Календарь событий</h3>
+      <Icon class="text-lg sm:text-xl" name="i-heroicons-calendar-days" />
+      <div class="font-bold text-base sm:text-lg">Календарь событий</div>
     </header>
-    <UCalendar
-      class="relative w-full p-4"
-      v-model="calendarDate"
-      :yearControls="false"
-      :monthControls="false"
-      :ui="{
-        heading: 'font-bold text-[16px]',
-      }"
-    >
-      <template #day="{ day }">
-        <div v-if="isEvent(day)">
-          <UChip :text="isEvent(day)?.length" size="xl">
+
+    <!-- Календарь с адаптивными размерами -->
+    <div class="p-2 sm:p-3 md:p-4">
+      <!-- Мобильная версия - список событий -->
+      <div class="block sm:hidden">
+        <div class="space-y-2 max-h-[400px] overflow-y-auto">
+          <div
+            v-for="event in upcomingEvents"
+            :key="event.id"
+            class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100"
+            @click="currentEvent = event"
+          >
+            <div class="font-semibold text-sm">
+              {{ formatEventDate(event.eventTime) }}
+            </div>
+            <div class="text-sm">{{ event.title }}</div>
+          </div>
+          <div
+            v-if="!upcomingEvents.length"
+            class="text-center text-gray-500 py-8"
+          >
+            Нет событий
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop версия - календарь -->
+      <div class="hidden sm:block">
+        <UCalendar
+          v-model="calendarDate"
+          :yearControls="false"
+          :monthControls="false"
+          :ui="{
+            heading: 'font-bold text-sm sm:text-base',
+            grid: 'gap-1',
+            cell: 'p-0.5 sm:p-1',
+          }"
+        >
+          <template #day="{ day }">
+            <div v-if="isEvent(day)">
+              <UChip
+                :text="String(isEvent(day)?.length)"
+                size="sm"
+                :ui="{ rounded: 'rounded-full' }"
+              >
+                <UButton
+                  :color="getColorByDate(day)"
+                  variant="soft"
+                  class="flex items-center justify-center rounded-full w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base focus:text-white cursor-pointer"
+                  @click="currentEvent = isEvent(day)"
+                >
+                  {{ day.day }}
+                </UButton>
+              </UChip>
+            </div>
+
             <UButton
+              v-else
               :color="getColorByDate(day)"
+              class="flex items-center justify-center rounded-full w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base focus:text-white"
               variant="soft"
-              class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white cursor-pointer"
-              @click="currentEvent = isEvent(day)"
             >
               {{ day.day }}
             </UButton>
-          </UChip>
-        </div>
+          </template>
+        </UCalendar>
+      </div>
+    </div>
 
-        <UButton
-          :color="getColorByDate(day)"
-          class="flex items-center justify-center rounded-full w-8 h-8 focus:text-white"
-          variant="soft"
-          v-else
-        >
-          {{ day.day }}
-        </UButton>
-      </template>
-    </UCalendar>
-    <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
-    <div class="absolute top-18 flex w-full gap-4 justify-between">
+    <!-- Кнопки навигации - теперь не перекрывают -->
+    <div
+      class="absolute top-3 left-0 right-0 flex justify-between px-2 sm:px-3"
+    >
       <UButton
-        class="ml-4"
         variant="link"
         icon="i-iconoir-nav-arrow-left"
+        class="text-white hover:text-gray-200 !p-1 sm:!p-2"
         @click="changeMonth('prev')"
       />
-
       <UButton
-        class="mr-4"
         variant="link"
         icon="i-iconoir-nav-arrow-right"
+        class="text-white hover:text-gray-200 !p-1 sm:!p-2"
         @click="changeMonth('next')"
       />
     </div>
+
+    <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
   </div>
 </template>
 

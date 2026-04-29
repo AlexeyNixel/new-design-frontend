@@ -1,34 +1,30 @@
 <template>
-  <UCarousel
-    arrows
-    :items="entry"
-    :ui="ui"
-    v-slot="{ item }"
-    class="h-full m-4"
-  >
-    <EntryCard :entry="item" />
-  </UCarousel>
+  <div class="news-asymmetric">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6" v-if="entry?.length">
+      <div class="lg:col-span-2">
+        <EntryCardHero :post="entry[0]" />
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <EntryCompactCard
+            v-for="item in entry.slice(1, 9)"
+            :key="item.id"
+            :entry="item"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useEntryApi } from '~~/services/api/entryService';
 
-const ui = {
-  root: 'h-full flex',
-  viewport: 'h-full ',
-  item: 'h-full w-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 transition-opacity ',
-  container: 'h-full',
-  arrows: 'absolute right-15 bottom-5',
-  prev: ' rounded  bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
-  next: ' rounded  bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
-};
-
 const entryApi = useEntryApi();
 
 const { data: entry } = await entryApi.getAllEntry({
-  limit: 12,
+  limit: 9,
   include: 'preview, department',
 });
 </script>
-
-<style scoped></style>

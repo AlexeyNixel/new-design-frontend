@@ -1,82 +1,55 @@
 <template>
-  <div class="h-full bg-white rounded-xl shadow">
-    <header
-      class="flex items-center gap-3 rounded-t-xl bg-gradient-to-r from-amber-500 to-amber-400 p-2 xl:px-4 xl:py-3 text-white"
+  <UCarousel
+    dots
+    v-slot="{ item }"
+    :items="notifications.data"
+    :ui="{
+      dots: 'bottom-2 sm:bottom-3',
+      dot: 'w-1.5 h-1.5 sm:w-2 sm:h-2 data-[state=active]:bg-primary mx-0.5',
+      container: 'h-full',
+      item: 'h-full',
+    }"
+    class="h-full flex"
+  >
+    <div
+      class="rounded-2xl p-3 sm:p-4 text-white shadow flex items-center justify-between gap-3 h-full"
+      :class="STYLE_BY_TYPE[item.type]"
     >
-      <Icon class="text-xl" name="i-heroicons-bell-alert" />
-      <div class="font-bold text-lg 3xl:text-2xl">Важные уведомления</div>
-    </header>
-    <!--    <div class="p-4 flex flex-col gap-4 3xl:h-[170px]">-->
-    <!--      <template v-if="notifications.data">-->
-    <!--
-<!--      </template>-->
-    <!--      <template v-else>-->
-    <!--        <div-->
-    <!--          class="bg-white border border-neutral-200 rounded-xl p-4 flex items-center gap-4"-->
-    <!--        >-->
-    <!--          <div-->
-    <!--            class="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mb-4"-->
-    <!--          >-->
-    <!--            <Icon-->
-    <!--              name="i-heroicons-bell-snooze"-->
-    <!--              class="w-6 h-6 text-neutral-400"-->
-    <!--            />-->
-    <!--          </div>-->
-    <!--          <div>-->
-    <!--            <h4 class="text-lg font-medium text-neutral-700 mb-2">-->
-    <!--              Новых уведомлений нет-->
-    <!--            </h4>-->
-    <!--            <p class="text-sm text-neutral-500 max-w-sm mx-auto">-->
-    <!--              Пока всё тихо и спокойно. Загляните позже — здесь появятся важные-->
-    <!--              новости и события библиотеки.-->
-    <!--            </p>-->
-    <!--          </div>-->
-    <!--        </div>-->
-    <!--      </template>-->
-    <!--    </div>-->
-    <!--    3xl:h-[117px]-->
-    <UCarousel
-      v-slot="{ item }"
-      orientation="vertical"
-      :items="notifications.data"
-      :ui="{
-        container: 'h-[117px] 3xl:h-[184px] w-full ',
-        item: 'basis-1/3  w-full',
-      }"
-      class="p-3"
-    >
-      <NuxtLink
-        class="p-2 flex rounded-lg w-full"
-        :class="`bg-${item.type}/10`"
-      >
-        <div class="w-10 h-10 flex items-center justify-center">
-          <Icon
-            :class="`text-${item.type}`"
-            class="w-6 h-6"
-            :name="ICON_BY_TYPE[item.type]"
-          />
+      <div class="flex-1 min-w-0">
+        <div
+          class="font-bold text-sm sm:text-base md:text-lg 4xl:text-xl uppercase tracking-wider truncate"
+        >
+          {{ item.title }}
         </div>
-        <div class="w-full">
-          <div>{{ item.title }}</div>
-          <div class="flex justify-between">
-            <div class="text-sm text-neutral-500">
-              {{ item.description }}
-            </div>
-            <div class="flex items-center text-sm" v-if="item.postId">
-              <div>Подробнее</div>
-              <Icon name="mingcute:arrow-right-line"></Icon>
-            </div>
-          </div>
-        </div>
-      </NuxtLink>
-    </UCarousel>
-  </div>
+        <p
+          class="text-xs sm:text-sm opacity-80 mt-1 line-clamp-2 sm:line-clamp-3"
+        >
+          {{ item.description }}
+        </p>
+        <UButton
+          label="Подробнее"
+          variant="soft"
+          :color="item.type"
+          class="mt-2 sm:mt-3 bg-white text-black text-xs font-bold px-3 sm:px-4 py-1.5 sm:py-2 rounded-full shadow-md hover:scale-105 transition-transform"
+        />
+      </div>
+      <div class="text-3xl sm:text-4xl md:text-5xl flex-shrink-0">
+        <Icon :name="ICON_BY_TYPE[item.type]" />
+      </div>
+    </div>
+  </UCarousel>
 </template>
 
 <script setup lang="ts">
 import { useNotificationApi } from '~~/services/api/notification.api';
 
 const notificationApi = useNotificationApi();
+
+const STYLE_BY_TYPE = {
+  success: 'bg-gradient-to-br from-success-600 to-success-400',
+  warning: 'bg-gradient-to-br from-warning-600 to-warning-400',
+  error: 'bg-gradient-to-br from-error-600 to-error-400',
+};
 
 const notifications = await notificationApi.getAllNotifications({
   limit: 5,
@@ -87,6 +60,11 @@ const ICON_BY_TYPE = {
   warning: 'qlementine-icons:tool-16',
   error: 'i-heroicons-exclamation-triangle',
 };
-</script>
 
-<style scoped></style>
+const carouselUI = {
+  dots: 'bottom-2',
+  dot: 'w-1.5 h-1.5 data-[state=active]:w-3 data-[state=active]:bg-white data-[state=active]:rounded-full transition-all',
+  container: 'h-full',
+  item: 'h-full',
+};
+</script>

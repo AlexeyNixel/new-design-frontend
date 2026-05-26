@@ -17,7 +17,7 @@
     >
       <div class="flex-1 min-w-0">
         <div
-          class="font-bold text-sm sm:text-base md:text-lg 4xl:text-xl uppercase tracking-wider truncate"
+          class="font-bold text-sm sm:text-base md:text-lg 4xl:text-xl uppercase tracking-wider line-clamp-2"
         >
           {{ item.title }}
         </div>

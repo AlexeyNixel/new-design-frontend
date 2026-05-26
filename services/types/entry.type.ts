@@ -1,4 +1,5 @@
 import { type File } from './file.type';
+import type { Tag } from '~~/services/types/tag.type';
 
 export interface Entry {
   id: string;
@@ -15,6 +16,7 @@ export interface Entry {
   departmentId: string;
   pinned: boolean;
   preview: File;
+  tags: Tag[];
   department: {
     title: string;
     id: string;

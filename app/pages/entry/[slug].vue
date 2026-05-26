@@ -6,13 +6,18 @@
       <header class="mb-8">
         <div class="mb-6">
           <div class="flex gap-2">
-            <UBadge
+            <NuxtLink
               v-for="tag in entry.tags"
-              :label="tag.label"
-              color="primary"
-              variant="soft"
-              class="mb-3"
-            />
+              :key="tag.id"
+              :to="{ name: 'entry', query: { tags: tag.id } }"
+            >
+              <UBadge
+                :label="tag.label"
+                color="primary"
+                variant="soft"
+                class="mb-3 hover:bg-primary-500 hover:text-white transition"
+              />
+            </NuxtLink>
           </div>
           <h1
             class="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
@@ -34,10 +39,16 @@
                   чтения</span
                 >
               </div>
-              <div class="flex items-center gap-1">
+              <NuxtLink
+                :to="{
+                  name: 'entry',
+                  query: { department: entry.departmentId },
+                }"
+                class="flex items-center gap-1 hover:underline"
+              >
                 <UIcon name="i-heroicons-user" class="w-4 h-4" />
                 <span>{{ entry.department.title }}</span>
-              </div>
+              </NuxtLink>
             </div>
           </div>
         </div>

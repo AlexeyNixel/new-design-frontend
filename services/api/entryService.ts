@@ -13,6 +13,7 @@ export const useEntryApi = () => {
     getBySlugEntry: (slug: string, params?: any) =>
       api.getOne<Entry>(API_ENDPOINTS.post, slug, { params: params }),
 
-    getAllTags: (params?: any) => api.get<Tag[]>(API_ENDPOINTS.tag, params),
+    getAllTags: (params?: any) =>
+      api.get<Tag[]>(API_ENDPOINTS.tag, { params: params }),
   };
 };

@@ -323,7 +323,12 @@ const entries = ref<ApiResponse<Entry[]>>();
 const page = ref(Number(route.query.page) || 1);
 const search = ref<string>((route.query.search as string) || '');
 
-const { data: tags } = await entryApi.getAllTags();
+const { data: tags } = await entryApi.getAllTags({
+  limit: 30,
+  sortBy: 'title',
+  sortOrder: 'asc',
+});
+
 const { data: departments } = await departmentApi.getAllDepartments();
 
 const filters = ref({
@@ -427,6 +432,7 @@ const updateUrl = () => {
 
 const loadEntries = async () => {
   try {
+    console.log(filters.value.tags);
     entries.value = await entryApi.getAllEntry({
       include: 'preview, department',
       search: search.value || undefined,

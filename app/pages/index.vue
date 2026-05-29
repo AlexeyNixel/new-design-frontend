@@ -60,8 +60,8 @@
       <BookShelf />
     </CommonSectionWrapper>
 
-    <!--    <CommonSectionWrapper bg-gray>-->
-    <!--      <Achievements />-->
-    <!--    </CommonSectionWrapper>-->
+    <CommonSectionWrapper >
+      <Achievements />
+    </CommonSectionWrapper>
   </div>
 </template>

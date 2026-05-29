@@ -48,7 +48,7 @@
 
         ul,
         ol {
-            @apply ml-12 mr-6 pl-6 ;
+            @apply list-disc ml-12 mr-6 pl-6 ;
 
             p {
                 @apply indent-0;
@@ -64,7 +64,7 @@
         }
 
         li {
-            @apply mb-2;
+            @apply  mb-2;
         }
 
         table {

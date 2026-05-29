@@ -29,14 +29,8 @@ import type { Page } from '~~/services/types/page.type';
 const route = useRoute();
 
 const { data: page } = await useFetch<Page>(
-  `http://api2.infomania.ru/api/page/${route.params.slug}`
+  `http://localhost:3300/api/page/${route.params.slug}`
 );
-
-const readingTime = computed(() => {
-  if (!page.value?.content) return 3;
-  const words = page.value.content.replace(/<[^>]*>/g, '').split(/\s+/).length;
-  return Math.ceil(words / 200);
-});
 
 // Хлебные крошки
 const breadcrumbUI = {
@@ -61,13 +55,16 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
+if (!page.value) {
+   showError({
+    status: 404,
+    statusText: 'Страницы не существует',
+  });
+}
+
 // SEO
 useSeoMeta({
   title: page.value?.title,
   description: page.value?.content?.substring(0, 160),
 });
 </script>
-
-<style scoped>
-@import '~/assets/css/main.css';
-</style>

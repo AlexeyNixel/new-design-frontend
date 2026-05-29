@@ -19,7 +19,7 @@
       <main class="max-w-none">
         <div
           ref="documentRef"
-          class="ck-content"
+          class="tiptap"
           v-html="document.document.content"
         ></div>
       </main>

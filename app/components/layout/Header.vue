@@ -425,8 +425,6 @@ const navigationApi = useNavigationApi();
 
 const items = await navigationApi.getAllNavigation();
 
-console.log(items);
-
 const navigateLinks = [
   {
     icon: 'i-heroicons-magnifying-glass',

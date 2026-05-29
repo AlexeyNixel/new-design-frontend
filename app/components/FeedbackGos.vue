@@ -22,6 +22,8 @@ onMounted(() => {
     // @ts-expect-error
     Widget('https://pos.gosuslugi.ru/form', 348893);
   }
+
+  
 });
 </script>
 

@@ -11,7 +11,10 @@
       :items="slides"
       class="rounded-xl shadow overflow-hidden w-full h-full"
     >
-      <NuxtLink class="block w-full h-full">
+      <NuxtLink
+        :to="item.post ? { name: 'entry-slug', params:{slug: item.post.slug} } : item.url"
+        class="block w-full h-full"
+      >
         <img
           :src="item.image.path"
           :alt="item.title || 'Слайд'"
@@ -59,4 +62,4 @@ const carouselUi = {
 const { data: slides } = await slideService.getAllSlides({
   limit: 5,
 });
-</script  >
+</script>

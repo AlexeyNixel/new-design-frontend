@@ -142,11 +142,7 @@ onMounted(async () => {
         >
           <template #day="{ day }">
             <div v-if="isEvent(day)">
-              <UChip
-                :text="String(isEvent(day)?.length)"
-                size="sm"
-                :ui="{ rounded: 'rounded-full' }"
-              >
+              <UChip :text="String(isEvent(day)?.length)" size="3xl">
                 <UButton
                   :color="getColorByDate(day)"
                   variant="soft"

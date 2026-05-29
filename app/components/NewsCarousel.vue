@@ -6,7 +6,7 @@
       </div>
 
       <div class="lg:col-span-3">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 items-stretch md:grid-cols-2 h-full gap-4">
           <EntryCompactCard
             v-for="item in entry.slice(1, 9)"
             :key="item.id"
@@ -25,6 +25,6 @@ const entryApi = useEntryApi();
 
 const { data: entry } = await entryApi.getAllEntry({
   limit: 9,
-  include: 'preview, department',
+  include: 'preview, department, tags',
 });
 </script>

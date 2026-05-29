@@ -12,7 +12,11 @@
       class="rounded-xl shadow overflow-hidden w-full h-full"
     >
       <NuxtLink
-        :to="item.post ? { name: 'entry-slug', params:{slug: item.post.slug} } : item.url"
+        :to="
+          item.post
+            ? { name: 'entry-slug', params: { slug: item.post.slug } }
+            : item.url
+        "
         class="block w-full h-full"
       >
         <img
@@ -44,7 +48,6 @@ const carouselUi = {
     ml-2 sm:ml-4 md:ml-[60px]
     bg-primary text-white border-0 ring-0
     hover:bg-primary/60 hover:cursor-pointer
-    !w-8 !h-8 sm:!w-10 sm:!h-10 md:!w-12 md:!h-12
     z-10
   `,
   next: `
@@ -52,7 +55,6 @@ const carouselUi = {
     mr-2 sm:mr-4 md:mr-[60px]
     bg-primary text-white border-0 ring-0
     hover:bg-primary/60 hover:cursor-pointer
-    !w-8 !h-8 sm:!w-10 sm:!h-10 md:!w-12 md:!h-12
     z-10
   `,
   dots: 'bottom-2 sm:bottom-3 md:bottom-5 z-10',

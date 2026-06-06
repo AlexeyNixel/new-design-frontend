@@ -3,6 +3,10 @@ name: CI/CD
 on:
   push:
     branches: [master]
+    paths-ignore:
+      - 'reports/**'
+      - '**.md'
+      - '.claude/**'
 
 jobs:
   deploy:

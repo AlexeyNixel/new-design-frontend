@@ -317,5 +317,5 @@
 </template>
 
 <script setup>
-// Компонент страницы медиатеки
+
 </script>

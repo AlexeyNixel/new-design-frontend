@@ -1,6 +1,9 @@
 <template>
   <div class="news-asymmetric">
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6" v-if="entry?.length">
+    <div
+      v-if="entry?.length"
+      class="grid grid-cols-1 lg:grid-cols-5 gap-6"
+    >
       <div class="lg:col-span-2">
         <EntryCardHero :post="entry[0]" />
       </div>

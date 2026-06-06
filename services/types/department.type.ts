@@ -5,6 +5,6 @@ export interface Department {
   oldId: number;
   slug: string;
   title: string;
-  phone: string,
-  mail: string
+  phone: string;
+  mail: string;
 }

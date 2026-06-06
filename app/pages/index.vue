@@ -1,4 +1,5 @@
 <script setup lang="ts"></script>
+
 <!-- pages/index.vue -->
 <template>
   <div class="flex flex-col gap-0">
@@ -60,7 +61,7 @@
       <BookShelf />
     </CommonSectionWrapper>
 
-    <CommonSectionWrapper >
+    <CommonSectionWrapper>
       <Achievements />
     </CommonSectionWrapper>
   </div>

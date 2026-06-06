@@ -1,5 +1,5 @@
 import { useApi } from './base';
-import { Club } from '../types/club.type';
+import type { Club } from '../types/club.type';
 import { API_ENDPOINTS } from './endpoints';
 
 export const useClubApi = () => {
@@ -7,6 +7,6 @@ export const useClubApi = () => {
 
   return {
     getAllClubs: (params: any) =>
-      api.get<Club[]>(API_ENDPOINTS.club, {params: params})
-  }
-}
+      api.get<Club[]>(API_ENDPOINTS.club, { params: params }),
+  };
+};

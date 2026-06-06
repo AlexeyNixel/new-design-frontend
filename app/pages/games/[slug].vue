@@ -15,36 +15,42 @@
         <div
           class="flex bg-white items-center justify-center w-full overflow-hidden rounded-xl shadow min-h-[500px]"
         >
-          <div class="flex flex-row-reverse" v-if="game.id === 'gm28'">
+          <div
+            v-if="game.id === 'gm28'"
+            class="flex flex-row-reverse"
+          >
             <UCarousel
               ref="carousel"
+              v-slot="{ item }"
+              v-image-gallery="{ modal }"
               class="h-full flex justify-center m-auto w-1/2"
               :items="items"
-              v-slot="{ item }"
               :ui="{
                 item: 'm-auto',
               }"
-              v-image-gallery="{ modal }"
             >
               <template v-if="item.type === 'image'">
                 <img
                   class="max-h-[450px] cursor-pointer"
                   :src="item.src"
                   alt=""
-                />
+                >
               </template>
               <template v-else-if="item.type === 'video'">
                 <div
                   class="relative w-full h-full flex items-center justify-center"
                 >
-                  <div class="relative w-full" style="padding-bottom: 56.25%">
+                  <div
+                    class="relative w-full"
+                    style="padding-bottom: 56.25%"
+                  >
                     <iframe
                       :src="item.src"
                       class="absolute top-0 left-0 w-full h-full rounded-lg"
                       :allow="item.allow"
                       frameborder="0"
                       allowfullscreen
-                    ></iframe>
+                    />
                   </div>
                 </div>
               </template>
@@ -63,7 +69,7 @@
                     class="rounded-lg w-full h-full object-cover"
                     loading="lazy"
                     alt=""
-                  />
+                  >
                 </template>
                 <template v-else-if="item.type === 'video'">
                   <div
@@ -81,7 +87,7 @@
                       >
                         <div
                           class="w-0 h-0 border-t-8 border-b-8 border-l-12 border-transparent border-l-white ml-1"
-                        ></div>
+                        />
                       </div>
                     </div>
                   </div>
@@ -91,16 +97,16 @@
           </div>
 
           <img
+            v-else
             class="w-1/2"
             :src="BASE_URL_IMAGE + game.cover_file"
             alt=""
-            v-else
-          />
+          >
         </div>
 
         <div class="bg-white rounded-xl shadow p-4 lg:p-6">
           <h3>Описание игры</h3>
-          <div v-html="game.full_description"></div>
+          <div v-html="game.full_description" />
         </div>
       </div>
 
@@ -114,55 +120,81 @@
             <div
               class="w-10 h-10 bg-primary/20 flex items-center justify-center rounded-lg"
             >
-              <Icon class="w-8 h-8" name="heroicons:user-group" />
+              <Icon
+                class="w-8 h-8"
+                name="heroicons:user-group"
+              />
             </div>
             <div class="">
-              <div class="text-sm">Количество игроков</div>
+              <div class="text-sm">
+                Количество игроков
+              </div>
               <div class="font-bold">
                 {{ game.player_min }}-{{ game.player_max }}
               </div>
             </div>
           </div>
           <div
-            class="flex gap-3 bg-gray-100 p-3 rounded-lg"
             v-if="game.player_age"
+            class="flex gap-3 bg-gray-100 p-3 rounded-lg"
           >
             <div
               class="w-10 h-10 bg-primary/20 flex items-center justify-center rounded-lg"
             >
-              <Icon class="w-8 h-8" name="i-heroicons-cake" />
+              <Icon
+                class="w-8 h-8"
+                name="i-heroicons-cake"
+              />
             </div>
             <div class="">
-              <div class="text-sm">Возрастное ограничение</div>
-              <div class="font-bold">{{ game.player_age }}+ лет</div>
+              <div class="text-sm">
+                Возрастное ограничение
+              </div>
+              <div class="font-bold">
+                {{ game.player_age }}+ лет
+              </div>
             </div>
           </div>
           <div
-            class="flex gap-3 bg-gray-100 p-3 rounded-lg"
             v-if="game.game_duration"
+            class="flex gap-3 bg-gray-100 p-3 rounded-lg"
           >
             <div
               class="w-10 h-10 bg-primary/20 flex items-center justify-center rounded-lg"
             >
-              <Icon class="w-8 h-8" name="i-heroicons-clock" />
+              <Icon
+                class="w-8 h-8"
+                name="i-heroicons-clock"
+              />
             </div>
             <div class="">
-              <div class="text-sm">Время партии</div>
-              <div class="font-bold">{{ game.game_duration }}</div>
+              <div class="text-sm">
+                Время партии
+              </div>
+              <div class="font-bold">
+                {{ game.game_duration }}
+              </div>
             </div>
           </div>
           <div
-            class="flex gap-3 bg-gray-100 p-3 rounded-lg"
             v-if="game.game_year"
+            class="flex gap-3 bg-gray-100 p-3 rounded-lg"
           >
             <div
               class="w-10 h-10 bg-primary/20 flex items-center justify-center rounded-lg"
             >
-              <Icon class="w-8 h-8" name="i-heroicons-calendar" />
+              <Icon
+                class="w-8 h-8"
+                name="i-heroicons-calendar"
+              />
             </div>
             <div class="">
-              <div class="text-sm">Год выпуска</div>
-              <div class="font-bold">{{ game.game_year }}</div>
+              <div class="text-sm">
+                Год выпуска
+              </div>
+              <div class="font-bold">
+                {{ game.game_year }}
+              </div>
             </div>
           </div>
         </div>
@@ -174,6 +206,7 @@
           <div class="flex gap-3">
             <UBadge
               v-for="item in game.genres.split('; ')"
+              :key="item"
               :label="GENRES[item]"
             />
           </div>
@@ -184,7 +217,10 @@
           class="bg-white rounded-xl shadow p-4 lg:p-6 gap-5 flex flex-col h-max"
         >
           <h3 class="text-2xl font-bold mb-4 flex items-center gap-3">
-            <Icon name="i-heroicons-book-open" class="w-6 h-6 text-primary" />
+            <Icon
+              name="i-heroicons-book-open"
+              class="w-6 h-6 text-primary"
+            />
             Правила игры
           </h3>
 
@@ -199,7 +235,10 @@
               target="_blank"
               class="inline-flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold"
             >
-              <Icon name="i-heroicons-arrow-down-tray" class="w-5 h-5" />
+              <Icon
+                name="i-heroicons-arrow-down-tray"
+                class="w-5 h-5"
+              />
               Скачать правила
             </NuxtLink>
           </div>
@@ -207,9 +246,15 @@
       </div>
     </div>
     <div class="mt-5">
-      <h3 class="mb-10">Смотрите также</h3>
+      <h3 class="mb-10">
+        Смотрите также
+      </h3>
       <div class="grid grid-cols-5 gap-4 mt-4">
-        <GameCard v-for="game in otherGames" :key="game.id" :game="game" />
+        <GameCard
+          v-for="game in otherGames"
+          :key="game.id"
+          :game="game"
+        />
       </div>
     </div>
   </CommonContentContainer>
@@ -227,7 +272,7 @@ const BASE_URL_RULE = 'http://infomania.ru/gamelibrary/files/rules/';
 const route = useRoute();
 const overlay = useOverlay();
 const gameApi = useGameApi();
-const { removeHtmlEntities } = useStringCleaner();
+const { removeHtmlEntities: _removeHtmlEntities } = useStringCleaner();
 
 const { data: otherGames } = await gameApi.getAllGames({ limit: 5 });
 const { data: game } = await gameApi.getOneGames(route.params.slug as string);

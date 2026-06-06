@@ -19,17 +19,18 @@ onMounted(() => {
   })()`;
     document.body.after(el);
 
-    // @ts-expect-error
+    // @ts-expect-error Widget is injected by external Gosuslugi script
     Widget('https://pos.gosuslugi.ru/form', 348893);
   }
-
-  
 });
 </script>
 
 <template>
   <div class="mr-5 w-full mb-4 md:mb-0">
-    <div id="js-show-iframe-wrapper" class="content">
+    <div
+      id="js-show-iframe-wrapper"
+      class="content"
+    >
       <div class="pos-banner-fluid bf-83">
         <div class="bf-83__decor">
           <div class="bf-83__logo-wrap">
@@ -37,8 +38,10 @@ onMounted(() => {
               class="bf-83__logo"
               src="https://pos.gosuslugi.ru/bin/banner-fluid/gosuslugi-logo-blue.svg"
               alt="Госуслуги"
-            />
-            <div class="bf-83__slogan">Решаем вместе</div>
+            >
+            <div class="bf-83__slogan">
+              Решаем вместе
+            </div>
           </div>
         </div>
         <div class="bf-83__content">
@@ -48,7 +51,12 @@ onMounted(() => {
           </div>
           <div class="bf-83__bottom-wrap">
             <div class="bf-83__btn-wrap">
-              <button class="pos-banner-btn_2" type="button">Написать</button>
+              <button
+                class="pos-banner-btn_2"
+                type="button"
+              >
+                Написать
+              </button>
               <UButton
                 href="https://apps.rustore.ru/app/ru.gosuslugi.pos"
                 target="_blank"

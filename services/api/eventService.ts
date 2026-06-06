@@ -1,6 +1,6 @@
 import { useApi } from './base';
 import { API_ENDPOINTS } from './endpoints';
-import { type Event } from '~~/services/types/event.type';
+import type { Event } from '~~/services/types/event.type';
 
 export const useEventApi = () => {
   const api = useApi();

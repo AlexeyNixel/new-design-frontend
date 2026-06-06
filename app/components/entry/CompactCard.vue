@@ -12,7 +12,7 @@
           :src="imgSrc"
           :alt="post.title"
           @error="notFoundImage"
-        />
+        >
       </div>
 
       <div class="flex-1 min-w-0">
@@ -21,10 +21,10 @@
             {{ dayjs(post.publishedAt).format('DD.MM.YYYY') }}
           </span>
           <UBadge
+            v-if="post.tags[0]"
             size="sm"
             color="secondary"
             variant="soft"
-            v-if="post.tags[0]"
           >
             {{ post.tags[0].title }}
           </UBadge>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { type Post } from '~~/services/types/post.type';
+import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 
 interface Props {

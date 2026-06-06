@@ -81,7 +81,10 @@
                   @mouseenter="keepChildOpen"
                   @mouseleave="closeChildDropdown"
                 >
-                  <template v-for="child in item.children" :key="child.id">
+                  <template
+                    v-for="child in item.children"
+                    :key="child.id"
+                  >
                     <UButton
                       :to="child.to"
                       :target="child.target"
@@ -119,7 +122,7 @@ interface Props {
   };
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const isOpen = ref(false);
 const activeChildItem = ref<string | number | null>(null);
@@ -200,14 +203,16 @@ const calculateChildDropdownPosition = () => {
       top: '0',
       marginLeft: '1px',
     };
-  } else if (availableSpaceLeft >= childDropdownWidth) {
+  }
+  else if (availableSpaceLeft >= childDropdownWidth) {
     // Места слева достаточно - открываем влево
     childDropdownStyle.value = {
       right: '100%',
       top: '0',
       marginRight: '1px',
     };
-  } else {
+  }
+  else {
     // Если нет места ни слева, ни справа - открываем вправо, но сдвигаем внутрь
     const offset = Math.max(0, childDropdownWidth - availableSpaceRight);
     childDropdownStyle.value = {
@@ -252,7 +257,7 @@ onUnmounted(() => {
   if (childCloseTimeout) {
     clearTimeout(childCloseTimeout);
   }
-  if (process.client) {
+  if (import.meta.client) {
     window.removeEventListener('resize', handleResize);
     if (resizeObserver) {
       resizeObserver.disconnect();

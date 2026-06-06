@@ -7,7 +7,10 @@
         @click.self="close"
       >
         <!-- Оверлей -->
-        <div class="absolute inset-0 bg-black/50" @click="close" />
+        <div
+          class="absolute inset-0 bg-black/50"
+          @click="close"
+        />
 
         <!-- Меню -->
         <div
@@ -18,10 +21,13 @@
             <div class="flex items-center justify-between p-4 border-b">
               <span class="font-bold text-lg">Меню</span>
               <button
-                @click="close"
                 class="p-2 rounded-lg hover:bg-neutral-100"
+                @click="close"
               >
-                <Icon name="heroicons:x-mark-20-solid" class="w-5 h-5" />
+                <Icon
+                  name="heroicons:x-mark-20-solid"
+                  class="w-5 h-5"
+                />
               </button>
             </div>
 
@@ -42,7 +48,10 @@
 
             <!-- Поиск в меню -->
             <div class="p-4 border-t">
-              <CatalogSearch placeholder="Поиск..." class="w-full" />
+              <CatalogSearch
+                placeholder="Поиск..."
+                class="w-full"
+              />
             </div>
           </div>
         </div>
@@ -78,9 +87,10 @@ watch(
   (isOpen) => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-    } else {
+    }
+    else {
       document.body.style.overflow = '';
     }
-  }
+  },
 );
 </script>

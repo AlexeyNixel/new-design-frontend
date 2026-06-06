@@ -14,8 +14,8 @@ export const useStringCleaner = () => {
       .replace(/&amp;/g, '&')
       .replace(/&lt;/g, '<')
       .replace(/&gt;/g, '>')
-      .replace(/&apos;/g, "'")
-      .replace(/&#39;/g, "'")
+      .replace(/&apos;/g, '\'')
+      .replace(/&#39;/g, '\'')
       .replace(/&nbsp;/g, ' ');
   };
 

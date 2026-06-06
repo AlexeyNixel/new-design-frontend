@@ -1,5 +1,5 @@
 <template>
-  <CommonContentGrid :items="video"></CommonContentGrid>
+  <CommonContentGrid :items="video" />
 </template>
 
 <script setup lang="ts">

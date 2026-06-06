@@ -12,11 +12,11 @@ export default defineNuxtPlugin((nuxtApp) => {
         if (target.tagName === 'IMG' && target instanceof HTMLImageElement) {
           const images = el.querySelectorAll('img');
           const arrImageLink: string[] = Array.from(images).map(
-            (image: HTMLImageElement) => image.src
+            (image: HTMLImageElement) => image.src,
           );
 
           const startIndex = arrImageLink.findIndex(
-            (img) => img === target.src
+            img => img === target.src,
           );
 
           if (modal) {
@@ -39,8 +39,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     },
 
     // Опционально: можно добавить SSR поддержку
-    getSSRProps(binding, vnode) {
-      // Для SSR можно вернуть пустой объект, так как директива только клиентская
+    getSSRProps(_binding, _vnode) {
       return {};
     },
   });

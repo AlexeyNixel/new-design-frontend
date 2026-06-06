@@ -13,7 +13,7 @@
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         loading="lazy"
         @error="handleImageError"
-      />
+      >
 
       <!-- Иконка типа (видео/книга) -->
       <div class="absolute top-4 right-4">

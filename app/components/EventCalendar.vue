@@ -8,7 +8,7 @@ const config = useRuntimeConfig();
 const events = ref<Event[]>();
 const now = new Date();
 const calendarDate = shallowRef(
-  new CalendarDate(now.getFullYear(), now.getMonth() + 1, now.getDate())
+  new CalendarDate(now.getFullYear(), now.getMonth() + 1, now.getDate()),
 );
 
 const eventsByDate = ref<{ [key: string]: Event[] }>({});
@@ -35,7 +35,8 @@ const fetchEvents = async (date: Date | any) => {
 
       if (eventsByDate.value[date]) {
         eventsByDate.value[date].push(event);
-      } else {
+      }
+      else {
         eventsByDate.value[date] = [event];
       }
     });
@@ -69,7 +70,8 @@ const getColorByDate = (date: Date) => {
 const changeMonth = async (direction: 'prev' | 'next') => {
   if (direction === 'prev') {
     calendarDate.value = calendarDate.value.subtract({ months: 1 });
-  } else {
+  }
+  else {
     calendarDate.value = calendarDate.value.add({ months: 1 });
   }
 
@@ -80,7 +82,7 @@ const upcomingEvents = computed(() => {
   if (!events.value) return [];
   const now = dayjs();
   return events.value
-    .filter((event) => dayjs(event.eventTime).isAfter(now))
+    .filter(event => dayjs(event.eventTime).isAfter(now))
     .slice(0, 5);
 });
 
@@ -99,8 +101,13 @@ onMounted(async () => {
     <header
       class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-3 sm:px-4 py-2 sm:py-3 text-white rounded-t-xl"
     >
-      <Icon class="text-lg sm:text-xl" name="i-heroicons-calendar-days" />
-      <div class="font-bold text-base sm:text-lg">Календарь событий</div>
+      <Icon
+        class="text-lg sm:text-xl"
+        name="i-heroicons-calendar-days"
+      />
+      <div class="font-bold text-base sm:text-lg">
+        Календарь событий
+      </div>
     </header>
 
     <!-- Календарь с адаптивными размерами -->
@@ -117,7 +124,9 @@ onMounted(async () => {
             <div class="font-semibold text-sm">
               {{ formatEventDate(event.eventTime) }}
             </div>
-            <div class="text-sm">{{ event.title }}</div>
+            <div class="text-sm">
+              {{ event.title }}
+            </div>
           </div>
           <div
             v-if="!upcomingEvents.length"
@@ -132,8 +141,8 @@ onMounted(async () => {
       <div class="hidden sm:block">
         <UCalendar
           v-model="calendarDate"
-          :yearControls="false"
-          :monthControls="false"
+          :year-controls="false"
+          :month-controls="false"
           :ui="{
             heading: 'font-bold text-sm sm:text-base',
             grid: 'gap-1',
@@ -142,7 +151,10 @@ onMounted(async () => {
         >
           <template #day="{ day }">
             <div v-if="isEvent(day)">
-              <UChip :text="String(isEvent(day)?.length)" size="3xl">
+              <UChip
+                :text="String(isEvent(day)?.length)"
+                size="3xl"
+              >
                 <UButton
                   :color="getColorByDate(day)"
                   variant="soft"
@@ -185,7 +197,11 @@ onMounted(async () => {
       />
     </div>
 
-    <EventDetail v-model="currentEvent" v-if="currentEvent" class="z-100" />
+    <EventDetail
+      v-if="currentEvent"
+      v-model="currentEvent"
+      class="z-100"
+    />
   </div>
 </template>
 

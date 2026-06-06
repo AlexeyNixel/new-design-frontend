@@ -2,12 +2,12 @@
 <template>
   <div class="relative w-full h-full">
     <UCarousel
+      v-slot="{ item }"
       arrows
       loop
       dots
       :autoplay="{ delay: 6000 }"
       :ui="carouselUi"
-      v-slot="{ item }"
       :items="slides"
       class="rounded-xl shadow overflow-hidden w-full h-full"
     >
@@ -25,7 +25,7 @@
           class="w-full h-full object-cover"
           :style="{ objectPosition: 'center center' }"
           loading="lazy"
-        />
+        >
       </NuxtLink>
     </UCarousel>
   </div>

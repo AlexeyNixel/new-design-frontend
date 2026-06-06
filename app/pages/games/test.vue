@@ -1,5 +1,8 @@
 <template>
-  <div v-if="game" class="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+  <div
+    v-if="game"
+    class="min-h-screen bg-gradient-to-b from-gray-50 to-white"
+  >
     <!-- Хлебные крошки -->
     <CommonContentContainer class="pt-6 pb-4">
       <UBreadcrumb
@@ -23,22 +26,22 @@
 
         <div class="flex flex-wrap items-center gap-4 text-gray-600">
           <div class="flex items-center gap-2">
-            <Icon name="i-heroicons-calendar" class="w-5 h-5" />
-            <span
-              >Год выпуска:
+            <Icon
+              name="i-heroicons-calendar"
+              class="w-5 h-5"
+            />
+            <span>Год выпуска:
               <strong class="text-gray-900">{{
                 game.game_year || 'Не указан'
-              }}</strong></span
-            >
+              }}</strong></span>
           </div>
           <div class="flex items-center gap-2">
-            <Icon name="i-heroicons-clock" class="w-5 h-5" />
-            <span
-              >Время игры:
-              <strong class="text-gray-900"
-                >{{ game.game_duration }} минут</strong
-              ></span
-            >
+            <Icon
+              name="i-heroicons-clock"
+              class="w-5 h-5"
+            />
+            <span>Время игры:
+              <strong class="text-gray-900">{{ game.game_duration }} минут</strong></span>
           </div>
           <div
             :class="[
@@ -51,8 +54,8 @@
             ]"
           >
             {{
-              game.status_desc ||
-              (game.status === 1 ? 'Доступно' : 'Недоступно')
+              game.status_desc
+                || (game.status === 1 ? 'Доступно' : 'Недоступно')
             }}
           </div>
         </div>
@@ -68,7 +71,7 @@
               :alt="game.name"
               class="w-full h-[400px] md:h-[500px] object-cover"
               @error="handleImageError"
-            />
+            >
           </div>
 
           <!-- Описание игры -->
@@ -83,13 +86,22 @@
               Описание игры
             </h2>
 
-            <div v-if="game.full_description" class="prose prose-lg max-w-none">
+            <div
+              v-if="game.full_description"
+              class="prose prose-lg max-w-none"
+            >
               <div v-html="game.full_description" />
             </div>
-            <div v-else-if="game.short_description" class="text-gray-600">
+            <div
+              v-else-if="game.short_description"
+              class="text-gray-600"
+            >
               {{ game.short_description }}
             </div>
-            <div v-else class="text-gray-500 italic">
+            <div
+              v-else
+              class="text-gray-500 italic"
+            >
               Описание игры отсутствует
             </div>
           </div>
@@ -102,7 +114,10 @@
             <h2
               class="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3"
             >
-              <Icon name="i-heroicons-book-open" class="w-6 h-6 text-primary" />
+              <Icon
+                name="i-heroicons-book-open"
+                class="w-6 h-6 text-primary"
+              />
               Правила игры
             </h2>
 
@@ -117,7 +132,10 @@
                 target="_blank"
                 class="inline-flex items-center gap-2 bg-primary text-white px-5 py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold"
               >
-                <Icon name="i-heroicons-arrow-down-tray" class="w-5 h-5" />
+                <Icon
+                  name="i-heroicons-arrow-down-tray"
+                  class="w-5 h-5"
+                />
                 Скачать правила
               </a>
             </div>
@@ -153,7 +171,9 @@
                     />
                   </div>
                   <div>
-                    <div class="text-sm text-gray-500">Количество игроков</div>
+                    <div class="text-sm text-gray-500">
+                      Количество игроков
+                    </div>
                     <div class="font-bold text-gray-900">
                       {{ game.player_min }}-{{ game.player_max }}
                     </div>
@@ -199,7 +219,9 @@
                     />
                   </div>
                   <div>
-                    <div class="text-sm text-gray-500">Время партии</div>
+                    <div class="text-sm text-gray-500">
+                      Время партии
+                    </div>
                     <div class="font-bold text-gray-900">
                       {{ game.game_duration }} минут
                     </div>
@@ -221,7 +243,9 @@
                     />
                   </div>
                   <div>
-                    <div class="text-sm text-gray-500">Год выпуска</div>
+                    <div class="text-sm text-gray-500">
+                      Год выпуска
+                    </div>
                     <div class="font-bold text-gray-900">
                       {{ game.game_year }}
                     </div>
@@ -243,7 +267,9 @@
                     />
                   </div>
                   <div>
-                    <div class="text-sm text-gray-500">Место хранения</div>
+                    <div class="text-sm text-gray-500">
+                      Место хранения
+                    </div>
                     <div class="font-bold text-gray-900 truncate">
                       {{ game.place || 'Не указано' }}
                     </div>
@@ -254,11 +280,17 @@
           </div>
 
           <!-- Жанры -->
-          <div v-if="game.genres" class="bg-white rounded-2xl shadow-lg p-6">
+          <div
+            v-if="game.genres"
+            class="bg-white rounded-2xl shadow-lg p-6"
+          >
             <h2
               class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"
             >
-              <Icon name="i-heroicons-tag" class="w-5 h-5 text-primary" />
+              <Icon
+                name="i-heroicons-tag"
+                class="w-5 h-5 text-primary"
+              />
               Жанры
             </h2>
             <div class="flex flex-wrap gap-2">
@@ -273,7 +305,10 @@
           </div>
 
           <!-- Комментарии -->
-          <div v-if="game.comment" class="bg-white rounded-2xl shadow-lg p-6">
+          <div
+            v-if="game.comment"
+            class="bg-white rounded-2xl shadow-lg p-6"
+          >
             <h2
               class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2"
             >
@@ -283,14 +318,18 @@
               />
               Комментарии
             </h2>
-            <p class="text-gray-600">{{ game.comment }}</p>
+            <p class="text-gray-600">
+              {{ game.comment }}
+            </p>
           </div>
 
           <!-- Кнопка бронирования -->
           <div
             class="bg-gradient-to-r from-primary to-primary/90 rounded-2xl p-6 text-white"
           >
-            <h3 class="text-xl font-bold mb-3">Хотите поиграть?</h3>
+            <h3 class="text-xl font-bold mb-3">
+              Хотите поиграть?
+            </h3>
             <p class="mb-6 opacity-90">
               Забронируйте эту игру для вашего мероприятия
             </p>
@@ -303,7 +342,10 @@
                   : 'bg-gray-300 cursor-not-allowed',
               ]"
             >
-              <Icon name="i-heroicons-calendar-days" class="w-5 h-5 mr-2" />
+              <Icon
+                name="i-heroicons-calendar-days"
+                class="w-5 h-5 mr-2"
+              />
               {{
                 game.status === 1
                   ? 'Забронировать игру'
@@ -315,7 +357,10 @@
       </div>
 
       <!-- Другие игры из библиотеки -->
-      <div v-if="otherGames && otherGames.length > 0" class="mt-16">
+      <div
+        v-if="otherGames && otherGames.length > 0"
+        class="mt-16"
+      >
         <div class="flex items-center justify-between mb-8">
           <div>
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900">
@@ -330,7 +375,10 @@
             class="text-primary font-semibold hover:underline flex items-center gap-2"
           >
             Все игры
-            <Icon name="i-heroicons-arrow-right" class="w-4 h-4" />
+            <Icon
+              name="i-heroicons-arrow-right"
+              class="w-4 h-4"
+            />
           </NuxtLink>
         </div>
 
@@ -340,13 +388,18 @@
   </div>
 
   <!-- Состояние загрузки -->
-  <div v-else class="min-h-screen flex items-center justify-center">
+  <div
+    v-else
+    class="min-h-screen flex items-center justify-center"
+  >
     <div class="text-center">
       <UIcon
         name="i-heroicons-arrow-path"
         class="w-12 h-12 text-primary animate-spin mx-auto mb-4"
       />
-      <p class="text-gray-600">Загрузка информации об игре...</p>
+      <p class="text-gray-600">
+        Загрузка информации об игре...
+      </p>
     </div>
   </div>
 </template>
@@ -354,7 +407,7 @@
 <script setup lang="ts">
 import { useGameApi } from '~~/services/api/game.api';
 
-const route = useRoute();
+const _route = useRoute();
 const gameApi = useGameApi();
 
 // Загружаем данные игры
@@ -371,7 +424,7 @@ const handleImageError = (e: Event) => {
 };
 
 // Форматирование HTML контента
-const formatHtml = (html: string) => {
+const _formatHtml = (html: string) => {
   if (!html) return '';
   return html.replace(/<br\s*\/?>/gi, '\n').replace(/<\/p>/gi, '</p>\n');
 };

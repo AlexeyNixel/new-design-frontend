@@ -15,7 +15,10 @@ const items = ref([
 
 <template>
   <div>
-    <UBreadcrumb class="text-black" :items="items" />
+    <UBreadcrumb
+      class="text-black"
+      :items="items"
+    />
 
     <div>
       <slot />

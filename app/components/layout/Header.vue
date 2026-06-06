@@ -3,7 +3,10 @@
     <header class="max-w-[1710px] mx-auto">
       <div class="w-full">
         <div class="flex items-center justify-between h-20 lg:h-24">
-          <NuxtLink to="/" class="group flex-shrink-0">
+          <NuxtLink
+            to="/"
+            class="group flex-shrink-0"
+          >
             <div class="relative">
               <div
                 class="relative w-44 fill-primary group-hover:fill-primary/80 transition-all duration-300"
@@ -15,9 +18,9 @@
 
           <div class="hidden lg:flex items-center rounded-2xl p-1.5">
             <UPopover
-              mode="hover"
               v-for="link in navigateLinks"
               :key="link.label"
+              mode="hover"
             >
               <UButton
                 :to="link.link"
@@ -36,7 +39,9 @@
                 </div>
               </UButton>
               <template #content>
-                <div class="text-sm p-1">{{ link.label }}</div>
+                <div class="text-sm p-1">
+                  {{ link.label }}
+                </div>
               </template>
             </UPopover>
           </div>
@@ -51,7 +56,10 @@
                   <div
                     class="relative w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300"
                   >
-                    <Icon name="ic:outline-phone" class="w-5 h-5 text-white" />
+                    <Icon
+                      name="ic:outline-phone"
+                      class="w-5 h-5 text-white"
+                    />
                   </div>
                 </div>
                 <div>
@@ -90,7 +98,7 @@
             </div>
 
             <div class="hidden lg:flex items-center gap-1.5">
-              <div class="w-px h-8 bg-gray-200 mx-1"></div>
+              <div class="w-px h-8 bg-gray-200 mx-1" />
               <a
                 v-for="link in socialLinks"
                 :key="link.label"
@@ -106,9 +114,12 @@
             </div>
 
             <div class="hidden 2xl:flex items-center gap-1.5">
-              <div class="w-px h-8 bg-gray-200 mx-1"></div>
+              <div class="w-px h-8 bg-gray-200 mx-1" />
 
-              <UPopover mode="hover" :popper="{ placement: 'bottom' }">
+              <UPopover
+                mode="hover"
+                :popper="{ placement: 'bottom' }"
+              >
                 <UButton
                   variant="ghost"
                   class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-xl transition-all duration-300 group"
@@ -122,7 +133,9 @@
                     />
                   </div>
                   <div class="text-left">
-                    <p class="text-xs text-gray-500">Режим работы</p>
+                    <p class="text-xs text-gray-500">
+                      Режим работы
+                    </p>
                     <p
                       class="text-sm font-bold text-gray-900 whitespace-nowrap"
                     >
@@ -148,24 +161,22 @@
                           class="w-5 h-5 text-primary"
                         />
                       </div>
-                      <h4 class="font-bold text-gray-900">Часы работы</h4>
+                      <h4 class="font-bold text-gray-900">
+                        Часы работы
+                      </h4>
                     </div>
                     <div class="space-y-2">
                       <div
                         class="flex items-center justify-between py-2 border-b border-gray-100"
                       >
                         <span class="text-gray-600">Вторник - Пятница</span>
-                        <span class="font-semibold text-gray-900"
-                          >10:00 – 20:00</span
-                        >
+                        <span class="font-semibold text-gray-900">10:00 – 20:00</span>
                       </div>
                       <div
                         class="flex items-center justify-between py-2 border-b border-gray-100"
                       >
                         <span class="text-gray-600">Суббота - Воскресенье</span>
-                        <span class="font-semibold text-gray-900"
-                          >10:00 – 19:00</span
-                        >
+                        <span class="font-semibold text-gray-900">10:00 – 19:00</span>
                       </div>
                       <div class="flex items-center justify-between py-2">
                         <span class="text-gray-600">Понедельник</span>
@@ -182,7 +193,10 @@
               </UPopover>
 
               <!-- Адрес -->
-              <UPopover mode="hover" :popper="{ placement: 'bottom' }">
+              <UPopover
+                mode="hover"
+                :popper="{ placement: 'bottom' }"
+              >
                 <UButton
                   variant="ghost"
                   class="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-xl transition-all duration-300 group"
@@ -196,7 +210,9 @@
                     />
                   </div>
                   <div class="text-left">
-                    <p class="text-xs text-gray-500">Наш адрес</p>
+                    <p class="text-xs text-gray-500">
+                      Наш адрес
+                    </p>
                     <p
                       class="text-sm font-bold text-gray-900 whitespace-nowrap"
                     >
@@ -221,7 +237,9 @@
                         />
                       </div>
 
-                      <h4 class="my-0!">Как нас найти</h4>
+                      <h4 class="my-0!">
+                        Как нас найти
+                      </h4>
                     </header>
                     <LibraryOnMap />
                   </div>
@@ -261,8 +279,6 @@
 <script setup lang="ts">
 import LibraryOnMap from '~/components/modals/LibraryOnMap.vue';
 import { useNavigationApi } from '~~/services/api/main-navigation.api';
-
-const mobileMenuOpen = ref(false);
 
 const navigationApi = useNavigationApi();
 

@@ -10,7 +10,7 @@
         :src="imgSrc"
         :alt="entry.title"
         @error="notFoundImage"
-      />
+      >
       <div class="absolute top-4 left-4">
         <div
           class="flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
@@ -37,7 +37,10 @@
 
       <div class="mt-auto pt-4 border-t border-gray-100">
         <div class="flex items-center justify-between">
-          <div v-if="entry.department" class="flex items-center space-x-2">
+          <div
+            v-if="entry.department"
+            class="flex items-center space-x-2"
+          >
             <span class="text-sm text-gray-600">
               {{ entry.department.title }}
             </span>

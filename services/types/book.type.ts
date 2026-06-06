@@ -1,4 +1,4 @@
-import { type File } from './file.type';
+import type { File } from './file.type';
 
 export interface Book {
   id: string;

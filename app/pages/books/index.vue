@@ -1,8 +1,15 @@
 <template>
   <CommonContentContainer>
-    <UInput class="w-full" placeholder="Поиск книг..."></UInput>
+    <UInput
+      class="w-full"
+      placeholder="Поиск книг..."
+    />
     <div class="grid grid-cols-6">
-      <BookCard v-for="book in data" :book="book" />
+      <BookCard
+        v-for="book in data"
+        :key="book.id"
+        :book="book"
+      />
     </div>
   </CommonContentContainer>
 </template>

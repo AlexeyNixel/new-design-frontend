@@ -8,10 +8,10 @@
     >
       <img
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        @error="notFoundImage"
         :src="imgSrc"
         :alt="post.title"
-      />
+        @error="notFoundImage"
+      >
 
       <!-- Дата в стиле карточки -->
       <div
@@ -42,8 +42,8 @@
         </h2>
 
         <div
-          v-html="post.description"
           class="text-gray-600 mb-4 line-clamp-3 prose prose-sm max-w-none"
+          v-html="post.description"
         />
       </div>
 
@@ -74,7 +74,10 @@
           <div class="flex items-center gap-6 text-sm">
             <!-- Дата -->
             <div class="flex items-center text-gray-600">
-              <Icon name="i-heroicons-calendar-20-solid" class="w-4 h-4 mr-2" />
+              <Icon
+                name="i-heroicons-calendar-20-solid"
+                class="w-4 h-4 mr-2"
+              />
               <span>{{ formateDate(post.publishedAt, 'DD MMMM YYYY') }}</span>
             </div>
 
@@ -115,9 +118,11 @@ const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
 
   if (format === 'MMM') {
     return date.toLocaleDateString('ru-RU', { month: 'short' });
-  } else if (format === 'DD') {
+  }
+  else if (format === 'DD') {
     return date.getDate().toString();
-  } else if (format === 'YYYY') {
+  }
+  else if (format === 'YYYY') {
     return date.getFullYear().toString();
   }
 

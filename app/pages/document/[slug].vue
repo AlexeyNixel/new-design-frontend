@@ -1,7 +1,11 @@
 <template>
   <CommonContentContainer>
     <!-- Хлебные крошки -->
-    <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-6" />
+    <UBreadcrumb
+      :ui="breadcrumbUI"
+      :items="breadcrumbItems"
+      class="mb-6"
+    />
 
     <!-- Основной контент документа -->
     <article class="max-w-4xl mx-auto">
@@ -21,7 +25,7 @@
           ref="documentRef"
           class="tiptap"
           v-html="document.document.content"
-        ></div>
+        />
       </main>
 
       <footer class="document-footer">
@@ -64,7 +68,7 @@ const documentRef = ref();
 const documentApi = useDocumentApi();
 const { data: document } = await documentApi.getBySlugDocument(
   route.params.slug as string,
-  { include: 'document' }
+  { include: 'document' },
 );
 
 // SEO

@@ -9,12 +9,22 @@
       style="margin: 20px 0; padding: 15px; border: 1px solid #ccc"
     >
       <h3>{{ test.name }}</h3>
-      <button @click="runTest(test)">Run Test</button>
-      <div v-if="test.status === 'loading'">⏳ Loading...</div>
-      <div v-if="test.status === 'success'" style="color: green">
+      <button @click="runTest(test)">
+        Run Test
+      </button>
+      <div v-if="test.status === 'loading'">
+        ⏳ Loading...
+      </div>
+      <div
+        v-if="test.status === 'success'"
+        style="color: green"
+      >
         ✅ Success: {{ test.result }}
       </div>
-      <div v-if="test.status === 'error'" style="color: red">
+      <div
+        v-if="test.status === 'error'"
+        style="color: red"
+      >
         ❌ Error: {{ test.error }}
       </div>
       <div v-if="test.details">
@@ -70,9 +80,9 @@ const tests = ref([
 ]);
 
 const envInfo = ref({
-  isServer: process.server,
-  isClient: process.client,
-  mode: process.dev ? 'development' : 'production',
+  isServer: import.meta.server,
+  isClient: import.meta.client,
+  mode: import.meta.dev ? 'development' : 'production',
   url: typeof window !== 'undefined' ? window.location.href : 'server',
 });
 
@@ -88,27 +98,31 @@ const runTest = async (test: any) => {
       // Прямой fetch
       response = await fetch(test.url);
       test.details = `URL: ${test.url}`;
-    } else if (test.method === 'proxy') {
+    }
+    else if (test.method === 'proxy') {
       // Через прокси
       response = await $fetch(test.url);
       test.details = `URL: ${test.url}`;
-    } else if (test.method === 'composable') {
+    }
+    else if (test.method === 'composable') {
       // Через ваш composable
       const { get } = useApi();
       response = await get(test.url, { params: { limit: 5 } });
       test.details = `Using useApi()`;
-    } else if (test.method === 'server') {
+    }
+    else if (test.method === 'server') {
       // Через серверный endpoint
       response = await $fetch(test.url);
       test.details = `Server route`;
     }
 
-    test.result =
-      typeof response === 'object'
+    test.result
+      = typeof response === 'object'
         ? `Got response with keys: ${Object.keys(response).join(', ')}`
         : `Response: ${response}`;
     test.status = 'success';
-  } catch (error: any) {
+  }
+  catch (error: any) {
     test.status = 'error';
     test.error = error.message || 'Unknown error';
     test.details = error.toString();

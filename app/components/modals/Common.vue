@@ -18,7 +18,8 @@ const handleWheelWidth = (e: WheelEvent) => {
   e.preventDefault();
   if (e.deltaY < 0 && width.value < 2000) {
     width.value = Math.min(2000, width.value + Math.abs(e.deltaY));
-  } else if (e.deltaY > 0 && width.value > 800) {
+  }
+  else if (e.deltaY > 0 && width.value > 800) {
     width.value = Math.max(800, width.value - e.deltaY);
   }
 };
@@ -41,17 +42,21 @@ onUnmounted(() => {
     <template #content>
       <UCarousel
         ref="carousel"
+        v-slot="{ item }"
         :style="{ width: width + 'px' }"
         :items="imgLinks"
-        @select="handleSelectSlide"
-        v-slot="{ item }"
         :start-index="startIndex || 0"
         arrows
         :ui="{
           item: 'm-auto',
         }"
+        @select="handleSelectSlide"
       >
-        <img :style="{ width: width + 'px' }" :src="item" alt="" />
+        <img
+          :style="{ width: width + 'px' }"
+          :src="item"
+          alt=""
+        >
       </UCarousel>
 
       <div class="flex gap-1 justify-between pt-4 max-w-md mx-auto">
@@ -62,7 +67,11 @@ onUnmounted(() => {
           :class="{ 'opacity-100': activeIndex === index }"
           @click="handleSelectSlide(index)"
         >
-          <img :src="item" class="rounded-lg w-20" alt="" />
+          <img
+            :src="item"
+            class="rounded-lg w-20"
+            alt=""
+          >
         </div>
       </div>
     </template>

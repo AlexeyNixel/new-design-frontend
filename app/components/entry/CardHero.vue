@@ -13,7 +13,7 @@
           :src="imgSrc"
           :alt="post.title"
           @error="notFoundImage"
-        />
+        >
 
         <!-- Дата -->
         <div class="absolute top-4 left-4">
@@ -33,7 +33,10 @@
         </div>
 
         <!-- Бейдж отдела -->
-        <div v-if="post.department" class="absolute bottom-4 left-4">
+        <div
+          v-if="post.department"
+          class="absolute bottom-4 left-4"
+        >
           <span
             class="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium"
           >

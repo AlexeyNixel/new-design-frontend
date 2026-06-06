@@ -1,5 +1,5 @@
 import { useApi } from './base';
-import { type Book, type BookCollections } from '../types/book.type';
+import type { Book, BookCollections } from '../types/book.type';
 import { API_ENDPOINTS } from './endpoints';
 
 export const useBookApi = () => {

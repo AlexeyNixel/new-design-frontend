@@ -1,7 +1,11 @@
 <template>
   <CommonContentContainer v-if="book">
     <!-- Хлебные крошки -->
-    <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-8" />
+    <UBreadcrumb
+      :ui="breadcrumbUI"
+      :items="breadcrumbItems"
+      class="mb-8"
+    />
 
     <div class="max-w-7xl mx-auto px-4">
       <!-- Основная информация о книге -->
@@ -12,7 +16,7 @@
           <div class="relative group">
             <div
               class="absolute -inset-4 rounded-2xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-300"
-            ></div>
+            />
             <div
               class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-4 border border-gray-200 dark:border-gray-700 overflow-hidden"
             >
@@ -25,7 +29,7 @@
                   :alt="book.title"
                   class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
-                />
+                >
               </div>
             </div>
           </div>
@@ -52,7 +56,9 @@
                   class="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0"
                 />
                 <div>
-                  <p class="text-sm text-gray-500">Место хранения</p>
+                  <p class="text-sm text-gray-500">
+                    Место хранения
+                  </p>
                   <p class="font-medium text-gray-900 dark:text-white">
                     {{ book.place }}
                   </p>
@@ -66,7 +72,9 @@
                   class="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0"
                 />
                 <div>
-                  <p class="text-sm text-gray-500">Добавлена</p>
+                  <p class="text-sm text-gray-500">
+                    Добавлена
+                  </p>
                   <p class="font-medium text-gray-900 dark:text-white">
                     {{ formatDate(book.createdAt) }}
                   </p>
@@ -80,7 +88,9 @@
                   class="w-5 h-5 text-gray-400 mt-0.5 flex-shrink-0"
                 />
                 <div>
-                  <p class="text-sm text-gray-500">Статус</p>
+                  <p class="text-sm text-gray-500">
+                    Статус
+                  </p>
                   <UBadge
                     :label="book.isDeleted ? 'Архив' : 'Доступна'"
                     :color="book.isDeleted ? 'gray' : 'green'"
@@ -94,13 +104,13 @@
             <!-- Кнопка Литрес -->
             <UButton
               v-if="book.litresLink"
-              @click="navigateTo(book.litresLink, { external: true })"
               variant="solid"
               color="orange"
               icon="i-heroicons-shopping-cart"
               label="Купить на Литрес"
               class="w-full mt-6"
               :ui="{ rounded: 'rounded-xl' }"
+              @click="navigateTo(book.litresLink, { external: true })"
             />
           </div>
 
@@ -112,7 +122,10 @@
             <h3
               class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2"
             >
-              <Icon name="i-heroicons-rectangle-stack" class="text-primary" />
+              <Icon
+                name="i-heroicons-rectangle-stack"
+                class="text-primary"
+              />
               В подборках
             </h3>
             <div class="space-y-2">
@@ -126,7 +139,10 @@
                 @click="navigateTo(`/collection/${collection.slug}`)"
               >
                 <template #leading>
-                  <Icon name="i-heroicons-bookmark" class="w-4 h-4" />
+                  <Icon
+                    name="i-heroicons-bookmark"
+                    class="w-4 h-4"
+                  />
                 </template>
               </UBadge>
             </div>
@@ -142,7 +158,7 @@
             <!-- Декоративный фон -->
             <div
               class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-50 to-transparent dark:from-amber-900/10 rounded-full -translate-y-32 translate-x-32"
-            ></div>
+            />
 
             <div class="relative">
               <!-- Категория -->
@@ -166,7 +182,10 @@
               <div
                 class="flex items-center gap-2 text-gray-600 dark:text-gray-400 mb-6"
               >
-                <Icon name="i-heroicons-user" class="w-5 h-5" />
+                <Icon
+                  name="i-heroicons-user"
+                  class="w-5 h-5"
+                />
                 <span class="text-lg">{{
                   extractAuthor(book.description) || 'Автор не указан'
                 }}</span>
@@ -194,7 +213,10 @@
               <h2
                 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3"
               >
-                <Icon name="i-heroicons-document-text" class="text-primary" />
+                <Icon
+                  name="i-heroicons-document-text"
+                  class="text-primary"
+                />
                 Содержание
               </h2>
             </div>
@@ -204,7 +226,7 @@
               <div
                 class="ck-content prose prose-lg dark:prose-invert max-w-none"
                 v-html="book.content"
-              ></div>
+              />
 
               <!-- Декоративный элемент в конце -->
               <div
@@ -229,7 +251,10 @@
               <h3
                 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2"
               >
-                <Icon name="i-heroicons-qr-code" class="text-blue-500" />
+                <Icon
+                  name="i-heroicons-qr-code"
+                  class="text-blue-500"
+                />
                 Техническая информация
               </h3>
               <div class="space-y-3">
@@ -253,8 +278,7 @@
                   <span class="text-gray-600 dark:text-gray-400">Слаг</span>
                   <span
                     class="font-mono text-sm text-gray-900 dark:text-white"
-                    >{{ book.slug }}</span
-                  >
+                  >{{ book.slug }}</span>
                 </div>
               </div>
             </div>
@@ -290,35 +314,36 @@ const formatDate = (dateString: string) => {
 
 const extractAuthor = (description: string) => {
   // Пытаемся извлечь автора из описания
-  const match = description.match(/^([^\.]+)\./);
+  const match = description.match(/^([^.]+)\./);
   return match ? match[1].trim() : null;
 };
 
 const extractISBN = (description: string) => {
-  const match = description.match(/ISBN\s+([\d\-]+)/);
+  const match = description.match(/ISBN\s+([\d-]+)/);
   return match ? match[1] : null;
 };
 
 // Действия
-const printBookInfo = () => {
+const _printBookInfo = () => {
   window.print();
 };
 
-const shareBook = () => {
+const _shareBook = () => {
   if (navigator.share) {
     navigator.share({
       title: book.title,
       text: book.description,
       url: window.location.href,
     });
-  } else {
+  }
+  else {
     navigator.clipboard.writeText(window.location.href);
     const toast = useToast();
     toast.add({ title: 'Ссылка скопирована в буфер', color: 'success' });
   }
 };
 
-const addToFavorites = () => {
+const _addToFavorites = () => {
   const toast = useToast();
   toast.add({ title: 'Добавлено в избранное', color: 'success' });
 };

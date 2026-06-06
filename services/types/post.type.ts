@@ -1,4 +1,4 @@
-import { type File } from './file.type';
+import type { File } from './file.type';
 import type { Tag } from '~~/services/types/tag.type';
 
 export interface Post {

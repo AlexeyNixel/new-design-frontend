@@ -12,11 +12,13 @@ const achievements = await achievementApi.getAllAchievements();
   >
     <div class="flex justify-between mx-10">
       <div
-        class="text-white text-center"
         v-for="item in achievements"
         :key="item.id"
+        class="text-white text-center"
       >
-        <div class="text-4xl font-bold mb-2">{{ item.count }}</div>
+        <div class="text-4xl font-bold mb-2">
+          {{ item.count }}
+        </div>
         <div class="text-sm">
           {{ item.label }}
         </div>

@@ -1,6 +1,6 @@
 import { useApi } from './base';
 import { API_ENDPOINTS } from './endpoints';
-import { type Slide } from '~~/services/types/slide.type';
+import type { Slide } from '~~/services/types/slide.type';
 
 interface Params {
   pageSize: number;

@@ -5,6 +5,7 @@
     </UApp>
   </NuxtLayout>
 </template>
+
 <script setup lang="ts">
 import { ru } from '@nuxt/ui/locale';
 
@@ -16,7 +17,7 @@ useHead({
       body: true,
     },
     {
-      innerHTML: "Widget('https://pos.gosuslugi.ru/form', 348893)",
+      innerHTML: 'Widget(\'https://pos.gosuslugi.ru/form\', 348893)',
       body: true,
     },
     {
@@ -33,7 +34,7 @@ onMounted(() => {
   VK.Widgets.Podcast(
     'vk_podcast_-203872543_456239018',
     '-203872543_456239018',
-    '0d6c0c098dce43c129'
+    '0d6c0c098dce43c129',
   );
 });
 </script>

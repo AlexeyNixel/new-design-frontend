@@ -2,8 +2,8 @@
   <div>
     <UCarousel
       v-if="notifications.data"
-      dots
       v-slot="{ item }"
+      dots
       :items="notifications.data"
       :ui="{
         dots: 'bottom-2 sm:bottom-3',
@@ -98,7 +98,7 @@ const ICON_BY_TYPE = {
   error: 'i-heroicons-exclamation-triangle',
 };
 
-const empty: Empty  = {
+const empty: Empty = {
   title: 'Сегодня уведомлений нет',
   description: 'Это значит, что сегодня вы можете взять книги',
   type: 'success',

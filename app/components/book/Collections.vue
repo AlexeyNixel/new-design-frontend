@@ -1,12 +1,17 @@
 <template>
-  <UCarousel class="" v-slot="{ item, index }" :items="collections" :ui="ui">
+  <UCarousel
+    v-slot="{ item }"
+    class=""
+    :items="collections"
+    :ui="ui"
+  >
     <NuxtLink>
       <UCard :ui="cardUI">
         <img
           class="h-[250px] w-full object-cover"
           :src="item?.preview?.path"
           alt=""
-        />
+        >
         <template #footer>
           <h3>{{ item.label }}</h3>
         </template>

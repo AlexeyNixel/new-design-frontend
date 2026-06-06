@@ -4,7 +4,10 @@
       <div class="flex flex-col bg-white p-5 shadow rounded-xl w-1/4 h-max">
         <div class="border-b border-gray-100 pb-2 mb-4">
           <h2>
-            <Icon name="i-heroicons-funnel" class="w-5 h-5 text-primary" />
+            <Icon
+              name="i-heroicons-funnel"
+              class="w-5 h-5 text-primary"
+            />
             Фильтры
           </h2>
         </div>
@@ -12,7 +15,10 @@
         <div class="mb-6">
           <header class="flex items-center justify-between mb-3">
             <h3 class="flex items-center gap-2 text-sm font-medium">
-              <Icon name="i-heroicons-tag" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-tag"
+                class="w-4 h-4"
+              />
               Жанры
             </h3>
 
@@ -33,10 +39,13 @@
             >
               <template #trailing>
                 <button
-                  @click="selectGenres(genre)"
                   class="flex items-center ml-1 hover:scale-125 transition-transform"
+                  @click="selectGenres(genre)"
                 >
-                  <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                  <Icon
+                    name="i-heroicons-x-mark"
+                    class="w-3 h-3"
+                  />
                 </button>
               </template>
             </UBadge>
@@ -44,13 +53,14 @@
 
           <div class="flex flex-col h-64 overflow-y-auto">
             <UButton
+              v-for="genre in genres"
+              :key="genre.tag"
               class="mb-2"
               variant="ghost"
-              v-for="genre in genres"
               :label="genre.desc"
-              @click="selectGenres(genre)"
               :icon="GenresIcons[genre.tag]"
               :class="isGenreSelected(genre) ? 'border border-primary' : ''"
+              @click="selectGenres(genre)"
             />
           </div>
         </div>
@@ -59,7 +69,10 @@
         <div class="mb-6">
           <header class="flex items-center justify-between mb-3">
             <h3 class="flex items-center gap-2 text-sm font-medium">
-              <Icon name="i-heroicons-cake" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-cake"
+                class="w-4 h-4"
+              />
               Возраст
             </h3>
           </header>
@@ -87,7 +100,10 @@
         <div class="mb-6">
           <header class="flex items-center justify-between mb-3">
             <h3 class="flex items-center gap-2 text-sm font-medium">
-              <Icon name="i-heroicons-user-group" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-user-group"
+                class="w-4 h-4"
+              />
               Игроки
             </h3>
           </header>
@@ -113,8 +129,16 @@
 
         <!-- Кнопка сброса фильтров -->
         <div class="mt-6 pt-4 border-t border-gray-100">
-          <UButton color="neutral" variant="ghost" size="sm" class="w-full">
-            <Icon name="i-heroicons-arrow-path" class="w-4 h-4 mr-2" />
+          <UButton
+            color="neutral"
+            variant="ghost"
+            size="sm"
+            class="w-full"
+          >
+            <Icon
+              name="i-heroicons-arrow-path"
+              class="w-4 h-4 mr-2"
+            />
             Сбросить все фильтры
           </UButton>
         </div>
@@ -123,25 +147,29 @@
       <div class="flex flex-col rounded-xl w-full">
         <div class="mb-4 bg-white border border-neutral-200 rounded-xl shadow">
           <UInput
+            v-model="searchText"
             variant="none"
             class="w-full rounded-xl bg-white"
             placeholder="Поиск игры..."
-            v-model="searchText"
-            @keydown.enter="searchData"
             size="xl"
+            @keydown.enter="searchData"
           />
         </div>
         <div v-if="games">
           <div class="grid grid-cols-4 gap-4 mb-6">
-            <GameCard v-for="game in games.data" :game="game" />
+            <GameCard
+              v-for="game in games.data"
+              :key="game.id"
+              :game="game"
+            />
           </div>
           <div class="flex items-center justify-center w-full">
             <UPagination
               v-model:page="page"
               show-edges
-              @update:page="handleNavigate"
               :total="games.meta?.total"
               :items-per-page="Number(games.meta?.limit)"
+              @update:page="handleNavigate"
             />
           </div>
         </div>
@@ -168,11 +196,11 @@ const searchText = ref<string>((route.query.search as string) || '');
 const genres = await gameApi.getAllGenres();
 
 const activeGenres = ref<string[]>(
-  (route.query.genres as string)?.split(',') || []
+  (route.query.genres as string)?.split(',') || [],
 );
 
 const selectedGenres = computed(() => {
-  return genres.filter((genre) => activeGenres.value.includes(genre.tag));
+  return genres.filter(genre => activeGenres.value.includes(genre.tag));
 });
 
 const updateUrl = () => {
@@ -220,7 +248,8 @@ const selectGenres = async (genre: Genres) => {
 
   if (index > -1) {
     activeGenres.value.splice(index, 1);
-  } else {
+  }
+  else {
     activeGenres.value.push(genreId);
   }
 

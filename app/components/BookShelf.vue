@@ -1,5 +1,8 @@
 <template>
-  <UTabs color="primary" :items="items">
+  <UTabs
+    color="primary"
+    :items="items"
+  >
     <template #content="{ item }">
       <component :is="item.component" />
     </template>

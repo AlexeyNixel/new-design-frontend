@@ -1,21 +1,8 @@
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  runtimeConfig: {
-    public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE,
-    },
-  },
   modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt'],
-  css: [
-    '~/assets/css/main.css',
-    '~/assets/css/fonts.css',
-    '~/assets/css/editor.css',
-    '~/assets/css/theme.css',
-    '~/assets/css/feedback-gos.css',
-  ],
+  devtools: { enabled: true },
   app: {
     head: {
       link: [
@@ -29,15 +16,23 @@ export default defineNuxtConfig({
       ],
     },
   },
+  css: [
+    '~/assets/css/main.css',
+    '~/assets/css/fonts.css',
+    '~/assets/css/editor.css',
+    '~/assets/css/theme.css',
+    '~/assets/css/feedback-gos.css',
+  ],
   ui: {
     colorMode: false,
     fonts: false,
   },
-
-  dayjs: {
-    locales: ['ru'],
-    defaultLocale: 'ru',
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE,
+    },
   },
+  compatibilityDate: '2025-07-15',
   nitro: {
     devProxy: {
       '/site': {
@@ -74,9 +69,14 @@ export default defineNuxtConfig({
           // убираем /**
           target: 'http://localhost:3000',
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/entry/, '/post'), // заменяем /entry на /post
+          rewrite: path => path.replace(/^\/entry/, '/post'), // заменяем /entry на /post
         },
       },
     },
+  },
+
+  dayjs: {
+    locales: ['ru'],
+    defaultLocale: 'ru',
   },
 });

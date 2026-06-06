@@ -1,6 +1,14 @@
 <template>
-  <UCarousel class="h-full m-4" :ui="ui" v-slot="{ item }" :items="games">
-    <GameCard class="my-4" :game="item" />
+  <UCarousel
+    v-slot="{ item }"
+    class="h-full m-4"
+    :ui="ui"
+    :items="games"
+  >
+    <GameCard
+      class="my-4"
+      :game="item"
+    />
   </UCarousel>
 </template>
 

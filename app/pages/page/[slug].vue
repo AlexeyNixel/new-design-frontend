@@ -1,7 +1,11 @@
 <template>
   <CommonContentContainer v-if="page">
     <!-- Хлебные крошки -->
-    <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-6" />
+    <UBreadcrumb
+      :ui="breadcrumbUI"
+      :items="breadcrumbItems"
+      class="mb-6"
+    />
 
     <div class="max-w-6xl mx-auto">
       <!-- Заголовок страницы -->
@@ -16,7 +20,10 @@
         class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
       >
         <div class="p-8 md:p-10">
-          <div class="ck-content" v-html="page.content"></div>
+          <div
+            class="ck-content"
+            v-html="page.content"
+          />
         </div>
       </div>
     </div>
@@ -29,7 +36,7 @@ import type { Page } from '~~/services/types/page.type';
 const route = useRoute();
 
 const { data: page } = await useFetch<Page>(
-  `http://localhost:3300/api/page/${route.params.slug}`
+  `http://localhost:3300/api/page/${route.params.slug}`,
 );
 
 // Хлебные крошки
@@ -51,7 +58,7 @@ const breadcrumbItems = computed(() => [
 ]);
 
 if (!page.value) {
-   showError({
+  showError({
     status: 404,
     statusText: 'Страницы не существует',
   });

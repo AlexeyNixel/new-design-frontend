@@ -1,4 +1,4 @@
-import type {File} from "./file.type"
+import type { File } from './file.type';
 
 export interface Club {
   id: string;
@@ -8,5 +8,5 @@ export interface Club {
   worktime: string;
   workDirection: object;
   previewFileId: string;
-  preview: File
+  preview: File;
 }

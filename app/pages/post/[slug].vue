@@ -1,6 +1,10 @@
 <template>
   <CommonContentContainer>
-    <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-6" />
+    <UBreadcrumb
+      :ui="breadcrumbUI"
+      :items="breadcrumbItems"
+      class="mb-6"
+    />
 
     <article class="max-w-4xl mx-auto animate-fade-in-up">
       <header class="mb-8">
@@ -29,15 +33,19 @@
               class="flex items-center gap-4 text-gray-600 dark:text-gray-400"
             >
               <div class="flex items-center gap-1">
-                <UIcon name="i-heroicons-calendar" class="w-4 h-4" />
+                <UIcon
+                  name="i-heroicons-calendar"
+                  class="w-4 h-4"
+                />
                 <span>{{ formattedDate(entry.publishedAt) }}</span>
               </div>
               <div class="flex items-center gap-1">
-                <UIcon name="i-heroicons-clock" class="w-4 h-4" />
-                <span
-                  >{{ Math.round(entry.content.length / 1000) }} мин
-                  чтения</span
-                >
+                <UIcon
+                  name="i-heroicons-clock"
+                  class="w-4 h-4"
+                />
+                <span>{{ Math.round(entry.content.length / 1000) }} мин
+                  чтения</span>
               </div>
               <NuxtLink
                 :to="{
@@ -46,7 +54,10 @@
                 }"
                 class="flex items-center gap-1 hover:underline"
               >
-                <UIcon name="i-heroicons-user" class="w-4 h-4" />
+                <UIcon
+                  name="i-heroicons-user"
+                  class="w-4 h-4"
+                />
                 <span>{{ entry.department.title }}</span>
               </NuxtLink>
             </div>
@@ -60,7 +71,7 @@
           v-image-gallery="{ modal }"
           class="tiptap"
           v-html="entry.content"
-        ></div>
+        />
       </main>
 
       <footer class="mt-8">
@@ -88,7 +99,7 @@ const route = useRoute();
 const formattedDate = useFormateDate();
 const overlay = useOverlay();
 
-const content = ref()
+const content = ref();
 
 const modal = overlay.create(ModalsCommon);
 
@@ -102,7 +113,7 @@ const { data: entry } = await entryApi.getBySlugEntry(
   route.params.slug as string,
   {
     include: 'department',
-  }
+  },
 );
 
 const breadcrumbItems = ref([

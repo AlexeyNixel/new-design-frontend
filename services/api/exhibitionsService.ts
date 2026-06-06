@@ -1,6 +1,6 @@
 import { useApi } from './base';
 import { API_ENDPOINTS } from './endpoints';
-import { type File } from '../types/file.type';
+import type { File } from '../types/file.type';
 
 export const useExhibitionApi = () => {
   const api = useApi();

@@ -4,7 +4,10 @@
       <!-- Одна строка: логотип слева, всё остальное справа -->
       <div class="flex items-center justify-between">
         <!-- Логотип - фиксированная ширина w-40 -->
-        <NuxtLink to="/" class="flex-shrink-0">
+        <NuxtLink
+          to="/"
+          class="flex-shrink-0"
+        >
           <div
             class="w-40 text-primary hover:text-primary/80 transition-colors"
           >
@@ -17,7 +20,10 @@
           <!-- Выпадающие списки -->
           <div class="hidden xl:flex items-center gap-1">
             <!-- Режим работы -->
-            <UPopover mode="hover" :popper="{ placement: 'bottom' }">
+            <UPopover
+              mode="hover"
+              :popper="{ placement: 'bottom' }"
+            >
               <UButton
                 variant="ghost"
                 class="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors group"
@@ -33,8 +39,7 @@
                 </div>
                 <span
                   class="text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >10:00–20:00</span
-                >
+                >10:00–20:00</span>
                 <Icon
                   name="i-heroicons-chevron-down-16-solid"
                   class="w-4 h-4 text-gray-400"
@@ -65,7 +70,10 @@
             </UPopover>
 
             <!-- Адрес на карте -->
-            <UPopover mode="hover" :popper="{ placement: 'bottom' }">
+            <UPopover
+              mode="hover"
+              :popper="{ placement: 'bottom' }"
+            >
               <UButton
                 variant="ghost"
                 class="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 rounded-lg transition-colors group"
@@ -81,8 +89,7 @@
                 </div>
                 <span
                   class="text-sm font-medium text-gray-900 whitespace-nowrap"
-                  >Красный пр., 26</span
-                >
+                >Красный пр., 26</span>
                 <Icon
                   name="i-heroicons-chevron-down-16-solid"
                   class="w-4 h-4 text-gray-400"
@@ -102,7 +109,9 @@
                         name="material-symbols:map-outline"
                         class="w-8 h-8 text-gray-400 mx-auto mb-1"
                       />
-                      <p class="text-sm text-gray-600">Красный проспект, 26</p>
+                      <p class="text-sm text-gray-600">
+                        Красный проспект, 26
+                      </p>
                       <p class="text-sm text-gray-500">
                         ст. м. "Площадь Ленина"
                       </p>
@@ -143,8 +152,7 @@
               </div>
               <span
                 class="text-xs font-medium text-gray-700 group-hover:text-primary leading-tight px-0.5 text-center"
-                >{{ link.label }}</span
-              >
+              >{{ link.label }}</span>
             </UButton>
           </div>
 
@@ -163,9 +171,7 @@
                     class="w-3.5 h-3.5 text-primary"
                   />
                 </div>
-                <span class="text-sm font-medium whitespace-nowrap"
-                  >+7 (383) 210-10-53</span
-                >
+                <span class="text-sm font-medium whitespace-nowrap">+7 (383) 210-10-53</span>
               </a>
               <span class="text-gray-300 text-sm">|</span>
               <a
@@ -228,7 +234,10 @@
             <div
               class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center"
             >
-              <Icon name="ic:outline-phone" class="w-5 h-5 text-primary" />
+              <Icon
+                name="ic:outline-phone"
+                class="w-5 h-5 text-primary"
+              />
             </div>
             <div>
               <p class="text-xs text-gray-500">Телефон</p>
@@ -258,13 +267,19 @@
 
         <!-- Выпадашки для мобильных -->
         <div class="flex gap-2 mb-3">
-          <UPopover mode="click" :popper="{ placement: 'bottom' }">
+          <UPopover
+            mode="click"
+            :popper="{ placement: 'bottom' }"
+          >
             <UButton
               variant="soft"
               size="md"
               class="flex-1 flex items-center justify-center gap-2 py-2.5"
             >
-              <Icon name="mingcute:time-line" class="w-4 h-4" />
+              <Icon
+                name="mingcute:time-line"
+                class="w-4 h-4"
+              />
               <span class="text-sm">Режим работы</span>
             </UButton>
             <template #content>
@@ -290,13 +305,19 @@
             </template>
           </UPopover>
 
-          <UPopover mode="click" :popper="{ placement: 'bottom' }">
+          <UPopover
+            mode="click"
+            :popper="{ placement: 'bottom' }"
+          >
             <UButton
               variant="soft"
               size="md"
               class="flex-1 flex items-center justify-center gap-2 py-2.5"
             >
-              <Icon name="material-symbols:map-outline" class="w-4 h-4" />
+              <Icon
+                name="material-symbols:map-outline"
+                class="w-4 h-4"
+              />
               <span class="text-sm">Адрес</span>
             </UButton>
             <template #content>
@@ -312,8 +333,12 @@
                       name="material-symbols:map-outline"
                       class="w-8 h-8 text-gray-400 mx-auto mb-1"
                     />
-                    <p class="text-sm text-gray-600">Красный проспект, 26</p>
-                    <p class="text-sm text-gray-500">ст. м. "Площадь Ленина"</p>
+                    <p class="text-sm text-gray-600">
+                      Красный проспект, 26
+                    </p>
+                    <p class="text-sm text-gray-500">
+                      ст. м. "Площадь Ленина"
+                    </p>
                   </div>
                 </div>
                 <a
@@ -342,7 +367,10 @@
             size="md"
             class="flex flex-col items-center justify-center p-4 h-20"
           >
-            <Icon :name="link.icon" class="w-5 h-5 mb-1" />
+            <Icon
+              :name="link.icon"
+              class="w-5 h-5 mb-1"
+            />
             <span class="text-sm text-center leading-tight">{{
               link.label
             }}</span>

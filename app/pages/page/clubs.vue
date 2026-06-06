@@ -36,10 +36,11 @@ const { data: clubs } = await clubApi.getAllClubs({
         class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 pt-2"
       >
         <div class="flex items-center gap-2">
-          <Icon name="lucide:phone" class="w-4 h-4 text-gray-500" />
-          <span class="text-sm font-medium text-gray-700"
-            >По всем вопросам:</span
-          >
+          <Icon
+            name="lucide:phone"
+            class="w-4 h-4 text-gray-500"
+          />
+          <span class="text-sm font-medium text-gray-700">По всем вопросам:</span>
         </div>
         <a
           href="tel:210-11-08"
@@ -52,15 +53,15 @@ const { data: clubs } = await clubApi.getAllClubs({
 
     <section class="tiptap space-y-4 md:space-y-5">
       <article
-        class="relative overflow-hidden flex flex-col gap-3 p-4 md:p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
         v-for="item in clubs"
         :key="item.id"
+        class="relative overflow-hidden flex flex-col gap-3 p-4 md:p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
       >
         <img
           class="gradient absolute right-0 bottom-0 w-1/3 m-0! pointer-events-none opacity-60"
           :src="item.preview.path"
           alt=""
-        />
+        >
 
         <div class="relative z-10">
           <h2
@@ -108,6 +109,7 @@ const { data: clubs } = await clubApi.getAllClubs({
               <ul class="list-disc m-4!">
                 <li
                   v-for="dir in item.workDirection"
+                  :key="dir"
                   class=""
                 >
                   {{ dir }}

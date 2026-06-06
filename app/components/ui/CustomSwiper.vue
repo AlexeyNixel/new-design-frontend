@@ -1,6 +1,11 @@
 <template>
   <div>
-    <UCarousel @select="select" :ui="ui" v-slot="{ item }" :items="items">
+    <UCarousel
+      v-slot="{ item }"
+      :ui="ui"
+      :items="items"
+      @select="select"
+    >
       <div class="bg-blue-400">
         {{ item }}
       </div>

@@ -25,16 +25,19 @@
             class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100"
           >
             <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Icon name="i-heroicons-funnel" class="w-5 h-5 text-primary" />
+              <Icon
+                name="i-heroicons-funnel"
+                class="w-5 h-5 text-primary"
+              />
               Фильтры
             </h2>
             <UButton
               v-if="hasActiveFilters"
-              @click="clearFilters"
               size="xs"
               color="neutral"
               variant="ghost"
               class="text-gray-500 hover:text-gray-700"
+              @click="clearFilters"
             >
               Сбросить всё
             </UButton>
@@ -47,7 +50,10 @@
             <h3
               class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
             >
-              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-building-office"
+                class="w-4 h-4"
+              />
               Отдел
             </h3>
             <USelect
@@ -68,12 +74,13 @@
               <h3
                 class="text-sm font-semibold text-gray-900 flex items-center gap-2"
               >
-                <Icon name="i-heroicons-tag" class="w-4 h-4" />
+                <Icon
+                  name="i-heroicons-tag"
+                  class="w-4 h-4"
+                />
                 Теги
               </h3>
-              <span class="text-xs text-gray-500"
-                >{{ selectedTagsCount }}/{{ tags.length }}</span
-              >
+              <span class="text-xs text-gray-500">{{ selectedTagsCount }}/{{ tags.length }}</span>
             </div>
 
             <!-- Выбранные теги -->
@@ -90,10 +97,13 @@
               >
                 <template #trailing>
                   <button
-                    @click="toggleTag(tag)"
                     class="ml-1 hover:scale-125 transition-transform"
+                    @click="toggleTag(tag)"
                   >
-                    <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                    <Icon
+                      name="i-heroicons-x-mark"
+                      class="w-3 h-3"
+                    />
                   </button>
                 </template>
               </UBadge>
@@ -105,13 +115,13 @@
                 <div
                   v-for="tag in tags"
                   :key="tag.id"
-                  @click="toggleTag(tag)"
                   :class="[
                     'flex items-center justify-between p-2 rounded-lg cursor-pointer transition-all',
                     isTagSelected(tag)
                       ? 'bg-primary/10 border border-primary/20'
                       : 'hover:bg-gray-50 border border-transparent',
                   ]"
+                  @click="toggleTag(tag)"
                 >
                   <div class="flex items-center gap-2">
                     <div
@@ -138,26 +148,36 @@
             <h3
               class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
             >
-              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-building-office"
+                class="w-4 h-4"
+              />
               Год
             </h3>
             <div class="flex overflow-x-auto w-full gap-4">
-              <UButton variant="soft" class="p-2" v-for="item in 20"
-                >20{{ item }}</UButton
+              <UButton
+                v-for="item in 20"
+                :key="item"
+                variant="soft"
+                class="p-2"
               >
+                20{{ item }}
+              </UButton>
             </div>
           </div>
 
           <!-- Сортировка -->
           <div class="pt-4 border-t border-gray-100">
-            <h3 class="text-sm font-semibold text-gray-900 mb-3">Сортировка</h3>
+            <h3 class="text-sm font-semibold text-gray-900 mb-3">
+              Сортировка
+            </h3>
             <USelect
-              placeholder="Сначала новые"
               v-model="filters.sort"
+              placeholder="Сначала новые"
               :items="SORT_OPTIONS"
               size="md"
-              @change="handleFilterChange"
               class="w-full"
+              @change="handleFilterChange"
             />
           </div>
         </div>
@@ -179,7 +199,6 @@
           <div class="flex gap-3">
             <UButton
               variant="soft"
-              @click="activeGrid = false"
               :class="[
                 'flex items-center px-4 py-2 rounded-lg transition-all duration-200',
                 !activeGrid
@@ -188,11 +207,11 @@
               ]"
               icon="i-heroicons-bars-3-bottom-left"
               aria-label="Плиточный вид"
+              @click="activeGrid = false"
             />
 
             <UButton
               variant="soft"
-              @click="activeGrid = true"
               icon="i-heroicons-squares-2x2"
               :class="[
                 'flex items-center  px-4 py-2 rounded-lg transition-all duration-200',
@@ -201,6 +220,7 @@
                   : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50',
               ]"
               aria-label="Сеточный вид"
+              @click="activeGrid = true"
             />
           </div>
         </div>
@@ -221,19 +241,26 @@
           </div>
 
           <!-- Список -->
-          <div v-else class="flex flex-col gap-6">
-            <EntryTile v-for="post in posts.data" :key="post.id" :post="post" />
+          <div
+            v-else
+            class="flex flex-col gap-6"
+          >
+            <EntryTile
+              v-for="post in posts.data"
+              :key="post.id"
+              :post="post"
+            />
           </div>
 
           <!-- Пагинация -->
           <div class="mt-10 pt-8 border-t border-gray-100">
             <UPagination
-              show-edges
-              @update:page="handleNavigate"
               v-model:page="page"
+              show-edges
               :page-count="10"
               :total="posts?.meta?.total || 0"
               class="flex items-center justify-center"
+              @update:page="handleNavigate"
             />
 
             <div class="text-center text-sm text-gray-500 mt-4">
@@ -244,9 +271,15 @@
         </div>
 
         <!-- Состояние "нет результатов" -->
-        <div v-else class="text-center py-16">
+        <div
+          v-else
+          class="text-center py-16"
+        >
           <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
-            <Icon name="i-heroicons-newspaper" class="w-full h-full" />
+            <Icon
+              name="i-heroicons-newspaper"
+              class="w-full h-full"
+            />
           </div>
           <h3 class="text-xl font-semibold text-gray-700 mb-2">
             Новостей не найдено
@@ -255,12 +288,15 @@
             Попробуйте изменить параметры фильтрации или очистить фильтры
           </p>
           <UButton
-            @click="clearFilters"
             color="primary"
             variant="solid"
             size="lg"
+            @click="clearFilters"
           >
-            <Icon name="i-heroicons-arrow-path" class="w-5 h-5 mr-2" />
+            <Icon
+              name="i-heroicons-arrow-path"
+              class="w-5 h-5 mr-2"
+            />
             Очистить фильтры
           </UButton>
         </div>
@@ -327,16 +363,16 @@ const filters = ref({
 
 const hasActiveFilters = computed(() => {
   return (
-    !!filters.value.date ||
-    !!filters.value.department ||
-    filters.value.tags.length > 0 ||
-    !!filters.value.dateFrom ||
-    !!filters.value.dateTo
+    !!filters.value.date
+    || !!filters.value.department
+    || filters.value.tags.length > 0
+    || !!filters.value.dateFrom
+    || !!filters.value.dateTo
   );
 });
 
 const selectedTags = computed(() => {
-  return tags.filter((tag) => filters.value.tags.includes(tag.id.toString()));
+  return tags.filter(tag => filters.value.tags.includes(tag.id.toString()));
 });
 
 const selectedTagsCount = computed(() => filters.value.tags.length);
@@ -361,7 +397,8 @@ const toggleTag = (tag: Tag) => {
 
   if (index > -1) {
     filters.value.tags.splice(index, 1);
-  } else {
+  }
+  else {
     filters.value.tags.push(tagId);
   }
 
@@ -425,7 +462,8 @@ const loadEntries = async () => {
       sortOrder: filters.value.sort,
       tags: filters.value.tags,
     });
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error loading entries:', error);
   }
 };
@@ -446,7 +484,7 @@ watch(
       sort: newQuery.sort as string,
     };
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 

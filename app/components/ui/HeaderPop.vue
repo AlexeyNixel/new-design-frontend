@@ -3,7 +3,10 @@
     <div
       class="flex flex-row items-center justify-start gap-2 p-2 rounded-xl transition hover:ring-2 ring-primary hover:cursor-pointer w-full"
     >
-      <Icon :name="icon" class="text-xl lg:text-4xl" />
+      <Icon
+        :name="icon"
+        class="text-xl lg:text-4xl"
+      />
       <div class="min-w-max flex-1">
         <span class="text-xs lg:text-sm break-words leading-0">
           {{ label }}
@@ -12,7 +15,10 @@
       </div>
     </div>
 
-    <template #content v-if="isPopover">
+    <template
+      v-if="isPopover"
+      #content
+    >
       <div class="rounded-xl overflow-hidden max-w-[90vw] lg:max-w-none">
         <component :is="modal" />
       </div>
@@ -32,6 +38,6 @@ withDefaults(
   {
     size: '2xl lg:5xl',
     isPopover: true,
-  }
+  },
 );
 </script>

@@ -11,9 +11,15 @@ const { data: competitions } = await entryApi.getAllEntry({
 
 <template>
   <CommonContentContainer>
-    <h1 class="mb-6">Архив конкурсов</h1>
+    <h1 class="mb-6">
+      Архив конкурсов
+    </h1>
     <div class="flex flex-col gap-4">
-      <entry-tile v-for="item in competitions" :key="item.id" :entry="item" />
+      <entry-tile
+        v-for="item in competitions"
+        :key="item.id"
+        :entry="item"
+      />
     </div>
   </CommonContentContainer>
 </template>

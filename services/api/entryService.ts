@@ -1,5 +1,5 @@
 import { useApi } from './base';
-import { type Post } from '../types/post.type';
+import type { Post } from '../types/post.type';
 import { API_ENDPOINTS } from './endpoints';
 import type { Tag } from '~~/services/types/tag.type';
 

@@ -14,7 +14,7 @@
         :alt="game.name"
         loading="lazy"
         @error="handleImageError"
-      />
+      >
 
       <UBadge
         :label="
@@ -36,19 +36,26 @@
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-1">
-            <Icon name="i-heroicons-user-group" class="w-4 h-4 text-primary" />
-            <span class="font-bold text-gray-900"
-              >{{ game.player_min }}-{{ game.player_max }}</span
-            >
+            <Icon
+              name="i-heroicons-user-group"
+              class="w-4 h-4 text-primary"
+            />
+            <span class="font-bold text-gray-900">{{ game.player_min }}-{{ game.player_max }}</span>
           </div>
           <div class="flex items-center gap-1">
-            <Icon name="i-heroicons-clock" class="w-4 h-4 text-primary" />
+            <Icon
+              name="i-heroicons-clock"
+              class="w-4 h-4 text-primary"
+            />
             <span class="font-bold text-gray-900">{{
               game.game_duration
             }}</span>
           </div>
           <div class="flex items-center gap-1">
-            <Icon name="i-heroicons-cake" class="w-4 h-4 text-primary" />
+            <Icon
+              name="i-heroicons-cake"
+              class="w-4 h-4 text-primary"
+            />
             <span class="font-bold text-gray-900">{{ game.player_age }}+</span>
           </div>
         </div>
@@ -64,7 +71,10 @@
       />
 
       <!-- Жанры -->
-      <div v-if="game.genres" class="mb-4">
+      <div
+        v-if="game.genres"
+        class="mb-4"
+      >
         <div class="flex flex-wrap gap-2">
           <UBadge
             v-for="(genre, index) in takeGameGenres(game.genres)"
@@ -72,8 +82,7 @@
             :label="GENRES[genre]"
             color="info"
             variant="soft"
-          >
-          </UBadge>
+          />
         </div>
       </div>
 
@@ -106,7 +115,7 @@ import { GameGenres } from '~/constants/gameGenres';
 
 const GENRES = GameGenres;
 
-const props = defineProps<{
+defineProps<{
   game: Game;
 }>();
 

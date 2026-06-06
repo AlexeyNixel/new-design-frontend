@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="{ name: 'entry-slug', params: { slug: entry.slug } }"
+    :to="{ name: 'post-slug', params: { slug: post.slug } }"
     class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row items-stretch min-h-64 hover:-translate-y-2 border border-gray-100"
   >
     <div
@@ -10,7 +10,7 @@
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         @error="notFoundImage"
         :src="imgSrc"
-        :alt="entry.title"
+        :alt="post.title"
       />
 
       <!-- Дата в стиле карточки -->
@@ -19,13 +19,13 @@
       >
         <div class="flex flex-col items-center">
           <span class="text-sm font-semibold text-gray-500">
-            {{ formateDate(entry.publishedAt, 'MMM') }}
+            {{ formateDate(post.publishedAt, 'MMM') }}
           </span>
           <span class="text-2xl font-bold text-gray-800">
-            {{ formateDate(entry.publishedAt, 'DD') }}
+            {{ formateDate(post.publishedAt, 'DD') }}
           </span>
           <span class="text-xs text-gray-500">
-            {{ formateDate(entry.publishedAt, 'YYYY') }}
+            {{ formateDate(post.publishedAt, 'YYYY') }}
           </span>
         </div>
       </div>
@@ -38,11 +38,11 @@
         <h2
           class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2"
         >
-          {{ entry.title }}
+          {{ post.title }}
         </h2>
 
         <div
-          v-html="entry.description"
+          v-html="post.description"
           class="text-gray-600 mb-4 line-clamp-3 prose prose-sm max-w-none"
         />
       </div>
@@ -65,7 +65,7 @@
             <div>
               <div class="text-xs text-gray-500">Отдел</div>
               <div class="font-medium text-gray-800">
-                {{ entry.department?.title }}
+                {{ post.department?.title }}
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@
             <!-- Дата -->
             <div class="flex items-center text-gray-600">
               <Icon name="i-heroicons-calendar-20-solid" class="w-4 h-4 mr-2" />
-              <span>{{ formateDate(entry.publishedAt, 'DD MMMM YYYY') }}</span>
+              <span>{{ formateDate(post.publishedAt, 'DD MMMM YYYY') }}</span>
             </div>
 
             <!-- Кнопка читать -->
@@ -94,15 +94,15 @@
 </template>
 
 <script setup lang="ts">
-import type { Entry } from '~~/services/types/entry.type';
+import type { Post } from '~~/services/types/post.type';
 
 const props = defineProps<{
-  entry: Entry;
+  post: Post;
 }>();
 
 const DEFAULT_IMAGE = '/placeholder.jpg';
 
-const imgSrc = ref(props.entry?.preview?.path || DEFAULT_IMAGE);
+const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
 
 // Хелпер для форматирования даты
 const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {

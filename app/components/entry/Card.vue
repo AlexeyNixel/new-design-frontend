@@ -57,18 +57,18 @@
 </template>
 
 <script setup lang="ts">
-import { type Entry } from '~~/services/types/entry.type';
+import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 
 interface Props {
-  entry: Entry;
+  post: Post;
 }
 
 const props = defineProps<Props>();
 
 const DEFAULT_IMAGE = '/placeholder.jpg';
 
-const imgSrc = ref(props.entry?.preview?.path || DEFAULT_IMAGE);
+const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
 
 const notFoundImage = () => {
   if (imgSrc.value !== DEFAULT_IMAGE) {

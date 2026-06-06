@@ -8,5 +8,8 @@ export const useDepartmentApi = () => {
   return {
     getAllDepartments: (params?: any) =>
       api.get<Department[]>(API_ENDPOINTS.department, { params: params }),
+
+    getOneDepartment: (slug: string, params: any) =>
+      api.getOne<Department>(API_ENDPOINTS.department, slug, { params: params }),
   };
 };

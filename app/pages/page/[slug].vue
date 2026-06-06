@@ -45,11 +45,6 @@ const breadcrumbItems = computed(() => [
     to: '/',
   },
   {
-    label: 'Страницы',
-    icon: 'i-heroicons-document-text',
-    to: '/pages',
-  },
-  {
     label: page.value?.title || 'Страница',
     to: `/page/${page.value?.slug}`,
   },

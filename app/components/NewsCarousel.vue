@@ -10,7 +10,7 @@
           <EntryCompactCard
             v-for="item in entry.slice(1, 9)"
             :key="item.id"
-            :entry="item"
+            :post="item"
           />
         </div>
       </div>

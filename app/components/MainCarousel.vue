@@ -14,7 +14,7 @@
       <NuxtLink
         :to="
           item.post
-            ? { name: 'entry-slug', params: { slug: item.post.slug } }
+            ? { name: 'post-slug', params: { slug: item.post.slug } }
             : item.url
         "
         class="block w-full h-full"

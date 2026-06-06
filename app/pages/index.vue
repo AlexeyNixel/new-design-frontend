@@ -36,7 +36,7 @@
     <!-- Остальные секции -->
     <CommonSectionWrapper
       title="Последние новости"
-      link="/entry"
+      link="/post"
       link-label="Все новости"
       bg-gray
     >

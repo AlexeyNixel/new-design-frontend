@@ -70,6 +70,12 @@ export default defineNuxtConfig({
           target: 'http://static.infomania.ru/site',
           changeOrigin: true,
         },
+        '/entry': {
+          // убираем /**
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/entry/, '/post'), // заменяем /entry на /post
+        },
       },
     },
   },

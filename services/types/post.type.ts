@@ -1,7 +1,7 @@
 import { type File } from './file.type';
 import type { Tag } from '~~/services/types/tag.type';
 
-export interface Entry {
+export interface Post {
   id: string;
   fileId: string;
   createdAt: string;

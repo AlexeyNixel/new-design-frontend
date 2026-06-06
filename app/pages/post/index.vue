@@ -206,27 +206,23 @@
         </div>
 
         <!-- Список новостей -->
-        <div v-if="entries?.data && entries.data.length > 0">
+        <div v-if="posts?.data && posts.data.length > 0">
           <!-- Сетка -->
           <div
             v-if="activeGrid"
             class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             <EntryCard
-              v-for="entry in entries.data"
-              :key="entry.id"
-              :entry="entry"
+              v-for="post in posts.data"
+              :key="post.id"
+              :post="post"
               class="h-full"
             />
           </div>
 
           <!-- Список -->
           <div v-else class="flex flex-col gap-6">
-            <EntryTile
-              v-for="entry in entries.data"
-              :key="entry.id"
-              :entry="entry"
-            />
+            <EntryTile v-for="post in posts.data" :key="post.id" :post="post" />
           </div>
 
           <!-- Пагинация -->
@@ -236,24 +232,13 @@
               @update:page="handleNavigate"
               v-model:page="page"
               :page-count="10"
-              :total="entries?.meta?.total || 0"
-              :ui="{
-                wrapper: 'flex items-center gap-1',
-                base: 'min-w-8 w-8 h-8',
-                rounded: 'rounded-lg',
-                default: {
-                  color: 'primary',
-                  activeButton: {
-                    color: 'primary',
-                  },
-                },
-              }"
+              :total="posts?.meta?.total || 0"
               class="flex items-center justify-center"
             />
 
             <div class="text-center text-sm text-gray-500 mt-4">
-              Показано {{ entries.data.length }} из
-              {{ entries.meta?.total }} новостей
+              Показано {{ posts.data.length }} из
+              {{ posts.meta?.total }} новостей
             </div>
           </div>
         </div>
@@ -286,7 +271,7 @@
 
 <script setup lang="ts">
 import { useEntryApi } from '~~/services/api/entryService';
-import type { Entry } from '~~/services/types/entry.type';
+import type { Post } from '~~/services/types/post.type';
 import type { ApiResponse } from '~~/services/api/base';
 import { useDepartmentApi } from '~~/services/api/departmentService';
 
@@ -308,7 +293,7 @@ const BREADCRUMB_ITEMS = [
   {
     label: 'Новости',
     icon: 'i-heroicons-newspaper',
-    to: '/entry',
+    to: '/post',
   },
 ];
 
@@ -319,7 +304,7 @@ const SORT_OPTIONS = [
 
 // Состояние
 const activeGrid = ref(false);
-const entries = ref<ApiResponse<Entry[]>>();
+const posts = ref<ApiResponse<Post[]>>();
 const page = ref(Number(route.query.page) || 1);
 const search = ref<string>((route.query.search as string) || '');
 
@@ -358,7 +343,7 @@ const selectedTagsCount = computed(() => filters.value.tags.length);
 
 const handleSearchChange = async () => {
   updateUrl();
-  entries.value = await entryApi.getAllEntry({
+  posts.value = await entryApi.getAllEntry({
     include: 'preview, department',
     search: search.value || undefined,
     department: filters.value.department,
@@ -425,15 +410,14 @@ const updateUrl = () => {
   if (filters.value.sort) query.sort = filters.value.sort;
 
   navigateTo({
-    name: 'entry',
+    name: 'post',
     query,
   });
 };
 
 const loadEntries = async () => {
   try {
-    console.log(filters.value.tags);
-    entries.value = await entryApi.getAllEntry({
+    posts.value = await entryApi.getAllEntry({
       include: 'preview, department',
       search: search.value || undefined,
       page: page.value,
@@ -451,7 +435,6 @@ await loadEntries();
 watch(
   () => route.query,
   (newQuery) => {
-    // Синхронизируем состояние с URL
     page.value = Number(newQuery.page) || 1;
     search.value = (newQuery.search as string) || '';
     filters.value = {

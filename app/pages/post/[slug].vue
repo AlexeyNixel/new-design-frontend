@@ -9,7 +9,7 @@
             <NuxtLink
               v-for="tag in entry.tags"
               :key="tag.id"
-              :to="{ name: 'entry', query: { tags: tag.id } }"
+              :to="{ name: 'post', query: { tags: tag.id } }"
             >
               <UBadge
                 :label="tag.label"
@@ -41,7 +41,7 @@
               </div>
               <NuxtLink
                 :to="{
-                  name: 'entry',
+                  name: 'post',
                   query: { department: entry.departmentId },
                 }"
                 class="flex items-center gap-1 hover:underline"
@@ -56,6 +56,7 @@
 
       <main class="news-content">
         <div
+          ref="content"
           v-image-gallery="{ modal }"
           class="tiptap"
           v-html="entry.content"
@@ -67,7 +68,7 @@
 
         <div class="flex justify-between items-center">
           <UButton
-            to="/entry"
+            to="/post"
             icon="i-heroicons-arrow-left"
             label="Все новости"
             variant="ghost"
@@ -86,6 +87,8 @@ import { useEntryApi } from '~~/services/api/entryService';
 const route = useRoute();
 const formattedDate = useFormateDate();
 const overlay = useOverlay();
+
+const content = ref()
 
 const modal = overlay.create(ModalsCommon);
 
@@ -111,14 +114,22 @@ const breadcrumbItems = ref([
   {
     label: 'Новости',
     icon: 'i-heroicons-newspaper',
-    to: '/entry',
+    to: '/post',
   },
   {
     label: entry.title,
     icon: 'i-heroicons-document-text',
-    to: `/entry/${entry.slug}`,
+    to: `/post/${entry.slug}`,
   },
 ]);
+
+// onMounted(() => {
+//   const img = document.querySelectorAll("img")
+//   for (let i of img) {
+//     i.className.add('img-plus')
+//   }
+//   console.log(img);
+// })
 
 useSeoMeta({
   title: entry.title,

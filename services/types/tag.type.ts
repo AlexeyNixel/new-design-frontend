@@ -1,5 +1,5 @@
 export interface Tag {
   id: string;
-  label: string;
+  title: string;
   slug: string;
 }

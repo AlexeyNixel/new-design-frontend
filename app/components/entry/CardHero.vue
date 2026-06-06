@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="{ name: 'entry-slug', params: { slug: post.slug } }"
+    :to="{ name: 'post-slug', params: { slug: post.slug } }"
     class="group block h-full"
   >
     <div
@@ -69,11 +69,11 @@
 </template>
 
 <script setup lang="ts">
-import type { Entry } from '~~/services/types/entry.type';
+import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 
 interface Props {
-  post: Entry;
+  post: Post;
 }
 
 const props = defineProps<Props>();

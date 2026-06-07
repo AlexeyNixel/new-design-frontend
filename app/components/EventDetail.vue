@@ -3,11 +3,15 @@ import type { Event } from '~~/services/types/event.type';
 import dayjs from 'dayjs';
 import { IBillboardPlaces } from '~/constants/billboardPlaces';
 
-const selectedEvent = ref<Event | null>();
+const selectedEvent = ref<Event | null>(null);
 
-defineProps<{
+const props = defineProps<{
   modelValue: Event[];
 }>();
+
+watch(() => props.modelValue, () => {
+  selectedEvent.value = null;
+});
 
 const emits = defineEmits(['update:modelValue']);
 
@@ -22,133 +26,129 @@ const formatTime = (date: Date | string) => {
 
 <template>
   <div
-    class="absolute top-0 h-full w-full bg-white rounded-xl overflow-hidden flex flex-col"
+    class="absolute inset-0 bg-white rounded-xl overflow-hidden flex flex-col z-10"
   >
-    <!-- Header - фиксированный -->
+    <!-- Header -->
     <header
-      class="flex-shrink-0 flex items-center justify-between bg-gradient-to-r from-success to-success/70 px-4 py-3 text-white rounded-t-xl"
+      class="flex-shrink-0 flex items-center bg-gradient-to-r from-success to-success/70 px-2 py-2 sm:py-3 text-white rounded-t-xl"
     >
-      <div class="flex items-center gap-3">
+      <UButton
+        v-if="selectedEvent"
+        variant="ghost"
+        icon="i-heroicons-arrow-left-20-solid"
+        class="text-white hover:bg-white/20 shrink-0"
+        @click="selectedEvent = null"
+      />
+      <div
+        v-else
+        class="w-9 shrink-0"
+      />
+
+      <div class="flex items-center gap-2 flex-1 justify-center min-w-0">
         <Icon
-          class="text-xl"
+          class="text-xl shrink-0"
           name="i-heroicons-calendar-days"
         />
-        <h3 class="!m-0">
+        <h3 class="m-0 font-bold text-sm sm:text-base truncate">
           Календарь событий
         </h3>
       </div>
 
       <UButton
-        color="white"
-        variant="link"
+        variant="ghost"
         icon="heroicons:x-mark-20-solid"
+        class="text-white hover:bg-white/20 shrink-0"
         @click="closeWindow"
       />
     </header>
 
-    <!-- Контент - скроллящийся -->
-    <div class="flex-1 overflow-y-auto p-4">
-      <div
-        v-if="!selectedEvent"
-        class="space-y-2"
-      >
-        <UButton
+    <!-- Список событий на день -->
+    <div
+      v-if="!selectedEvent"
+      class="flex-1 overflow-y-auto p-3"
+    >
+      <div class="space-y-1">
+        <button
           v-for="item in modelValue"
           :key="item.id"
-          variant="link"
-          class="flex items-center odd:bg-neutral-100 w-full rounded p-3 hover:bg-neutral-50 transition-colors"
+          class="flex items-center w-full rounded-lg px-3 py-2.5 text-left hover:bg-neutral-100 transition-colors odd:bg-neutral-50"
           @click="selectedEvent = item"
         >
-          <div class="text-primary font-bold min-w-[50px]">
+          <span class="text-primary font-bold text-sm min-w-[48px]">
             {{ formatTime(item.eventTime) }}
-          </div>
-          <p class="ml-2 text-left flex-1">
+          </span>
+          <span class="ml-2 text-sm text-gray-800 flex-1">
             {{ item.title }}
-          </p>
-        </UButton>
+          </span>
+        </button>
       </div>
+    </div>
 
-      <div v-else>
-        <!--        <div class=""> -->
-        <!--          <UButton -->
-        <!--            variant="ghost" -->
-        <!--            icon="i-heroicons-arrow-left-20-solid" -->
-        <!--            @click="selectedEvent = null" -->
-        <!--            class="" -->
-        <!--          > -->
-        <!--            Назад -->
-        <!--          </UButton> -->
-        <!--        </div> -->
-
-        <!-- Детали события -->
-        <div class="space-y-4">
-          <header>
-            <div class="flex items-center justify-between mb-3">
-              <div class="font-bold text-xl text-gray-900">
-                {{ selectedEvent.title }}
-              </div>
-              <span
-                v-if="selectedEvent.age"
-                class="px-3 py-1 bg-blue-100 text-blue-800 font-semibold rounded-full text-sm"
-              >
-                {{ selectedEvent.age }}+
-              </span>
-            </div>
-
-            <div class="text-gray-700 flex justify-between items-center">
-              <div class="flex gap-2 items-center">
-                <UIcon
-                  name="i-heroicons-clock-20-solid"
-                  class="w-4 h-4 text-gray-400"
-                />
-                <span>{{ formatTime(selectedEvent.eventTime) }}</span>
-              </div>
-
-              <div
-                v-if="selectedEvent.place"
-                class="flex items-center gap-2"
-              >
-                <UIcon
-                  name="i-heroicons-map-pin-20-solid"
-                  class="w-4 h-4 text-gray-400"
-                />
-                <span>{{ IBillboardPlaces[selectedEvent.place] }}</span>
-              </div>
-
-              <div
-                v-if="selectedEvent.phone"
-                class="flex items-center gap-2"
-              >
-                <UIcon
-                  name="i-heroicons-phone-20-solid"
-                  class="w-4 h-4 text-gray-400"
-                />
-                <a
-                  :href="`tel:${selectedEvent.phone}`"
-                  class="text-primary hover:underline"
-                >
-                  {{ selectedEvent.phone }}
-                </a>
-              </div>
-            </div>
-          </header>
-
-          <!-- Контент события -->
-          <div class="pt-4 border-t border-gray-200">
-            <div
-              class="tiptap max-w-none"
-              v-html="selectedEvent.content"
-            />
+    <!-- Детали выбранного события -->
+    <div
+      v-else
+      class="flex-1 overflow-y-auto p-4"
+    >
+      <div class="space-y-4">
+        <div class="flex items-start justify-between gap-2">
+          <div class="font-bold text-lg text-gray-900 leading-tight">
+            {{ selectedEvent.title }}
           </div>
+          <span
+            v-if="selectedEvent.age"
+            class="flex-shrink-0 px-2.5 py-0.5 bg-blue-100 text-blue-800 font-semibold rounded-full text-sm"
+          >
+            {{ selectedEvent.age }}+
+          </span>
+        </div>
+
+        <div class="flex flex-wrap gap-3 text-sm text-gray-600">
+          <div class="flex items-center gap-1.5">
+            <UIcon
+              name="i-heroicons-clock-20-solid"
+              class="w-4 h-4 text-gray-400 shrink-0"
+            />
+            <span>{{ formatTime(selectedEvent.eventTime) }}</span>
+          </div>
+
+          <div
+            v-if="selectedEvent.place"
+            class="flex items-center gap-1.5"
+          >
+            <UIcon
+              name="i-heroicons-map-pin-20-solid"
+              class="w-4 h-4 text-gray-400 shrink-0"
+            />
+            <span>{{ IBillboardPlaces[selectedEvent.place] }}</span>
+          </div>
+
+          <div
+            v-if="selectedEvent.phone"
+            class="flex items-center gap-1.5"
+          >
+            <UIcon
+              name="i-heroicons-phone-20-solid"
+              class="w-4 h-4 text-gray-400 shrink-0"
+            />
+            <a
+              :href="`tel:${selectedEvent.phone}`"
+              class="text-primary hover:underline"
+            >
+              {{ selectedEvent.phone }}
+            </a>
+          </div>
+        </div>
+
+        <div
+          v-if="selectedEvent.content"
+          class="pt-3 border-t border-gray-200"
+        >
+          <div
+            class="tiptap max-w-none text-sm"
+            v-html="selectedEvent.content"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Убираем лишние скроллбары на мобильных устройствах */
-.overflow-y-auto {
-  -webkit-overflow-scrolling: touch;
-}
-</style>

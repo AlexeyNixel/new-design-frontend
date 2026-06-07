@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { DateValue } from '@internationalized/date';
 import type { Event } from '~~/services/types/event.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
@@ -13,9 +14,9 @@ const calendarDate = shallowRef(
 
 const eventsByDate = ref<{ [key: string]: Event[] }>({});
 
-const fetchEvents = async (date: Date | any) => {
-  const startDay = dayjs(date).startOf('month').format();
-  const endDay = dayjs(date).endOf('month').format();
+const fetchEvents = async (date: CalendarDate) => {
+  const startDay = dayjs(date.toString()).startOf('month').format();
+  const endDay = dayjs(date.toString()).endOf('month').format();
 
   eventsByDate.value = {};
 
@@ -31,40 +32,29 @@ const fetchEvents = async (date: Date | any) => {
 
   if (Array.isArray(events.value)) {
     events.value.forEach((event: Event) => {
-      const date = dayjs(event.eventTime).format('YYYY-MM-DD');
+      const dateKey = dayjs(event.eventTime).format('YYYY-MM-DD');
 
-      if (eventsByDate.value[date]) {
-        eventsByDate.value[date].push(event);
+      if (eventsByDate.value[dateKey]) {
+        eventsByDate.value[dateKey].push(event);
       }
       else {
-        eventsByDate.value[date] = [event];
+        eventsByDate.value[dateKey] = [event];
       }
     });
   }
 };
 
-const isEvent = (date: Date) => {
-  const dateString = dayjs(date).format('YYYY-MM-DD');
+const isEvent = (date: DateValue) => {
+  const dateString = dayjs(date.toString()).format('YYYY-MM-DD');
   return eventsByDate.value[dateString];
 };
 
-const isWeekend = (date: Date) => {
-  const day = dayjs(date).get('day');
-  return day === 1;
+const isMonday = (date: DateValue) => {
+  return dayjs(date.toString()).get('day') === 1;
 };
 
-const getColorByDate = (date: Date) => {
-  const event = isEvent(date);
-
-  if (isWeekend(date)) {
-    return 'warning';
-  }
-
-  if (event) {
-    return 'info';
-  }
-
-  return 'undefined';
+const isOutsideMonth = (date: DateValue) => {
+  return date.month !== calendarDate.value.month;
 };
 
 const changeMonth = async (direction: 'prev' | 'next') => {
@@ -91,110 +81,120 @@ const formatEventDate = (date: string) => {
 };
 
 onMounted(async () => {
-  await fetchEvents(new Date());
+  await fetchEvents(calendarDate.value);
 });
 </script>
 
 <template>
-  <div class="bg-white shadow rounded-xl relative">
-    <!-- Заголовок -->
+  <div class="bg-white shadow rounded-xl relative overflow-hidden">
+    <!-- Заголовок с навигацией -->
     <header
-      class="flex items-center gap-3 bg-gradient-to-r from-success to-success/70 px-3 sm:px-4 py-2 sm:py-3 text-white rounded-t-xl"
+      class="flex items-center bg-gradient-to-r from-success to-success/70 px-1 sm:px-2 py-2 sm:py-3 text-white rounded-t-xl"
     >
-      <Icon
-        class="text-lg sm:text-xl"
-        name="i-heroicons-calendar-days"
+      <UButton
+        variant="ghost"
+        icon="i-iconoir-nav-arrow-left"
+        class="text-white hover:bg-white/20 shrink-0"
+        @click="changeMonth('prev')"
       />
-      <div class="font-bold text-base sm:text-lg">
-        Календарь событий
+      <div class="flex items-center gap-2 flex-1 justify-center min-w-0">
+        <Icon
+          class="text-lg sm:text-xl shrink-0"
+          name="i-heroicons-calendar-days"
+        />
+        <div class="font-bold text-sm sm:text-base truncate">
+          Календарь событий
+        </div>
       </div>
+      <UButton
+        variant="ghost"
+        icon="i-iconoir-nav-arrow-right"
+        class="text-white hover:bg-white/20 shrink-0"
+        @click="changeMonth('next')"
+      />
     </header>
 
-    <!-- Календарь с адаптивными размерами -->
-    <div class="p-2 sm:p-3 md:p-4">
+    <!-- Тело -->
+    <div class="p-2 sm:p-3">
       <!-- Мобильная версия - список событий -->
       <div class="block sm:hidden">
-        <div class="space-y-2 max-h-[400px] overflow-y-auto">
+        <div class="space-y-2 max-h-[300px] overflow-y-auto">
           <div
             v-for="event in upcomingEvents"
             :key="event.id"
-            class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100"
+            class="bg-gray-50 rounded-lg p-3 cursor-pointer hover:bg-gray-100 transition-colors"
             @click="currentEvent = event"
           >
-            <div class="font-semibold text-sm">
+            <div class="font-semibold text-sm text-primary">
               {{ formatEventDate(event.eventTime) }}
             </div>
-            <div class="text-sm">
+            <div class="text-sm text-gray-700">
               {{ event.title }}
             </div>
           </div>
           <div
             v-if="!upcomingEvents.length"
-            class="text-center text-gray-500 py-8"
+            class="text-center text-gray-500 py-6 text-sm"
           >
             Нет событий
           </div>
         </div>
       </div>
 
-      <!-- Desktop версия - календарь -->
+      <!-- Desktop версия - сетка календаря -->
       <div class="hidden sm:block">
         <UCalendar
           v-model="calendarDate"
           :year-controls="false"
           :month-controls="false"
+          size="sm"
           :ui="{
-            heading: 'font-bold text-sm sm:text-base',
-            grid: 'gap-1',
-            cell: 'p-0.5 sm:p-1',
+            heading: 'font-semibold text-sm',
+            cell: 'p-0',
           }"
         >
           <template #day="{ day }">
-            <div v-if="isEvent(day)">
-              <UChip
-                :text="String(isEvent(day)?.length)"
-                size="3xl"
+            <!-- День с событиями -->
+            <UChip
+              v-if="isEvent(day) && !isOutsideMonth(day)"
+              :text="String(isEvent(day)?.length)"
+              size="xs"
+              color="info"
+            >
+              <div
+                class="flex items-center justify-center rounded-full w-7 h-7 text-xs font-medium bg-info/20 text-info cursor-pointer"
+                @click.stop="currentEvent = isEvent(day)"
               >
-                <UButton
-                  :color="getColorByDate(day)"
-                  variant="soft"
-                  class="flex items-center justify-center rounded-full w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base focus:text-white cursor-pointer"
-                  @click="currentEvent = isEvent(day)"
-                >
-                  {{ day.day }}
-                </UButton>
-              </UChip>
-            </div>
+                {{ day.day }}
+              </div>
+            </UChip>
 
-            <UButton
-              v-else
-              :color="getColorByDate(day)"
-              class="flex items-center justify-center rounded-full w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base focus:text-white"
-              variant="soft"
+            <!-- Понедельник -->
+            <div
+              v-else-if="isMonday(day) && !isOutsideMonth(day)"
+              class="flex items-center justify-center rounded-full w-7 h-7 text-xs font-medium bg-warning/20 text-warning"
             >
               {{ day.day }}
-            </UButton>
+            </div>
+
+            <!-- День вне текущего месяца -->
+            <div
+              v-else-if="isOutsideMonth(day)"
+              class="flex items-center justify-center rounded-full w-7 h-7 text-xs font-medium text-gray-300"
+            >
+              {{ day.day }}
+            </div>
+
+            <!-- Обычный день -->
+            <div
+              v-else
+              class="flex items-center justify-center rounded-full w-7 h-7 text-xs font-medium"
+            >
+              {{ day.day }}
+            </div>
           </template>
         </UCalendar>
       </div>
-    </div>
-
-    <!-- Кнопки навигации - теперь не перекрывают -->
-    <div
-      class="absolute top-3 left-0 right-0 flex justify-between px-2 sm:px-3"
-    >
-      <UButton
-        variant="link"
-        icon="i-iconoir-nav-arrow-left"
-        class="text-white hover:text-gray-200 !p-1 sm:!p-2"
-        @click="changeMonth('prev')"
-      />
-      <UButton
-        variant="link"
-        icon="i-iconoir-nav-arrow-right"
-        class="text-white hover:text-gray-200 !p-1 sm:!p-2"
-        @click="changeMonth('next')"
-      />
     </div>
 
     <EventDetail
@@ -204,12 +204,3 @@ onMounted(async () => {
     />
   </div>
 </template>
-
-<style scoped>
-div [data-outside-visible-view] {
-  button {
-    color: #e7e1e1;
-    background: none;
-  }
-}
-</style>

@@ -63,7 +63,7 @@ export const useApi = () => {
   const getOne = async <T>(
     endpoint: string,
     slug: string,
-    options: any,
+    options?: any,
   ): Promise<ApiResponse<T>> => {
     const { data }: any = await useFetch(baseApi + endpoint + slug, {
       method: 'GET',

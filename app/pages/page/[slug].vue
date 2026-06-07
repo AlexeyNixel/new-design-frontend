@@ -21,7 +21,7 @@
       >
         <div class="p-8 md:p-10">
           <div
-            class="ck-content"
+            class="tiptap"
             v-html="page.content"
           />
         </div>
@@ -31,15 +31,14 @@
 </template>
 
 <script setup lang="ts">
-import type { Page } from '~~/services/types/page.type';
+import { usePageApi } from '~~/services/api/page.api';
 
 const route = useRoute();
 
-const { data: page } = await useFetch<Page>(
-  `http://localhost:3300/api/page/${route.params.slug}`,
-);
+const pageApi = usePageApi();
 
-// Хлебные крошки
+const { data: page } = await pageApi.getOnePage(route.params.slug as string);
+
 const breadcrumbUI = {
   link: 'text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400',
   active: 'text-gray-900 dark:text-white font-medium',
@@ -52,12 +51,12 @@ const breadcrumbItems = computed(() => [
     to: '/',
   },
   {
-    label: page.value?.title || 'Страница',
-    to: `/page/${page.value?.slug}`,
+    label: page?.title || 'Страница',
+    to: `/page/${page?.slug}`,
   },
 ]);
 
-if (!page.value) {
+if (!page) {
   showError({
     status: 404,
     statusText: 'Страницы не существует',
@@ -66,7 +65,7 @@ if (!page.value) {
 
 // SEO
 useSeoMeta({
-  title: page.value?.title,
-  description: page.value?.content?.substring(0, 160),
+  title: page?.title,
+  description: page?.content?.substring(0, 160),
 });
 </script>

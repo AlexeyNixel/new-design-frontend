@@ -15,4 +15,5 @@ export const API_ENDPOINTS = {
   tag: '/api/tags/',
   achievements: '/api/achievements',
   club: '/api/clubs/',
+  page: '/api/page/',
 };

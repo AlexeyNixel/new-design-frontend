@@ -80,12 +80,12 @@ export interface PageRichTextBlock {
   html: string;
 }
 
-export type PageContentBlock =
-  | PageStatsBlock
-  | PageFeaturesBlock
-  | PageTagsBlock
-  | PageAdvantagesBlock
-  | PageHighlightBlock
-  | PagePersonBlock
-  | PageBannerBlock
-  | PageRichTextBlock;
+export type PageContentBlock
+  = | PageStatsBlock
+    | PageFeaturesBlock
+    | PageTagsBlock
+    | PageAdvantagesBlock
+    | PageHighlightBlock
+    | PagePersonBlock
+    | PageBannerBlock
+    | PageRichTextBlock;

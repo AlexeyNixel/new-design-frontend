@@ -1,16 +1,25 @@
 <template>
   <UPopover mode="hover">
     <div
-      class="grid grid-cols-[auto_minmax(120px,_180px)] gap-2 p-1 items-center justify-center rounded-xl transition hover:ring-2 ring-primary hover:cursor-pointer"
+      class="flex flex-row items-center justify-start gap-2 p-2 rounded-xl transition hover:ring-2 ring-primary hover:cursor-pointer w-full"
     >
-      <Icon :name="icon" :class="`text-${size}`" />
-      <div>
-        <span class="text-sm">{{ label }}</span>
+      <Icon
+        :name="icon"
+        class="text-xl lg:text-4xl"
+      />
+      <div class="min-w-max flex-1">
+        <span class="text-xs lg:text-sm break-words leading-0">
+          {{ label }}
+          <slot />
+        </span>
       </div>
     </div>
 
-    <template #content v-if="isPopover">
-      <div class="rounded-xl overflow-hidden">
+    <template
+      v-if="isPopover"
+      #content
+    >
+      <div class="rounded-xl overflow-hidden max-w-[90vw] lg:max-w-none">
         <component :is="modal" />
       </div>
     </template>
@@ -21,16 +30,14 @@
 withDefaults(
   defineProps<{
     icon: string;
-    label: string;
-    size?: '5xl' | '2xl';
+    label?: string;
+    size?: string;
     isPopover?: boolean;
     modal?: Component;
   }>(),
   {
-    size: '5xl',
+    size: '2xl lg:5xl',
     isPopover: true,
-  }
+  },
 );
 </script>
-
-<style scoped></style>

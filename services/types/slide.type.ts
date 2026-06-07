@@ -11,4 +11,5 @@ export interface Slide {
   position: number;
   title: string;
   url: string;
+  post: any;
 }

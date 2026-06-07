@@ -17,20 +17,45 @@ export const useApi = () => {
 
   const get = async <T>(
     endpoint: string,
-    options?: any
+    options?: any,
   ): Promise<ApiResponse<T>> => {
     try {
-      const res: { data: any; meta: any } = await $fetch(baseApi + endpoint, {
+      const { data } = await useFetch(baseApi + endpoint, {
         method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         ...options,
       });
 
       return {
-        data: res.data,
-        meta: res.meta,
+        data: data.value.data,
+        meta: data.value.meta,
         status: 200,
       };
-    } catch (e) {
+    }
+    catch {
+      throw 'Неправильный запрос';
+    }
+  };
+
+  const getWithoutPagination = async <T>(
+    endpoint: string,
+    options?: any,
+  ): Promise<T> => {
+    try {
+      const { data } = await useFetch(baseApi + endpoint, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        ...options,
+      });
+      return data.value as T;
+    }
+    catch {
       throw 'Неправильный запрос';
     }
   };
@@ -38,24 +63,25 @@ export const useApi = () => {
   const getOne = async <T>(
     endpoint: string,
     slug: string,
-    options: any
+    options?: any,
   ): Promise<ApiResponse<T>> => {
-    try {
-      const res: any = await $fetch(baseApi + endpoint + slug, {
-        method: 'GET',
-        ...options,
-      });
-      return {
-        data: res,
-        status: 200,
-      };
-    } catch (e) {
-      throw e;
-    }
+    const { data }: any = await useFetch(baseApi + endpoint + slug, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      ...options,
+    });
+    return {
+      data: data.value,
+      status: 200,
+    };
   };
 
   return {
     get,
     getOne,
+    getWithoutPagination,
   };
 };

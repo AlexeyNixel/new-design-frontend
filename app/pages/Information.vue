@@ -40,31 +40,31 @@
     </div>
   </div>
 
-  <!--    <div class="py-12 bg-white border-t border-gray-200">-->
-  <!--      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">-->
-  <!--        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">-->
-  <!--          <div v-for="item in information" class="text-center p-6">-->
-  <!--            <div-->
-  <!--              class="w-16 h-16 bg-[#25cae9] rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4"-->
-  <!--            >-->
-  <!--              <Icon :name="item.icon" />-->
-  <!--            </div>-->
-  <!--            <h3 class="text-xl font-semibold text-gray-900 mb-3">-->
-  <!--              {{ item.label }}-->
-  <!--            </h3>-->
-  <!--            <p class="text-gray-600 leading-relaxed">-->
-  <!--              {{ item.text }}-->
-  <!--            </p>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
+  <!--    <div class="py-12 bg-white border-t border-gray-200"> -->
+  <!--      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"> -->
+  <!--        <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> -->
+  <!--          <div v-for="item in information" class="text-center p-6"> -->
+  <!--            <div -->
+  <!--              class="w-16 h-16 bg-[#25cae9] rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4" -->
+  <!--            > -->
+  <!--              <Icon :name="item.icon" /> -->
+  <!--            </div> -->
+  <!--            <h3 class="text-xl font-semibold text-gray-900 mb-3"> -->
+  <!--              {{ item.label }} -->
+  <!--            </h3> -->
+  <!--            <p class="text-gray-600 leading-relaxed"> -->
+  <!--              {{ item.text }} -->
+  <!--            </p> -->
+  <!--          </div> -->
+  <!--        </div> -->
+  <!--      </div> -->
+  <!--    </div> -->
 
-  <!--  </div>-->
+  <!--  </div> -->
 </template>
 
 <script setup lang="ts">
-const information = [
+const _information = [
   {
     label: 'Актуальная информация',
     text: 'Все сведения регулярно обновляются в соответствии с требованиями  законодательства',

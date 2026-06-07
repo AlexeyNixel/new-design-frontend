@@ -1,15 +1,19 @@
 import { useApi } from './base';
-import { type Entry } from '../types/entry.type';
+import type { Post } from '../types/post.type';
 import { API_ENDPOINTS } from './endpoints';
+import type { Tag } from '~~/services/types/tag.type';
 
 export const useEntryApi = () => {
   const api = useApi();
 
   return {
     getAllEntry: (params?: any) =>
-      api.get<Entry[]>(API_ENDPOINTS.entry, { params: params }),
+      api.get<Post[]>(API_ENDPOINTS.post, { params: params }),
 
     getBySlugEntry: (slug: string, params?: any) =>
-      api.getOne<Entry>(API_ENDPOINTS.entry, slug, { params: params }),
+      api.getOne<Post>(API_ENDPOINTS.post, slug, { params: params }),
+
+    getAllTags: (params?: any) =>
+      api.get<Tag[]>(API_ENDPOINTS.tag, { params: params }),
   };
 };

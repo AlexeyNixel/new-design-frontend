@@ -7,9 +7,10 @@
     <UButton
       :label="label"
       :icon="icon"
-      variant="link"
+      variant="soft"
       color="neutral"
-    ></UButton>
+      size="xl"
+    />
 
     <template #content>
       <div class="flex flex-col p-2 gap-2">

@@ -1,127 +1,139 @@
 <template>
   <NuxtLink
-    :to="{ name: 'entry-slug', params: { slug: entry.slug } }"
-    class="news-tile"
+    :to="{ name: 'post-slug', params: { slug: post.slug } }"
+    class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row items-stretch min-h-64 hover:-translate-y-2 border border-gray-100"
   >
-    <div class="news-preview">
-      <img :src="entry?.preview?.path" :alt="entry.title" loading="lazy" />
+    <div
+      class="md:w-72 min-w-72 h-64 md:h-auto overflow-hidden relative shrink-0"
+    >
+      <img
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+        :src="imgSrc"
+        :alt="post.title"
+        @error="notFoundImage"
+      >
+
+      <!-- Дата в стиле карточки -->
+      <div
+        class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl p-3 shadow-lg"
+      >
+        <div class="flex flex-col items-center">
+          <span class="text-sm font-semibold text-gray-500">
+            {{ formateDate(post.publishedAt, 'MMM') }}
+          </span>
+          <span class="text-2xl font-bold text-gray-800">
+            {{ formateDate(post.publishedAt, 'DD') }}
+          </span>
+          <span class="text-xs text-gray-500">
+            {{ formateDate(post.publishedAt, 'YYYY') }}
+          </span>
+        </div>
+      </div>
     </div>
 
-    <div class="news-content">
-      <h2 class="news-title">{{ entry.title }}</h2>
-      <p class="news-description">{{ entry.desc }}</p>
+    <!-- Контент -->
+    <div class="p-5 md:p-6 flex flex-col justify-between flex-1">
+      <!-- Заголовок и описание -->
+      <div>
+        <h2
+          class="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors duration-300 line-clamp-2"
+        >
+          {{ post.title }}
+        </h2>
 
-      <div class="news-meta">
-        <span class="news-date">{{ entry.department.title }}</span>
-        <span class="news-date">{{ formateDate(entry.publishedAt) }}</span>
+        <div
+          class="text-gray-600 mb-4 line-clamp-3 prose prose-sm max-w-none"
+          v-html="post.description"
+        />
+      </div>
+
+      <!-- Нижняя панель -->
+      <div class="pt-4 border-t border-gray-100 mt-auto">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+        >
+          <!-- Департамент -->
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg flex items-center justify-center"
+            >
+              <Icon
+                name="i-heroicons-building-office-20-solid"
+                class="w-5 h-5 text-primary"
+              />
+            </div>
+            <div>
+              <div class="text-xs text-gray-500">Отдел</div>
+              <div class="font-medium text-gray-800">
+                {{ post.department?.title }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Дополнительная информация -->
+          <div class="flex items-center gap-6 text-sm">
+            <!-- Дата -->
+            <div class="flex items-center text-gray-600">
+              <Icon
+                name="i-heroicons-calendar-20-solid"
+                class="w-4 h-4 mr-2"
+              />
+              <span>{{ formateDate(post.publishedAt, 'DD MMMM YYYY') }}</span>
+            </div>
+
+            <!-- Кнопка читать -->
+            <div class="flex items-center text-primary font-semibold">
+              <span class="mr-2">Подробнее</span>
+              <Icon
+                name="i-heroicons-arrow-right-20-solid"
+                class="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300"
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </NuxtLink>
 </template>
 
 <script setup lang="ts">
-import type { Entry } from '~~/services/types/entry.type';
+import type { Post } from '~~/services/types/post.type';
 
-defineProps<{
-  entry: Entry;
+const props = defineProps<{
+  post: Post;
 }>();
 
-const formateDate = useFormateDate();
+const DEFAULT_IMAGE = '/placeholder.jpg';
+
+const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
+
+// Хелпер для форматирования даты
+const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
+  const date = new Date(dateString);
+  const options: any = {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  };
+
+  if (format === 'MMM') {
+    return date.toLocaleDateString('ru-RU', { month: 'short' });
+  }
+  else if (format === 'DD') {
+    return date.getDate().toString();
+  }
+  else if (format === 'YYYY') {
+    return date.getFullYear().toString();
+  }
+
+  return date.toLocaleDateString('ru-RU', options);
+};
+
+const notFoundImage = () => {
+  if (imgSrc.value !== DEFAULT_IMAGE) {
+    imgSrc.value = DEFAULT_IMAGE;
+  }
+};
 </script>
 
-<style scoped>
-@import '~/assets/css/main.css';
-
-.news-tile {
-  @apply bg-white rounded overflow-hidden  shadow-primary-200 mb-8 transition-all
-  flex items-stretch min-h-64;
-}
-
-.news-tile:hover {
-  @apply -translate-y-1 shadow-xl;
-}
-
-.news-preview {
-  @apply w-72 min-w-72 overflow-hidden relative shrink-0;
-}
-
-.news-preview img {
-  @apply w-full h-full object-cover transition;
-}
-
-.news-tile:hover .news-preview img {
-  transform: scale(1.05);
-}
-
-.news-content {
-  @apply p-6 flex flex-col justify-between w-full;
-}
-
-.news-title {
-  @apply text-2xl font-bold text-neutral-700 mb-3 overflow-hidden;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
-.news-description {
-  @apply text-neutral-700 mb-4 grow hidden;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.news-meta {
-  @apply flex justify-between items-center my-auto pt-4 border-t-1 border-t-neutral-200;
-}
-
-.news-date {
-  color: #888;
-  font-size: 0.9rem;
-}
-
-/* Адаптивность */
-@media (max-width: 768px) {
-  .news-tile {
-    flex-direction: column;
-    min-height: auto;
-  }
-
-  .news-preview {
-    width: 100%;
-    min-width: 100%;
-    height: 200px;
-  }
-
-  .news-content {
-    padding: 20px;
-  }
-
-  .news-title {
-    font-size: 1.3rem;
-  }
-
-  .news-meta {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .news-preview {
-    height: 180px;
-  }
-
-  .news-content {
-    padding: 16px;
-  }
-
-  .news-title {
-    font-size: 1.2rem;
-  }
-}
-</style>
+<style scoped></style>

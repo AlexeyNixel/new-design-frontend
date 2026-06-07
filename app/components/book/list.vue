@@ -1,11 +1,10 @@
 <template>
   <UCarousel
+    v-slot="{ item }"
     arrows
     loop
     :ui="ui"
     :items="books"
-    v-slot="{ item, index }"
-    class-names
   >
     <BookCard :book="item" />
   </UCarousel>

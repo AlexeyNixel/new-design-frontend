@@ -1,10 +1,10 @@
-import { type File } from './file.type';
+import type { File } from './file.type';
 
 export interface Book {
   id: string;
   oldId: number;
   title: string;
-  desc: string;
+  description: string;
   content: string;
   fileId: string;
   createdAt: string;
@@ -14,5 +14,14 @@ export interface Book {
   link: string;
   storagePlace: string;
   isVideo: boolean;
+  preview: File;
+}
+
+export interface BookCollections {
+  id: string;
+  label: string;
+  isDeleted: boolean;
+  previewFileId: string;
+  createdAt: string;
   preview: File;
 }

@@ -1,13 +1,11 @@
 <template>
-  <div class="grid grid-cols-2"></div>
+  <div class="grid grid-cols-2" />
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   items: Array<object>;
 }>();
-
-console.log(props.items);
 </script>
 
 <style scoped></style>

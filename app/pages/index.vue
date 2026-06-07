@@ -1,46 +1,68 @@
-<template>
-  <div class="flex flex-col gap-5">
-    <CommonContentContainer>
-      <div class="grid grid-cols-5 gap-5">
-        <div class="col-span-4">
-          <PagesComponentsIndexMainCarousel class="h-full" />
-        </div>
-
-        <div class="col-span-1 flex flex-col gap-5 w-full">
-          <div class="bg-white rounded-xl shadow p-4 w-full h-1/3">
-            <PagesComponentsIndexInfoBanner />
-          </div>
-          <div class="bg-white p-4 rounded-xl shadow flex-1 h-2/3">
-            <PagesComponentsIndexEventCalendar />
-          </div>
-        </div>
-      </div>
-      <div class="my-5">
-        <PagesComponentsIndexCatalogSearch class="w-full" />
-      </div>
-    </CommonContentContainer>
-
-    <CommonContentContainer title="Книги" bgGray>
-      <PagesComponentsIndexBookShelf />
-    </CommonContentContainer>
-
-    <CommonContentContainer title="События">
-      <PagesComponentsIndexNewsCarousel />
-    </CommonContentContainer>
-
-    <CommonContentContainer bgGray>
-      <div class="flex gap-5">
-        <CommonContentContainer title="Викторины" bgGray>
-          <PagesComponentsIndexExhibitionContent />
-        </CommonContentContainer>
-        <CommonContentContainer title="Викторины" bgGray>
-          <PagesComponentsIndexExhibitionContent />
-        </CommonContentContainer>
-      </div>
-    </CommonContentContainer>
-  </div>
-</template>
-
 <script setup lang="ts"></script>
 
-<style scoped></style>
+<!-- pages/index.vue -->
+<template>
+  <div class="flex flex-col gap-0">
+    <!-- ГЕРОЙ-СЕКЦИЯ -->
+    <section class="bg-gradient-to-br from-primary-50 to-primary-100">
+      <div class="w-full px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12">
+        <div class="max-w-[1700px] mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-9 flex">
+              <div
+                class="rounded-2xl overflow-hidden shadow-xl bg-white w-full"
+              >
+                <MainCarousel />
+              </div>
+            </div>
+
+            <!-- Правая колонка - 3 колонки -->
+            <div class="lg:col-span-3 flex flex-col gap-4">
+              <InfoBanner />
+              <EventCalendar />
+            </div>
+          </div>
+
+          <!-- Поиск -->
+          <div class="mt-6 block">
+            <CatalogSearch
+              placeholder="Найти настолку, книгу или событие..."
+              class="w-full"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Остальные секции -->
+    <CommonSectionWrapper
+      title="Последние новости"
+      link="/post"
+      link-label="Все новости"
+      bg-gray
+    >
+      <NewsCarousel />
+    </CommonSectionWrapper>
+
+    <CommonSectionWrapper
+      title="Игровая библиотека"
+      link="/games"
+      link-label="Полный список игр"
+    >
+      <GameCarousel />
+    </CommonSectionWrapper>
+
+    <CommonSectionWrapper
+      bg-gray
+      title="Книги"
+      link="/books"
+      link-label="Полный список книг"
+    >
+      <BookShelf />
+    </CommonSectionWrapper>
+
+    <CommonSectionWrapper>
+      <Achievements />
+    </CommonSectionWrapper>
+  </div>
+</template>

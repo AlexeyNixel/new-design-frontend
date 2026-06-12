@@ -15,14 +15,20 @@
 ## Где искать в коде
 
 - Типы блоков: `services/types/page.type.ts` (`PageContentBlock` и наследники,
-  поле `Page.blocks?`)
+  `PageHeroBlock`, объединение `PageBlock = PageHeroBlock | PageContentBlock`,
+  поле `Page.blocks?: PageBlock[]`)
 - Компоненты-блоки: `app/components/page-blocks/*.vue`
   (auto-import имена: `PageBlocksHero`, `PageBlocksStats`, `PageBlocksFeatures`,
   `PageBlocksTags`, `PageBlocksAdvantages`, `PageBlocksHighlight`,
   `PageBlocksPerson`, `PageBlocksBanner`, `PageBlocksRichText`)
-- Диспетчер блоков: `app/components/page-blocks/Renderer.vue` (`PageBlocksRenderer`)
-- Пример использования (полностью на данных, без бэкенда — данные объявлены
-  локально в `<script setup>`): `app/pages/page/mediateka.vue`
+- Диспетчер блоков: `app/components/page-blocks/Renderer.vue` (`PageBlocksRenderer`,
+  принимает `PageContentBlock[]`, без `hero`)
+- Пример с локальными данными (без бэкенда — данные объявлены прямо
+  в `<script setup>`): `app/pages/page/mediateka.vue`
+- Универсальный обработчик с данными от бэкенда: `app/pages/page/[slug].vue`.
+  Если `page.blocks` непустой — страница рендерится блоками (новый формат);
+  если `blocks` отсутствует/пуст — рендерится `page.content` через `v-html`,
+  как раньше (старый формат). См. раздел «Обработчик в `[slug].vue`» ниже.
 
 ## Типы блоков и их поля
 
@@ -42,24 +48,46 @@
 градиентным фоном), остальные — последовательно через `<PageBlocksRenderer :blocks="..." />`
 внутри контейнера страницы.
 
-## Что нужно от бэкенда, чтобы убрать локальные данные
+## Обработчик в `[slug].vue`
 
-Расширить модель `Page` (`services/types/page.type.ts`) полем `blocks`:
+`app/pages/page/[slug].vue` запрашивает страницу через `usePageApi().getOnePage(slug)`
+и решает, в каком формате её рендерить:
+
+- **Новый формат** (`page.blocks` — непустой массив): из `blocks` извлекается
+  блок `type === 'hero'` (если есть) — он рендерится через `PageBlocksHero`
+  на всю ширину, как в `mediateka.vue`. Остальные блоки (`PageContentBlock[]`,
+  без `hero`) передаются в `PageBlocksRenderer` внутри белой карточки-контейнера.
+  Если блока `hero` нет, вместо него над блоками выводится обычный `<h1>`
+  с `page.title`.
+- **Старый формат** (`page.blocks` отсутствует/пуст): рендерится как раньше —
+  хлебные крошки, `<h1>` с `page.title` и `v-html="page.content"` внутри
+  белой карточки.
+
+Так старые страницы (просто HTML в `content`) продолжают работать без
+изменений, а новые страницы-лендинги отделов достаточно собрать из блоков
+на бэкенде — фронт автоматически переключится на блочный рендер.
+
+## Модель данных `Page.blocks`
+
+Модель `Page` (`services/types/page.type.ts`) расширена полем `blocks`:
 
 ```ts
 interface Page {
   id: string;
   title: string;
-  content: string;   // оставить для простых страниц через [slug].vue (просто HTML)
+  content: string;   // используется для простых страниц (старый формат, просто HTML)
   isDeleted: boolean;
   slug: string;
-  blocks?: PageContentBlock[]; // НОВОЕ: для составных страниц-лендингов отделов
+  blocks?: PageBlock[]; // для составных страниц-лендингов отделов (новый формат)
 }
+
+type PageBlock = PageHeroBlock | PageContentBlock;
 ```
 
-`PageContentBlock` — discriminated union по полю `type` (см. таблицу выше).
-Бэкенду достаточно отдавать массив объектов с этой структурой в JSON —
-фронт сам подберёт нужный компонент через `Renderer.vue`.
+`PageBlock` — discriminated union по полю `type`, включающий `hero` и все
+типы из таблицы выше. Бэкенду достаточно отдавать массив объектов с этой
+структурой в JSON — фронт сам извлечёт `hero` и подберёт компоненты для
+остальных блоков через `Renderer.vue`.
 
 Если в API уже есть админка/CMS для страниц — туда стоит добавить редактор
 блоков (выбор типа + поля по типу), а не текстовое поле `content` для таких
@@ -91,13 +119,13 @@ interface Page {
 
 ## План для переписывания бэкенда и админки
 
-Это не задача «прямо сейчас», а заметки на будущее — когда будем проектировать
-API и админ-панель для страниц отделов.
+Фронт (`[slug].vue`) уже умеет рендерить оба формата — это заметки для бэкенда
+и админ-панели, когда дойдут руки отдавать `blocks` для страниц отделов.
 
 ### 1. Контракт API
 
 `GET /pages/:slug` должен возвращать (помимо текущих `id/title/slug/content/isDeleted`)
-поле `blocks: PageContentBlock[] | null`:
+поле `blocks: PageBlock[] | null`:
 
 ```json
 {

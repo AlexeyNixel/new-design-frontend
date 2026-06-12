@@ -4,7 +4,7 @@ export interface Page {
   content: string;
   isDeleted: boolean;
   slug: string;
-  blocks?: PageContentBlock[];
+  blocks?: PageBlock[];
 }
 
 export interface PageHeroBlockContacts {
@@ -89,3 +89,5 @@ export type PageContentBlock
     | PagePersonBlock
     | PageBannerBlock
     | PageRichTextBlock;
+
+export type PageBlock = PageHeroBlock | PageContentBlock;

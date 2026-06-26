@@ -7,10 +7,10 @@
     <section class="bg-gradient-to-br from-primary-50 to-primary-100">
       <div class="w-full px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12">
         <div class="max-w-[1700px] mx-auto">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-            <div class="lg:col-span-9 flex">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:items-start">
+            <div class="lg:col-span-9">
               <div
-                class="rounded-2xl overflow-hidden shadow-xl bg-white w-full"
+                class="rounded-2xl overflow-hidden shadow-xl bg-white w-full aspect-[2/1]"
               >
                 <MainCarousel />
               </div>

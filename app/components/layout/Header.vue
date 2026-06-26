@@ -17,33 +17,23 @@
           </NuxtLink>
 
           <div class="hidden lg:flex items-center rounded-2xl p-1.5">
-            <UPopover
+            <UButton
               v-for="link in navigateLinks"
               :key="link.label"
-              mode="hover"
+              :to="link.link"
+              variant="ghost"
+              class="relative flex flex-col items-center justify-center px-3 py-2 gap-1 rounded-xl transition-all duration-300 group overflow-hidden"
             >
-              <UButton
-                :to="link.link"
-                variant="ghost"
-                class="relative flex flex-col items-center justify-center p-4 gap-1.5 rounded-xl transition-all duration-300 group overflow-hidden"
+              <div
+                class="relative w-10 h-10 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow group-hover:scale-110 transition-all duration-300"
               >
-                <div class="relative">
-                  <div
-                    class="relative w-10 h-10 bg-gradient-to-br from-gray-50 to-white rounded-xl flex items-center justify-center shadow-sm group-hover:shadow group-hover:scale-110 transition-all duration-300"
-                  >
-                    <Icon
-                      :name="link.icon"
-                      class="w-5 h-5 transition-all duration-300 group-hover:scale-110"
-                    />
-                  </div>
-                </div>
-              </UButton>
-              <template #content>
-                <div class="text-sm p-1">
-                  {{ link.label }}
-                </div>
-              </template>
-            </UPopover>
+                <Icon
+                  :name="link.icon"
+                  class="w-5 h-5 transition-all duration-300"
+                />
+              </div>
+              <span class="text-[10px] text-gray-500 font-medium text-center leading-tight max-w-[76px]">{{ link.label }}</span>
+            </UButton>
           </div>
 
           <div class="flex items-center gap-4">
@@ -249,30 +239,22 @@
 
             <!-- Мобильная кнопка меню -->
             <div class="lg:hidden px-5">
-              <UDropdownMenu
-                :content="{
-                  align: 'end',
-                  side: 'bottom',
-                  sideOffset: 8,
-                }"
-                :ui="{
-                  content: 'w-48',
-                }"
-                label-key="title"
-                :items="items"
-              >
-                <UButton
-                  icon="i-lucide-menu"
-                  color="neutral"
-                  variant="outline"
-                />
-              </UDropdownMenu>
+              <UButton
+                icon="i-lucide-menu"
+                color="neutral"
+                variant="outline"
+                @click="mobileMenuOpen = true"
+              />
             </div>
           </div>
         </div>
       </div>
     </header>
     <MainNavigation class="hidden lg:block" />
+    <MobileMenu
+      v-model="mobileMenuOpen"
+      :items="items"
+    />
   </div>
 </template>
 
@@ -283,6 +265,8 @@ import { useNavigationApi } from '~~/services/api/main-navigation.api';
 const navigationApi = useNavigationApi();
 
 const items = await navigationApi.getAllNavigation();
+
+const mobileMenuOpen = ref(false);
 
 const navigateLinks = [
   {
@@ -297,13 +281,12 @@ const navigateLinks = [
   },
   {
     icon: 'i-heroicons-academic-cap',
-    label:
-      'Сведения об организации, осуществляющей образовательную деятельность',
+    label: 'Об организации',
     link: '/information',
   },
   {
     icon: 'i-heroicons-eye',
-    label: 'Версия для слабовидящих',
+    label: 'Для слабовидящих',
     link: '/',
   },
 ];

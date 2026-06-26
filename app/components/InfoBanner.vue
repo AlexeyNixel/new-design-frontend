@@ -6,10 +6,11 @@
     :ui="{
       dots: 'bottom-2 sm:bottom-3',
       dot: 'w-1.5 h-1.5 sm:w-2 sm:h-2 data-[state=active]:bg-white bg-white/35 mx-0.5 transition-colors duration-200',
+      viewport: 'h-full',
       container: 'h-full',
       item: 'h-full',
     }"
-    class="h-full flex"
+    class="h-full"
   >
     <div
       class="relative rounded-2xl p-3 sm:p-4 text-white shadow-lg flex items-center justify-between gap-3 h-full overflow-hidden"

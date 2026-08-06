@@ -250,7 +250,7 @@
         </div>
       </div>
     </header>
-    <MainNavigation class="hidden lg:block" />
+    <MainNavigation class="hidden xl:block" />
     <MobileMenu
       v-model="mobileMenuOpen"
       :items="items"

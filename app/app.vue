@@ -16,10 +16,6 @@ useHead({
       src: 'https://pos.gosuslugi.ru/bin/script.min.js',
       body: true,
     },
-    {
-      innerHTML: 'Widget(\'https://pos.gosuslugi.ru/form\', 348893)',
-      body: true,
-    },
   ],
 });
 useSeoMeta({

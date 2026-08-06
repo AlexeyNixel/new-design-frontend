@@ -19,13 +19,20 @@
         "
         class="block w-full h-full"
       >
-        <img
-          :src="item.image.path"
-          :alt="item.title || 'Слайд'"
-          class="w-full h-full object-cover"
-          :style="{ objectPosition: 'center center' }"
-          loading="lazy"
-        >
+        <picture class="block w-full h-full">
+          <source
+            v-if="item.imageMobile?.path"
+            media="(max-width: 639px)"
+            :srcset="item.imageMobile.path"
+          >
+          <img
+            :src="item.image.path"
+            :alt="item.title || 'Слайд'"
+            class="w-full h-full object-cover"
+            :style="{ objectPosition: 'center center' }"
+            loading="lazy"
+          >
+        </picture>
       </NuxtLink>
     </UCarousel>
   </div>

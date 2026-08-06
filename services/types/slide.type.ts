@@ -6,6 +6,9 @@ export interface Slide {
   fileId: string;
   id: string;
   image: any;
+  /** Мобильный формат изображения (портретный кроп). Пока бэкенд его не отдаёт —
+   *  используется как необязательное поле, слайдер сам подставляет image как фолбэк. */
+  imageMobile?: any;
   isDeleted: boolean;
   oldId: number;
   position: number;

@@ -25,10 +25,7 @@
             class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100"
           >
             <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Icon
-                name="i-heroicons-funnel"
-                class="w-5 h-5 text-primary"
-              />
+              <Icon name="i-heroicons-funnel" class="w-5 h-5 text-primary" />
               Фильтры
             </h2>
             <UButton
@@ -50,10 +47,7 @@
             <h3
               class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
             >
-              <Icon
-                name="i-heroicons-building-office"
-                class="w-4 h-4"
-              />
+              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
               Отдел
             </h3>
             <USelect
@@ -74,13 +68,12 @@
               <h3
                 class="text-sm font-semibold text-gray-900 flex items-center gap-2"
               >
-                <Icon
-                  name="i-heroicons-tag"
-                  class="w-4 h-4"
-                />
+                <Icon name="i-heroicons-tag" class="w-4 h-4" />
                 Теги
               </h3>
-              <span class="text-xs text-gray-500">{{ selectedTagsCount }}/{{ tags.length }}</span>
+              <span class="text-xs text-gray-500"
+                >{{ selectedTagsCount }}/{{ tags.length }}</span
+              >
             </div>
 
             <!-- Выбранные теги -->
@@ -100,10 +93,7 @@
                     class="ml-1 hover:scale-125 transition-transform"
                     @click="toggleTag(tag)"
                   >
-                    <Icon
-                      name="i-heroicons-x-mark"
-                      class="w-3 h-3"
-                    />
+                    <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
                   </button>
                 </template>
               </UBadge>
@@ -148,29 +138,25 @@
             <h3
               class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
             >
-              <Icon
-                name="i-heroicons-building-office"
-                class="w-4 h-4"
-              />
+              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
               Год
             </h3>
             <div class="flex overflow-x-auto w-full gap-4">
               <UButton
-                v-for="item in 20"
+                v-for="item in years"
                 :key="item"
                 variant="soft"
-                class="p-2"
+                class="p-2 my-4"
+                @click="selectYears(item)"
               >
-                20{{ item }}
+                {{ item }}
               </UButton>
             </div>
           </div>
 
           <!-- Сортировка -->
           <div class="pt-4 border-t border-gray-100">
-            <h3 class="text-sm font-semibold text-gray-900 mb-3">
-              Сортировка
-            </h3>
+            <h3 class="text-sm font-semibold text-gray-900 mb-3">Сортировка</h3>
             <USelect
               v-model="filters.sort"
               placeholder="Сначала новые"
@@ -188,6 +174,7 @@
         <div class="flex items-center justify-between mb-4 gap-3">
           <div class="w-full">
             <UInput
+              v-model="search"
               variant="none"
               class="w-full rounded-lg bg-white shadow"
               placeholder="Поиск новостей"
@@ -241,15 +228,8 @@
           </div>
 
           <!-- Список -->
-          <div
-            v-else
-            class="flex flex-col gap-6"
-          >
-            <EntryTile
-              v-for="post in posts.data"
-              :key="post.id"
-              :post="post"
-            />
+          <div v-else class="flex flex-col gap-6">
+            <EntryTile v-for="post in posts.data" :key="post.id" :post="post" />
           </div>
 
           <!-- Пагинация -->
@@ -271,15 +251,9 @@
         </div>
 
         <!-- Состояние "нет результатов" -->
-        <div
-          v-else
-          class="text-center py-16"
-        >
+        <div v-else class="text-center py-16">
           <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
-            <Icon
-              name="i-heroicons-newspaper"
-              class="w-full h-full"
-            />
+            <Icon name="i-heroicons-newspaper" class="w-full h-full" />
           </div>
           <h3 class="text-xl font-semibold text-gray-700 mb-2">
             Новостей не найдено
@@ -293,10 +267,7 @@
             size="lg"
             @click="clearFilters"
           >
-            <Icon
-              name="i-heroicons-arrow-path"
-              class="w-5 h-5 mr-2"
-            />
+            <Icon name="i-heroicons-arrow-path" class="w-5 h-5 mr-2" />
             Очистить фильтры
           </UButton>
         </div>
@@ -363,28 +334,23 @@ const filters = ref({
 
 const hasActiveFilters = computed(() => {
   return (
-    !!filters.value.date
-    || !!filters.value.department
-    || filters.value.tags.length > 0
-    || !!filters.value.dateFrom
-    || !!filters.value.dateTo
+    !!filters.value.date ||
+    !!filters.value.department ||
+    filters.value.tags.length > 0 ||
+    !!filters.value.dateFrom ||
+    !!filters.value.dateTo
   );
 });
 
 const selectedTags = computed(() => {
-  return tags.filter(tag => filters.value.tags.includes(tag.id.toString()));
+  return tags.filter((tag) => filters.value.tags.includes(tag.id.toString()));
 });
 
 const selectedTagsCount = computed(() => filters.value.tags.length);
 
 const handleSearchChange = async () => {
   updateUrl();
-  posts.value = await entryApi.getAllEntry({
-    include: 'preview, department',
-    search: search.value || undefined,
-    department: filters.value.department,
-    tags: filters.value.tags,
-  });
+  await loadEntries();
 };
 
 const isTagSelected = (tag: Tag) => {
@@ -397,10 +363,26 @@ const toggleTag = (tag: Tag) => {
 
   if (index > -1) {
     filters.value.tags.splice(index, 1);
-  }
-  else {
+  } else {
     filters.value.tags.push(tagId);
   }
+
+  handleFilterChange();
+};
+
+const years = computed(() => {
+  const tmp = [];
+  const date = new Date().getFullYear();
+
+  for (let i = 2010; i <= date; i++) {
+    tmp.push(i);
+  }
+  return tmp;
+});
+
+const selectYears = async (year: number) => {
+  filters.value.dateFrom = year + '-01-01T15:31:36.211Z';
+  filters.value.dateTo = year + '-12-31T15:31:36.211Z';
 
   handleFilterChange();
 };
@@ -454,6 +436,7 @@ const updateUrl = () => {
 
 const loadEntries = async () => {
   try {
+    console.log(search.value);
     posts.value = await entryApi.getAllEntry({
       include: 'preview, department',
       search: search.value || undefined,
@@ -461,9 +444,10 @@ const loadEntries = async () => {
       department: filters.value.department,
       sortOrder: filters.value.sort,
       tags: filters.value.tags,
+      startDate: filters.value.dateFrom,
+      endDate: filters.value.dateTo,
     });
-  }
-  catch (error) {
+  } catch (error) {
     console.error('Error loading entries:', error);
   }
 };
@@ -484,7 +468,7 @@ watch(
       sort: newQuery.sort as string,
     };
   },
-  { immediate: true },
+  { immediate: true }
 );
 </script>
 

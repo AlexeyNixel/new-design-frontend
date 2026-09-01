@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="{ name: 'entry-slug', params: { slug: entry.slug } }"
+    :to="{ name: 'post-slug', params: { slug: post.slug } }"
     class="group my-2 relative flex flex-col min-h-[520px] bg-white w-full rounded-2xl overflow-hidden transition-all duration-300 hover:shadow hover:-translate-y-1 shadow"
   >
     <div class="relative w-full h-[260px] overflow-hidden">
@@ -8,7 +8,7 @@
       <img
         class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
         :src="imgSrc"
-        :alt="entry.title"
+        :alt="post.title"
         @error="notFoundImage"
       >
       <div class="absolute top-4 left-4">
@@ -16,13 +16,13 @@
           class="flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
         >
           <span class="text-sm font-semibold text-gray-500">
-            {{ dayjs(entry.publishedAt).format('MMM') }}
+            {{ dayjs(post.publishedAt).format('MMM') }}
           </span>
           <span class="text-2xl font-bold text-gray-800">
-            {{ dayjs(entry.publishedAt).format('DD') }}
+            {{ dayjs(post.publishedAt).format('DD') }}
           </span>
           <span class="text-xs text-gray-500">
-            {{ dayjs(entry.publishedAt).format('YYYY') }}
+            {{ dayjs(post.publishedAt).format('YYYY') }}
           </span>
         </div>
       </div>
@@ -32,17 +32,17 @@
       <div
         class="text-lg md:text-xl line-clamp-5 font-bold text-gray-900 mb-3 group-hover:text-primary"
       >
-        {{ entry.title }}
+        {{ post.title }}
       </div>
 
       <div class="mt-auto pt-4 border-t border-gray-100">
         <div class="flex items-center justify-between">
           <div
-            v-if="entry.department"
+            v-if="post.department"
             class="flex items-center space-x-2"
           >
             <span class="text-sm text-gray-600">
-              {{ entry.department.title }}
+              {{ post.department.title }}
             </span>
           </div>
 

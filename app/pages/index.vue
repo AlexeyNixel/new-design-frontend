@@ -1,4 +1,5 @@
 <script setup lang="ts"></script>
+
 <!-- pages/index.vue -->
 <template>
   <div class="flex flex-col gap-0">
@@ -28,7 +29,7 @@
             />
           </div>
         </div>
-      </div>  
+      </div>
     </section>
 
     <!-- Остальные секции -->
@@ -66,7 +67,10 @@
       <div class="block justify-between md:flex">
         <FeedbackGos />
         <NuxtLink>
-          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
+          <img
+            src="/banner-uvazhaemye-posetiteli.png"
+            alt=""
+          >
         </NuxtLink>
       </div>
     </CommonSectionWrapper>

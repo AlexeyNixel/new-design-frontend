@@ -25,7 +25,10 @@
             class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100"
           >
             <h2 class="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <Icon name="i-heroicons-funnel" class="w-5 h-5 text-primary" />
+              <Icon
+                name="i-heroicons-funnel"
+                class="w-5 h-5 text-primary"
+              />
               Фильтры
             </h2>
             <UButton
@@ -47,7 +50,10 @@
             <h3
               class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
             >
-              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-building-office"
+                class="w-4 h-4"
+              />
               Отдел
             </h3>
             <USelect
@@ -68,12 +74,13 @@
               <h3
                 class="text-sm font-semibold text-gray-900 flex items-center gap-2"
               >
-                <Icon name="i-heroicons-tag" class="w-4 h-4" />
+                <Icon
+                  name="i-heroicons-tag"
+                  class="w-4 h-4"
+                />
                 Теги
               </h3>
-              <span class="text-xs text-gray-500"
-                >{{ selectedTagsCount }}/{{ tags.length }}</span
-              >
+              <span class="text-xs text-gray-500">{{ selectedTagsCount }}/{{ tags.length }}</span>
             </div>
 
             <!-- Выбранные теги -->
@@ -93,7 +100,10 @@
                     class="ml-1 hover:scale-125 transition-transform"
                     @click="toggleTag(tag)"
                   >
-                    <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                    <Icon
+                      name="i-heroicons-x-mark"
+                      class="w-3 h-3"
+                    />
                   </button>
                 </template>
               </UBadge>
@@ -138,7 +148,10 @@
             <h3
               class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2"
             >
-              <Icon name="i-heroicons-building-office" class="w-4 h-4" />
+              <Icon
+                name="i-heroicons-building-office"
+                class="w-4 h-4"
+              />
               Год
             </h3>
             <div class="flex overflow-x-auto w-full gap-4">
@@ -156,7 +169,9 @@
 
           <!-- Сортировка -->
           <div class="pt-4 border-t border-gray-100">
-            <h3 class="text-sm font-semibold text-gray-900 mb-3">Сортировка</h3>
+            <h3 class="text-sm font-semibold text-gray-900 mb-3">
+              Сортировка
+            </h3>
             <USelect
               v-model="filters.sort"
               placeholder="Сначала новые"
@@ -228,8 +243,15 @@
           </div>
 
           <!-- Список -->
-          <div v-else class="flex flex-col gap-6">
-            <EntryTile v-for="post in posts.data" :key="post.id" :post="post" />
+          <div
+            v-else
+            class="flex flex-col gap-6"
+          >
+            <EntryTile
+              v-for="post in posts.data"
+              :key="post.id"
+              :post="post"
+            />
           </div>
 
           <!-- Пагинация -->
@@ -251,9 +273,15 @@
         </div>
 
         <!-- Состояние "нет результатов" -->
-        <div v-else class="text-center py-16">
+        <div
+          v-else
+          class="text-center py-16"
+        >
           <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
-            <Icon name="i-heroicons-newspaper" class="w-full h-full" />
+            <Icon
+              name="i-heroicons-newspaper"
+              class="w-full h-full"
+            />
           </div>
           <h3 class="text-xl font-semibold text-gray-700 mb-2">
             Новостей не найдено
@@ -267,7 +295,10 @@
             size="lg"
             @click="clearFilters"
           >
-            <Icon name="i-heroicons-arrow-path" class="w-5 h-5 mr-2" />
+            <Icon
+              name="i-heroicons-arrow-path"
+              class="w-5 h-5 mr-2"
+            />
             Очистить фильтры
           </UButton>
         </div>
@@ -334,16 +365,16 @@ const filters = ref({
 
 const hasActiveFilters = computed(() => {
   return (
-    !!filters.value.date ||
-    !!filters.value.department ||
-    filters.value.tags.length > 0 ||
-    !!filters.value.dateFrom ||
-    !!filters.value.dateTo
+    !!filters.value.date
+    || !!filters.value.department
+    || filters.value.tags.length > 0
+    || !!filters.value.dateFrom
+    || !!filters.value.dateTo
   );
 });
 
 const selectedTags = computed(() => {
-  return tags.filter((tag) => filters.value.tags.includes(tag.id.toString()));
+  return tags.filter(tag => filters.value.tags.includes(tag.id.toString()));
 });
 
 const selectedTagsCount = computed(() => filters.value.tags.length);
@@ -363,7 +394,8 @@ const toggleTag = (tag: Tag) => {
 
   if (index > -1) {
     filters.value.tags.splice(index, 1);
-  } else {
+  }
+  else {
     filters.value.tags.push(tagId);
   }
 
@@ -447,7 +479,8 @@ const loadEntries = async () => {
       startDate: filters.value.dateFrom,
       endDate: filters.value.dateTo,
     });
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error loading entries:', error);
   }
 };
@@ -468,7 +501,7 @@ watch(
       sort: newQuery.sort as string,
     };
   },
-  { immediate: true }
+  { immediate: true },
 );
 </script>
 

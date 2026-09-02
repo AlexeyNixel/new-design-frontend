@@ -1,6 +1,9 @@
 <template>
   <!-- Новый формат: страница собрана из контентных блоков -->
-  <div v-if="page && hasBlocks" class="bg-neutral-100">
+  <div
+    v-if="page && hasBlocks"
+    class="bg-neutral-100"
+  >
     <PageBlocksHero
       v-if="heroBlock"
       :icon="heroBlock.icon"
@@ -29,7 +32,11 @@
   <!-- Старый формат: страница со свободным HTML-контентом -->
   <CommonContentContainer v-else-if="page">
     <!-- Хлебные крошки -->
-    <UBreadcrumb :ui="breadcrumbUI" :items="breadcrumbItems" class="mb-6" />
+    <UBreadcrumb
+      :ui="breadcrumbUI"
+      :items="breadcrumbItems"
+      class="mb-6"
+    />
 
     <div class="max-w-6xl mx-auto">
       <!-- Заголовок страницы -->
@@ -44,7 +51,10 @@
         class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
       >
         <div class="p-8 md:p-10">
-          <div class="tiptap" v-html="page.content" />
+          <div
+            class="tiptap"
+            v-html="page.content"
+          />
         </div>
       </div>
     </div>
@@ -75,13 +85,13 @@ if (!page) {
 const hasBlocks = computed(() => !!page?.blocks?.length);
 
 const heroBlock = computed(() =>
-  page?.blocks?.find((block): block is PageHeroBlock => block.type === 'hero')
+  page?.blocks?.find((block): block is PageHeroBlock => block.type === 'hero'),
 );
 
 const contentBlocks = computed<PageContentBlock[]>(() =>
   (page?.blocks ?? []).filter(
-    (block): block is PageContentBlock => block.type !== 'hero'
-  )
+    (block): block is PageContentBlock => block.type !== 'hero',
+  ),
 );
 
 const breadcrumbUI = {

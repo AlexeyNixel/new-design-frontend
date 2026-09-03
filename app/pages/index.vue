@@ -28,6 +28,10 @@
               class="w-full"
             />
           </div>
+
+          <div class="mt-4">
+            <Achievements />
+          </div>
         </div>
       </div>
     </section>
@@ -59,18 +63,13 @@
       <BookShelf />
     </CommonSectionWrapper>
 
-    <CommonSectionWrapper>
-      <Achievements />
-    </CommonSectionWrapper>
+    <CommonSectionWrapper> </CommonSectionWrapper>
 
     <CommonSectionWrapper>
       <div class="block justify-between md:flex">
         <FeedbackGos />
         <NuxtLink class="rounded-xl overflow-hidden">
-          <img
-            src="/banner-uvazhaemye-posetiteli.png"
-            alt=""
-          >
+          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
         </NuxtLink>
       </div>
     </CommonSectionWrapper>

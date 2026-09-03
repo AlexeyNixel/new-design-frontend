@@ -32,29 +32,33 @@
       </div>
     </div>
 
-    <!-- Контент карточки -->
-    <div class="p-3 flex flex-col gap-1.5">
-      <!-- Заголовок книги -->
+    <!-- Контент карточки: фиксированная структура, чтобы карточки были одной высоты -->
+    <div class="p-3 flex flex-1 flex-col">
+      <!-- Заголовок книги: всегда резервирует 2 строки -->
       <h3
-        class="text-sm font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300"
+        class="min-h-[2.5rem] text-sm font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300"
       >
         {{ book.title }}
       </h3>
 
-      <!-- Место хранения -->
-      <div
-        v-if="book.place"
-        class="flex items-center gap-1 text-[11px] text-gray-500"
-      >
-        <Icon
-          name="i-heroicons-map-pin"
-          class="w-3 h-3 shrink-0"
-        />
-        <span class="truncate">{{ book.place }}</span>
+      <!-- Место хранения: строка всегда занимает место -->
+      <div class="mt-1.5 min-h-[1.125rem]">
+        <div
+          v-if="book.place"
+          class="flex items-center gap-1 text-[11px] text-gray-500"
+        >
+          <Icon
+            name="i-heroicons-map-pin"
+            class="w-3 h-3 shrink-0"
+          />
+          <span class="truncate">{{ book.place }}</span>
+        </div>
       </div>
 
-      <!-- Ссылка/действие -->
-      <div class="flex items-center text-primary font-semibold text-xs mt-0.5">
+      <!-- Ссылка/действие: прижата к низу -->
+      <div
+        class="mt-auto pt-1.5 flex items-center text-primary font-semibold text-xs"
+      >
         <span>{{ book.isVideo ? 'Смотреть' : 'Подробнее' }}</span>
         <Icon
           name="i-heroicons-arrow-right-20-solid"

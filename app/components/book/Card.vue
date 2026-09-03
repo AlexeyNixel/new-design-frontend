@@ -1,7 +1,7 @@
 <template>
   <NuxtLink
     :to="{ name: 'books-slug', params: { slug: book.id } }"
-    class="group h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md border border-gray-100 my-3"
+    class="group h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md border border-gray-100"
   >
     <!-- Обертка для изображения: обложка всегда видна целиком -->
     <div

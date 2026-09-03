@@ -51,11 +51,11 @@
       </h3>
 
       <!-- Краткое описание -->
-      <div
-        v-if="book.description"
-        class="text-gray-600 text-sm mb-4 line-clamp-3"
-        v-html="book.description"
-      />
+      <!--      <div -->
+      <!--        v-if="book.description" -->
+      <!--        class="text-gray-600 text-sm mb-4 line-clamp-3" -->
+      <!--        v-html="book.description" -->
+      <!--      /> -->
 
       <!-- Мета-информация -->
       <div class="pt-4 border-t border-gray-100 mt-auto">
@@ -63,28 +63,28 @@
           class="flex flex-col sm:flex-row sm:items-center justify-between gap-3"
         >
           <!-- Основная информация -->
-          <div class="flex items-center gap-3">
-            <!-- Иконка типа -->
-            <div
-              class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center"
-            >
-              <Icon
-                :name="
-                  book.isVideo
-                    ? 'i-heroicons-film'
-                    : 'i-heroicons-document-text'
-                "
-                class="w-5 h-5 text-primary"
-              />
-            </div>
+          <!--          <div class="flex items-center gap-3"> -->
+          <!--            &lt;!&ndash; Иконка типа &ndash;&gt; -->
+          <!--            <div -->
+          <!--              class="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center" -->
+          <!--            > -->
+          <!--              <Icon -->
+          <!--                :name=" -->
+          <!--                  book.isVideo -->
+          <!--                    ? 'i-heroicons-film' -->
+          <!--                    : 'i-heroicons-document-text' -->
+          <!--                " -->
+          <!--                class="w-5 h-5 text-primary" -->
+          <!--              /> -->
+          <!--            </div> -->
 
-            <div>
-              <div class="text-xs text-gray-500">Добавлена</div>
-              <div class="text-sm font-medium text-gray-900">
-                {{ formatDate(book.createdAt) }}
-              </div>
-            </div>
-          </div>
+          <!--            <div> -->
+          <!--              <div class="text-xs text-gray-500">Добавлена</div> -->
+          <!--              <div class="text-sm font-medium text-gray-900"> -->
+          <!--                {{ formatDate(book.createdAt) }} -->
+          <!--              </div> -->
+          <!--            </div> -->
+          <!--          </div> -->
 
           <!-- Ссылка/действие -->
           <div class="flex items-center text-primary font-semibold text-sm">

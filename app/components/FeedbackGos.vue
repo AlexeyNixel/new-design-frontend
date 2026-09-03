@@ -26,7 +26,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mr-5 w-full mb-4 md:mb-0">
+  <div class="mr-5 rounded-xl overflow-hidden w-full mb-4 md:mb-0">
     <div
       id="js-show-iframe-wrapper"
       class="content"
@@ -57,14 +57,14 @@ onMounted(() => {
               >
                 Написать
               </button>
-              <UButton
+              <img
                 href="https://apps.rustore.ru/app/ru.gosuslugi.pos"
                 target="_blank"
                 class="pos-banner-btn_2 dark:bg-white min-h-[52px] ring-0 mt-2 rounded-[8px]"
+                src="/rustore.png"
+                alt=""
                 @click="navigateRuStore"
               >
-                RuStore
-              </UButton>
             </div>
           </div>
         </div>

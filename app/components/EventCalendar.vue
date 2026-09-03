@@ -270,34 +270,6 @@ onMounted(async () => {
               </template>
             </UCalendar>
           </div>
-
-          <!-- Ближайшие события -->
-          <div class="flex-1 min-h-0 flex flex-col border-t border-gray-100 mt-2.5 px-2.5 sm:px-3 pt-2.5 pb-2.5 sm:pb-3">
-            <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-1.5 px-0.5 shrink-0">
-              Ближайшие события
-            </div>
-            <div class="max-h-[76px] overflow-y-auto space-y-1.5 pr-0.5">
-              <button
-                v-for="event in upcomingEvents"
-                :key="event.id"
-                class="flex items-center gap-2 w-full rounded-lg px-2 py-1.5 text-left bg-gray-50 hover:bg-info/10 transition-colors cursor-pointer"
-                @click="openDay([event])"
-              >
-                <span class="shrink-0 text-[11px] font-bold text-info bg-info/10 rounded-md px-1.5 py-0.5">
-                  {{ formatEventDate(event.eventTime) }}
-                </span>
-                <span class="text-xs text-gray-700 truncate">
-                  {{ event.title }}
-                </span>
-              </button>
-              <div
-                v-if="!upcomingEvents.length"
-                class="text-center text-gray-400 text-xs py-4"
-              >
-                Нет предстоящих событий
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

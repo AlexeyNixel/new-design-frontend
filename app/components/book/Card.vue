@@ -107,28 +107,6 @@ defineProps<{
   book: Book;
 }>();
 
-// Форматирование даты
-const formatDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
-  if (!dateString) return '';
-
-  const date = new Date(dateString);
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
-
-  if (format === 'DD.MM.YYYY') {
-    return date.toLocaleDateString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  }
-
-  return date.toLocaleDateString('ru-RU', options);
-};
-
 // Обрезка текста
 const truncateText = (text: string, maxLength: number) => {
   if (!text || text.length <= maxLength) return text;

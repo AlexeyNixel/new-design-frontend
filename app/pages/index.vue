@@ -63,13 +63,16 @@
       <BookShelf />
     </CommonSectionWrapper>
 
-    <CommonSectionWrapper> </CommonSectionWrapper>
+    <CommonSectionWrapper />
 
     <CommonSectionWrapper>
       <div class="block justify-between md:flex">
         <FeedbackGos />
         <NuxtLink class="rounded-xl overflow-hidden">
-          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
+          <img
+            src="/banner-uvazhaemye-posetiteli.png"
+            alt=""
+          >
         </NuxtLink>
       </div>
     </CommonSectionWrapper>

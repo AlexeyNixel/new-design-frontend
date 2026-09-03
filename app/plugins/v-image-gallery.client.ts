@@ -1,4 +1,8 @@
 // plugins/image-gallery-directive.client.ts
+type GalleryElement = HTMLElement & {
+  _imageGalleryHandler?: (event: MouseEvent) => void;
+};
+
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.directive('image-gallery', {
     mounted(el: HTMLElement, binding) {
@@ -26,15 +30,16 @@ export default defineNuxtPlugin((nuxtApp) => {
       };
 
       // Сохраняем обработчик на элементе для возможности удаления
-      (el as any)._imageGalleryHandler = handleClick;
+      (el as GalleryElement)._imageGalleryHandler = handleClick;
       el.addEventListener('click', handleClick);
     },
 
     unmounted(el: HTMLElement) {
       // Очищаем обработчик события при размонтировании
-      if ((el as any)._imageGalleryHandler) {
-        el.removeEventListener('click', (el as any)._imageGalleryHandler);
-        delete (el as any)._imageGalleryHandler;
+      const handler = (el as GalleryElement)._imageGalleryHandler;
+      if (handler) {
+        el.removeEventListener('click', handler);
+        delete (el as GalleryElement)._imageGalleryHandler;
       }
     },
 

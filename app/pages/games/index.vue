@@ -204,7 +204,7 @@ const selectedGenres = computed(() => {
 });
 
 const updateUrl = () => {
-  const query: any = {};
+  const query: Record<string, string | number> = {};
   if (page.value >= 1) query.page = page.value;
   if (searchText.value) query.search = searchText.value;
   if (activeGenres.value) query.genres = activeGenres.value.join(',');

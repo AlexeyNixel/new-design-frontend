@@ -1,6 +1,12 @@
+import type { UseFetchOptions } from 'nuxt/app';
 import { useRuntimeConfig } from 'nuxt/app';
 
-export interface ApiResponse<T = any> {
+export type ApiRequestOptions = UseFetchOptions<unknown>;
+
+/** Query-параметры запроса (?page=1&search=...) */
+export type ApiQueryParams = Record<string, unknown>;
+
+export interface ApiResponse<T = unknown> {
   data: T;
   meta?: {
     page: number;
@@ -17,7 +23,7 @@ export const useApi = () => {
 
   const get = async <T>(
     endpoint: string,
-    options?: any,
+    options?: ApiRequestOptions,
   ): Promise<ApiResponse<T>> => {
     try {
       const { data } = await useFetch(baseApi + endpoint, {
@@ -29,9 +35,11 @@ export const useApi = () => {
         ...options,
       });
 
+      const response = data.value as ApiResponse<T>;
+
       return {
-        data: data.value.data,
-        meta: data.value.meta,
+        data: response.data,
+        meta: response.meta,
         status: 200,
       };
     }
@@ -42,7 +50,7 @@ export const useApi = () => {
 
   const getWithoutPagination = async <T>(
     endpoint: string,
-    options?: any,
+    options?: ApiRequestOptions,
   ): Promise<T> => {
     try {
       const { data } = await useFetch(baseApi + endpoint, {
@@ -63,9 +71,9 @@ export const useApi = () => {
   const getOne = async <T>(
     endpoint: string,
     slug: string,
-    options?: any,
+    options?: ApiRequestOptions,
   ): Promise<ApiResponse<T>> => {
-    const { data }: any = await useFetch(baseApi + endpoint + slug, {
+    const { data } = await useFetch(baseApi + endpoint + slug, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -74,7 +82,7 @@ export const useApi = () => {
       ...options,
     });
     return {
-      data: data.value,
+      data: data.value as T,
       status: 200,
     };
   };

@@ -436,7 +436,7 @@ const handleNavigate = async (newPage?: number) => {
 };
 
 const updateUrl = () => {
-  const query: any = {};
+  const query: Record<string, string | number> = {};
   if (page.value > 1) query.page = page.value;
   if (search.value) query.search = search.value;
   if (filters.value.date) query.date = filters.value.date;

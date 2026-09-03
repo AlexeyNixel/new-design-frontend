@@ -110,7 +110,7 @@ const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
 // Хелпер для форматирования даты
 const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
   const date = new Date(dateString);
-  const options: any = {
+  const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

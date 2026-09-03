@@ -1,4 +1,4 @@
-import { useApi } from './base';
+import { useApi, type ApiQueryParams } from './base';
 import { API_ENDPOINTS } from './endpoints';
 import type { Notification } from '~~/services/types/notification.type';
 
@@ -6,7 +6,7 @@ export const useNotificationApi = () => {
   const api = useApi();
 
   return {
-    getAllNotifications: (params?: any) =>
+    getAllNotifications: (params?: ApiQueryParams) =>
       api.get<Notification[]>(API_ENDPOINTS.notification, { params: params }),
   };
 };

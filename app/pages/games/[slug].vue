@@ -251,9 +251,9 @@
       </h3>
       <div class="grid grid-cols-5 gap-4 mt-4">
         <GameCard
-          v-for="game in otherGames"
-          :key="game.id"
-          :game="game"
+          v-for="otherGame in otherGames"
+          :key="otherGame.id"
+          :game="otherGame"
         />
       </div>
     </div>

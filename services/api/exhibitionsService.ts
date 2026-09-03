@@ -1,4 +1,4 @@
-import { useApi } from './base';
+import { useApi, type ApiQueryParams } from './base';
 import { API_ENDPOINTS } from './endpoints';
 import type { File } from '../types/file.type';
 
@@ -6,7 +6,7 @@ export const useExhibitionApi = () => {
   const api = useApi();
 
   return {
-    getAllExhibition: (params?: any) =>
+    getAllExhibition: (params?: ApiQueryParams) =>
       api.get<File[]>(API_ENDPOINTS.file, {
         params: {
           searchByField: 'type=EXHIBITION',

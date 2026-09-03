@@ -40,7 +40,17 @@
 </template>
 
 <script setup lang="ts">
-const tests = ref([
+interface CorsTest {
+  name: string;
+  url: string;
+  method: string;
+  status: '' | 'loading' | 'success' | 'error';
+  result: string;
+  error: string;
+  details: string;
+}
+
+const tests = ref<CorsTest[]>([
   {
     name: 'Test 1: Direct fetch to API',
     url: 'http://api2.infomania.ru/api/main-slider/?limit=5',
@@ -86,7 +96,7 @@ const envInfo = ref({
   url: typeof window !== 'undefined' ? window.location.href : 'server',
 });
 
-const runTest = async (test: any) => {
+const runTest = async (test: CorsTest) => {
   test.status = 'loading';
   test.error = '';
   test.result = '';
@@ -122,10 +132,10 @@ const runTest = async (test: any) => {
         : `Response: ${response}`;
     test.status = 'success';
   }
-  catch (error: any) {
+  catch (error: unknown) {
     test.status = 'error';
-    test.error = error.message || 'Unknown error';
-    test.details = error.toString();
+    test.error = error instanceof Error ? error.message : 'Unknown error';
+    test.details = String(error);
     console.error(`Test "${test.name}" failed:`, error);
   }
 };

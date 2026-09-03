@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { onMounted } from 'vue';
 
-const navigateRuStore = (e: any) => {
+const navigateRuStore = (e: MouseEvent) => {
   e.stopPropagation();
   navigateTo('https://apps.rustore.ru/app/ru.gosuslugi.pos', {
     external: true,

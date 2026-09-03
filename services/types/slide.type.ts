@@ -1,15 +1,21 @@
+export interface SlideImage {
+  path: string;
+  preview?: string;
+}
+
 export interface Slide {
   createdAt: string;
   desc: string;
-  entry: any;
+  entry: unknown;
   entryId: string;
   fileId: string;
   id: string;
-  image: any;
+  image: SlideImage;
+  imageMobile?: SlideImage;
   isDeleted: boolean;
   oldId: number;
   position: number;
   title: string;
   url: string;
-  post: any;
+  post: { slug: string } | null;
 }

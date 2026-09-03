@@ -4,5 +4,5 @@ export interface Menu {
   title: string;
   isDeleted: boolean;
   menuType: string;
-  menuItems: Array<any>;
+  menuItems: unknown[];
 }

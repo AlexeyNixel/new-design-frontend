@@ -14,7 +14,6 @@ const calendarDate = shallowRef(
 
 const eventsByDate = ref<{ [key: string]: Event[] }>({});
 
-// Состояние навигации внутри карточки: календарь -> список дня -> детали события
 const dayEvents = ref<Event[] | null>(null);
 const selectedEvent = ref<Event | null>(null);
 const navDirection = ref<'forward' | 'back'>('forward');
@@ -74,6 +73,22 @@ const isOutsideMonth = (date: DateValue) => {
   return date.month !== calendarDate.value.month;
 };
 
+type DayState = 'event' | 'monday' | 'outside' | 'normal';
+
+const dayState = (date: DateValue): DayState => {
+  if (isOutsideMonth(date)) return 'outside';
+  if (isEvent(date)) return 'event';
+  if (isMonday(date)) return 'monday';
+  return 'normal';
+};
+
+const DAY_CIRCLE_CLASS: Record<DayState, string> = {
+  event: 'bg-info/20 text-info cursor-pointer hover:bg-info/30',
+  monday: 'bg-warning/20 text-warning',
+  outside: 'text-gray-300',
+  normal: '',
+};
+
 const changeMonth = async (direction: 'prev' | 'next') => {
   if (direction === 'prev') {
     calendarDate.value = calendarDate.value.subtract({ months: 1 });
@@ -112,6 +127,7 @@ const upcomingEvents = computed(() => {
   const now = dayjs();
   return events.value
     .filter(event => parseEventTime(event.eventTime).isAfter(now))
+    .sort((a, b) => parseEventTime(a.eventTime).valueOf() - parseEventTime(b.eventTime).valueOf())
     .slice(0, 5);
 });
 
@@ -227,74 +243,32 @@ onMounted(async () => {
               }"
             >
               <template #day="{ day }">
-                <!-- День с событиями -->
+                <!-- День с событиями: бейдж-уведомление в правом верхнем углу, поверх дня -->
                 <UChip
-                  v-if="isEvent(day) && !isOutsideMonth(day)"
+                  v-if="dayState(day) === 'event'"
                   :text="String(isEvent(day)?.length)"
-                  size="xs"
                   color="info"
+                  position="top-right"
+                  :ui="{ base: 'h-5 min-w-5 px-1 text-[10px] font-bold ring-2 ring-white' }"
                 >
                   <div
-                    class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium bg-info/20 text-info cursor-pointer transition-colors hover:bg-info/30"
+                    class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium transition-colors"
+                    :class="DAY_CIRCLE_CLASS.event"
                     @click.stop="openDay(isEvent(day) ?? [])"
                   >
                     {{ day.day }}
                   </div>
                 </UChip>
 
-                <!-- Понедельник -->
-                <div
-                  v-else-if="isMonday(day) && !isOutsideMonth(day)"
-                  class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium bg-warning/20 text-warning"
-                >
-                  {{ day.day }}
-                </div>
-
-                <!-- День вне текущего месяца -->
-                <div
-                  v-else-if="isOutsideMonth(day)"
-                  class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium text-gray-300"
-                >
-                  {{ day.day }}
-                </div>
-
-                <!-- Обычный день -->
                 <div
                   v-else
                   class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium"
+                  :class="DAY_CIRCLE_CLASS[dayState(day)]"
                 >
                   {{ day.day }}
                 </div>
               </template>
             </UCalendar>
-          </div>
-
-          <!-- Ближайшие события -->
-          <div class="flex-1 min-h-0 flex flex-col border-t border-gray-100 mt-2.5 px-2.5 sm:px-3 pt-2.5 pb-2.5 sm:pb-3">
-            <div class="text-[11px] font-semibold text-gray-400 uppercase tracking-wide mb-1.5 px-0.5 shrink-0">
-              Ближайшие события
-            </div>
-            <div class="flex-1 min-h-0 overflow-y-auto space-y-1.5 pr-0.5">
-              <button
-                v-for="event in upcomingEvents"
-                :key="event.id"
-                class="flex items-center gap-2 w-full rounded-lg px-2 py-1.5 text-left bg-gray-50 hover:bg-info/10 transition-colors cursor-pointer"
-                @click="openDay([event])"
-              >
-                <span class="shrink-0 text-[11px] font-bold text-info bg-info/10 rounded-md px-1.5 py-0.5">
-                  {{ formatEventDate(event.eventTime) }}
-                </span>
-                <span class="text-xs text-gray-700 truncate">
-                  {{ event.title }}
-                </span>
-              </button>
-              <div
-                v-if="!upcomingEvents.length"
-                class="text-center text-gray-400 text-xs py-4"
-              >
-                Нет предстоящих событий
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -303,7 +277,7 @@ onMounted(async () => {
       <div
         v-else
         key="events"
-        class="flex-1 min-h-0 overflow-y-auto p-2.5 sm:p-3"
+        class="max-h-[420px] overflow-y-auto p-2.5 sm:p-3"
       >
         <EventDetail
           :events="dayEvents ?? []"

@@ -14,7 +14,9 @@
     />
 
     <div class="container mx-auto px-4 py-16 max-w-7xl">
-      <div class="bg-white border border-gray-100 rounded-2xl shadow-sm p-8 md:p-12">
+      <div
+        class="bg-white border border-gray-100 rounded-2xl shadow-sm p-8 md:p-12"
+      >
         <h1
           v-if="!heroBlock"
           class="text-4xl font-bold text-gray-900 text-center mb-10"
@@ -61,7 +63,10 @@
 
 <script setup lang="ts">
 import { usePageApi } from '~~/services/api/page.api';
-import type { PageContentBlock, PageHeroBlock } from '~~/services/types/page.type';
+import type {
+  PageContentBlock,
+  PageHeroBlock,
+} from '~~/services/types/page.type';
 
 const route = useRoute();
 
@@ -84,7 +89,9 @@ const heroBlock = computed(() =>
 );
 
 const contentBlocks = computed<PageContentBlock[]>(() =>
-  (page?.blocks ?? []).filter((block): block is PageContentBlock => block.type !== 'hero'),
+  (page?.blocks ?? []).filter(
+    (block): block is PageContentBlock => block.type !== 'hero',
+  ),
 );
 
 const breadcrumbUI = {

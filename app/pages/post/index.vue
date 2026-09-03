@@ -156,12 +156,13 @@
             </h3>
             <div class="flex overflow-x-auto w-full gap-4">
               <UButton
-                v-for="item in 20"
+                v-for="item in years"
                 :key="item"
                 variant="soft"
-                class="p-2"
+                class="p-2 my-4"
+                @click="selectYears(item)"
               >
-                20{{ item }}
+                {{ item }}
               </UButton>
             </div>
           </div>
@@ -188,6 +189,7 @@
         <div class="flex items-center justify-between mb-4 gap-3">
           <div class="w-full">
             <UInput
+              v-model="search"
               variant="none"
               class="w-full rounded-lg bg-white shadow"
               placeholder="Поиск новостей"
@@ -379,12 +381,7 @@ const selectedTagsCount = computed(() => filters.value.tags.length);
 
 const handleSearchChange = async () => {
   updateUrl();
-  posts.value = await entryApi.getAllEntry({
-    include: 'preview, department',
-    search: search.value || undefined,
-    department: filters.value.department,
-    tags: filters.value.tags,
-  });
+  await loadEntries();
 };
 
 const isTagSelected = (tag: Tag) => {
@@ -401,6 +398,23 @@ const toggleTag = (tag: Tag) => {
   else {
     filters.value.tags.push(tagId);
   }
+
+  handleFilterChange();
+};
+
+const years = computed(() => {
+  const tmp = [];
+  const date = new Date().getFullYear();
+
+  for (let i = 2010; i <= date; i++) {
+    tmp.push(i);
+  }
+  return tmp;
+});
+
+const selectYears = async (year: number) => {
+  filters.value.dateFrom = year + '-01-01T15:31:36.211Z';
+  filters.value.dateTo = year + '-12-31T15:31:36.211Z';
 
   handleFilterChange();
 };
@@ -454,6 +468,7 @@ const updateUrl = () => {
 
 const loadEntries = async () => {
   try {
+    console.log(search.value);
     posts.value = await entryApi.getAllEntry({
       include: 'preview, department',
       search: search.value || undefined,
@@ -461,6 +476,8 @@ const loadEntries = async () => {
       department: filters.value.department,
       sortOrder: filters.value.sort,
       tags: filters.value.tags,
+      startDate: filters.value.dateFrom,
+      endDate: filters.value.dateTo,
     });
   }
   catch (error) {

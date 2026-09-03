@@ -2,19 +2,18 @@ import type { File } from './file.type';
 
 export interface Book {
   id: string;
-  oldId: number;
+  slug: string;
   title: string;
   description: string;
   content: string;
-  fileId: string;
+  previewFileId: string;
   createdAt: string;
-  isDeleted: false;
-  category: string;
-  dateOfReceipt: string;
-  link: string;
-  storagePlace: string;
+  isDeleted: boolean;
+  place: string;
   isVideo: boolean;
+  litresLink?: string;
   preview: File;
+  collections?: BookCollections[];
 }
 
 export interface BookCollections {

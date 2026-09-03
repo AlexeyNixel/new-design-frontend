@@ -72,7 +72,7 @@
 
       <!-- Жанры -->
       <div
-        v-if="game.genres"
+        v-if="showTag && game.genres"
         class="mb-4"
       >
         <div class="flex flex-wrap gap-2">
@@ -117,6 +117,7 @@ const GENRES = GameGenres;
 
 defineProps<{
   game: Game;
+  showTag?: boolean;
 }>();
 
 const baseUrlImage = 'http://infomania.ru/gamelibrary/img/game-cover/';

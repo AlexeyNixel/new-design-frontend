@@ -77,6 +77,8 @@
       <footer class="mt-8">
         <USeparator class="my-6" />
 
+        <EntryMore />
+
         <div class="flex justify-between items-center">
           <UButton
             to="/post"

@@ -93,7 +93,7 @@
                   </p>
                   <UBadge
                     :label="book.isDeleted ? 'Архив' : 'Доступна'"
-                    :color="book.isDeleted ? 'gray' : 'green'"
+                    :color="book.isDeleted ? 'neutral' : 'success'"
                     variant="soft"
                     class="mt-1"
                   />
@@ -105,7 +105,7 @@
             <UButton
               v-if="book.litresLink"
               variant="solid"
-              color="orange"
+              color="warning"
               icon="i-heroicons-shopping-cart"
               label="Купить на Литрес"
               class="w-full mt-6"
@@ -133,7 +133,7 @@
                 v-for="collection in book.collections"
                 :key="collection.id"
                 :label="collection.label"
-                color="amber"
+                color="warning"
                 variant="outline"
                 class="w-full justify-start cursor-pointer hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
                 @click="navigateTo(`/collection/${collection.slug}`)"

@@ -49,5 +49,11 @@ defineProps<{
       v-else-if="block.type === 'richText'"
       :html="block.html"
     />
+    <PageBlocksArchive
+      v-else-if="block.type === 'archive'"
+      :title="block.title"
+      :note="block.note"
+      :items="block.items"
+    />
   </template>
 </template>

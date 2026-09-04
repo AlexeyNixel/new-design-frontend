@@ -80,6 +80,19 @@ export interface PageRichTextBlock {
   html: string;
 }
 
+export interface PageArchiveBlockItem {
+  date?: string;
+  text: string;
+  url: string;
+}
+
+export interface PageArchiveBlock {
+  type: 'archive';
+  title: string;
+  note?: string;
+  items: PageArchiveBlockItem[];
+}
+
 export type PageContentBlock
   = | PageStatsBlock
     | PageFeaturesBlock
@@ -88,6 +101,7 @@ export type PageContentBlock
     | PageHighlightBlock
     | PagePersonBlock
     | PageBannerBlock
-    | PageRichTextBlock;
+    | PageRichTextBlock
+    | PageArchiveBlock;
 
 export type PageBlock = PageHeroBlock | PageContentBlock;

@@ -25,8 +25,10 @@ const view = computed<'calendar' | 'list' | 'detail'>(() => {
 });
 
 const headerTitle = computed(() => {
-  if (view.value === 'detail' && selectedEvent.value) return selectedEvent.value.title;
-  if (view.value === 'list' && dayEvents.value?.length) return parseEventTime(dayEvents.value[0].eventTime).format('D MMMM');
+  if (view.value === 'detail' && selectedEvent.value)
+    return selectedEvent.value.title;
+  if (view.value === 'list' && dayEvents.value?.length)
+    return parseEventTime(dayEvents.value[0].eventTime).format('D MMMM');
   return 'Календарь событий';
 });
 
@@ -127,7 +129,11 @@ const upcomingEvents = computed(() => {
   const now = dayjs();
   return events.value
     .filter(event => parseEventTime(event.eventTime).isAfter(now))
-    .sort((a, b) => parseEventTime(a.eventTime).valueOf() - parseEventTime(b.eventTime).valueOf())
+    .sort(
+      (a, b) =>
+        parseEventTime(a.eventTime).valueOf()
+        - parseEventTime(b.eventTime).valueOf(),
+    )
     .slice(0, 5);
 });
 
@@ -141,7 +147,9 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="bg-white shadow rounded-xl relative overflow-hidden flex flex-col h-full">
+  <div
+    class="bg-white shadow rounded-xl relative overflow-hidden flex flex-col h-full"
+  >
     <!-- Единая шапка для календаря и панели событий -->
     <header
       class="flex items-center shrink-0 bg-gradient-to-r from-success to-success/70 px-1 sm:px-2 py-2 sm:py-3 text-white rounded-t-xl"
@@ -227,9 +235,9 @@ onMounted(async () => {
           </div>
         </div>
 
-        <!-- Desktop версия - сетка календаря + ближайшие события -->
+        <!-- Desktop версия - сетка календаря -->
         <div class="hidden sm:flex sm:flex-col flex-1 min-h-0">
-          <div class="px-1 pt-2">
+          <div class="px-1 pt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
             <UCalendar
               v-model="calendarDate"
               :year-controls="false"
@@ -249,7 +257,9 @@ onMounted(async () => {
                   :text="String(isEvent(day)?.length)"
                   color="info"
                   position="top-right"
-                  :ui="{ base: 'h-5 min-w-5 px-1 text-[10px] font-bold ring-2 ring-white' }"
+                  :ui="{
+                    base: 'h-5 min-w-5 px-1 text-[10px] font-bold ring-2 ring-white',
+                  }"
                 >
                   <div
                     class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium transition-colors"
@@ -277,7 +287,7 @@ onMounted(async () => {
       <div
         v-else
         key="events"
-        class="max-h-[420px] overflow-y-auto p-2.5 sm:p-3"
+        class="overflow-y-auto p-2.5 sm:p-3 max-h-[320px] lg:max-h-none lg:flex-1 lg:min-h-0"
       >
         <EventDetail
           :events="dayEvents ?? []"
@@ -294,7 +304,9 @@ onMounted(async () => {
 .nav-forward-leave-active,
 .nav-back-enter-active,
 .nav-back-leave-active {
-  transition: transform 0.18s ease, opacity 0.18s ease;
+  transition:
+    transform 0.18s ease,
+    opacity 0.18s ease;
 }
 
 .nav-forward-enter-from {

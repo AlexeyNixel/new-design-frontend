@@ -9,13 +9,13 @@
         <div class="max-w-[1700px] mx-auto">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
             <div
-              class="lg:col-span-9 rounded-2xl overflow-hidden shadow-xl bg-white aspect-[5/2] w-full h-full"
+              class="lg:col-span-9 rounded-2xl overflow-hidden shadow-xl bg-white aspect-[5/2] lg:aspect-auto lg:h-[496px] w-full h-full"
             >
               <MainCarousel />
             </div>
 
             <!-- Правая колонка -->
-            <div class="lg:col-span-3 w-full flex flex-col gap-4 min-h-0">
+            <div class="lg:col-span-3 w-full flex flex-col gap-4 min-h-0 lg:h-[496px]">
               <InfoBanner />
               <EventCalendar class="flex-1 min-h-0" />
             </div>

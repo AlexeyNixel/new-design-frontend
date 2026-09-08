@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "geo": {
+      "source": "zubair-trabzada/geo-seo-claude",
+      "sourceType": "github",
+      "skillPath": "geo/SKILL.md",
+      "computedHash": "bdbb6ae071f24e6880dd5642df35f2b94e53678755c86138577181147a85698d"
+    },
+    "geo-audit": {
+      "source": "zubair-trabzada/geo-seo-claude",
+      "sourceType": "github",
+      "skillPath": "skills/geo-audit/SKILL.md",
+      "computedHash": "0a9c2cd9b39514a0e9993a01c2b403bb1f567bdd5ed7f01d370c68b0d38c5491"
+    }
+  }
+}

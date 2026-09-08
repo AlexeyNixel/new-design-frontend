@@ -20,7 +20,7 @@
 - Компоненты-блоки: `app/components/page-blocks/*.vue`
   (auto-import имена: `PageBlocksHero`, `PageBlocksStats`, `PageBlocksFeatures`,
   `PageBlocksTags`, `PageBlocksAdvantages`, `PageBlocksHighlight`,
-  `PageBlocksPerson`, `PageBlocksBanner`, `PageBlocksRichText`)
+  `PageBlocksPerson`, `PageBlocksBanner`, `PageBlocksRichText`, `PageBlocksArchive`)
 - Диспетчер блоков: `app/components/page-blocks/Renderer.vue` (`PageBlocksRenderer`,
   принимает `PageContentBlock[]`, без `hero`)
 - Пример с локальными данными (без бэкенда — данные объявлены прямо
@@ -43,6 +43,7 @@
 | `person`      | `name`, `position`, `icon?`                                       | Карточка руководителя отдела |
 | `banner`      | `text`                                                            | Финальный баннер-призыв |
 | `richText`    | `html`                                                            | Произвольный HTML-абзац (когда готового типа блока нет) |
+| `archive`     | `title`, `note?`, `items: { date?, text, url }[]`                | Свёрнутый по умолчанию список датированных ссылок (архив выпусков проекта, подборка новостей) — не разрастается на всю страницу |
 
 `hero` рендерится отдельно от остальных блоков (на всю ширину экрана, со своим
 градиентным фоном), остальные — последовательно через `<PageBlocksRenderer :blocks="..." />`
@@ -145,6 +146,8 @@ type PageBlock = PageHeroBlock | PageContentBlock;
     { "type": "advantages", "title": "...", "items": ["..."] },
     { "type": "highlight", "title": "...", "description": "...", "badge": "🎬 Присоединяйтесь!" },
     { "type": "person", "name": "...", "position": "...", "icon": "i-heroicons-user-circle" },
+    { "type": "archive", "title": "Выпуски проекта", "note": "...",
+      "items": [{ "date": "17.04.2026", "text": "Тридцать третий выпуск", "url": "https://..." }] },
     { "type": "banner", "text": "..." }
   ]
 }
@@ -175,9 +178,9 @@ type PageBlock = PageHeroBlock | PageContentBlock;
   (drag-n-drop по порядку — порядок = порядок рендера);
 - при добавлении — выбор типа блока из фиксированного списка
   (`hero`, `stats`, `features`, `tags`, `advantages`, `highlight`, `person`,
-  `banner`, `richText`);
+  `banner`, `richText`, `archive`);
 - форма редактирования полей **зависит от типа** (для `stats`/`features`/`tags`/
-  `advantages` — редактируемый список элементов, для `hero`/`person`/`highlight`/
+  `advantages`/`archive` — редактируемый список элементов, для `hero`/`person`/`highlight`/
   `banner` — плоская форма полей, для `richText` — rich-text/HTML редактор,
   как уже используется для `content` других страниц).
 

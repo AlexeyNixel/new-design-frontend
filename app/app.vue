@@ -3,6 +3,9 @@
     <UApp :locale="ru">
       <NuxtPage />
     </UApp>
+    <!-- TODO(prod-gate): скрыть в production (import.meta.dev + defineAsyncComponent).
+         Вне <UApp>, чтобы не влиять на гидрацию его внутренних компонентов. -->
+    <DevPanel />
   </NuxtLayout>
 </template>
 

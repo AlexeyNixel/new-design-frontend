@@ -15,7 +15,9 @@
             </div>
 
             <!-- Правая колонка -->
-            <div class="lg:col-span-3 w-full flex flex-col gap-4 min-h-0 lg:h-[496px]">
+            <div
+              class="lg:col-span-3 w-full flex flex-col gap-4 min-h-0 lg:h-[496px]"
+            >
               <InfoBanner />
               <EventCalendar class="flex-1 min-h-0" />
             </div>
@@ -23,10 +25,7 @@
 
           <!-- Поиск -->
           <div class="mt-4 block">
-            <CatalogSearch
-              placeholder="Найти настолку, книгу или событие..."
-              class="w-full"
-            />
+            <CatalogSearch class="w-full" />
           </div>
 
           <div class="mt-4">
@@ -69,10 +68,7 @@
       <div class="block justify-between md:flex">
         <FeedbackGos />
         <NuxtLink class="rounded-xl overflow-hidden">
-          <img
-            src="/banner-uvazhaemye-posetiteli.png"
-            alt=""
-          >
+          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
         </NuxtLink>
       </div>
     </CommonSectionWrapper>

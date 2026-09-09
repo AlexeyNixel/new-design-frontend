@@ -75,10 +75,6 @@
       </main>
 
       <footer class="mt-8">
-        <USeparator class="my-6" />
-
-        <EntryMore />
-
         <div class="flex justify-between items-center">
           <UButton
             to="/post"
@@ -87,7 +83,19 @@
             variant="ghost"
             color="primary"
           />
+          <UButton
+            v-if="hasSession"
+            icon="akar-icons:gear"
+            label="Редактировать"
+            variant="ghost"
+            color="error"
+            @click="
+              goToAdmin('post/admin/' + entry.id)
+            "
+          />
         </div>
+        <USeparator class="my-6" />
+        <EntryMore />
       </footer>
     </article>
   </CommonContentContainer>
@@ -100,6 +108,7 @@ import { useEntryApi } from '~~/services/api/entryService';
 const route = useRoute();
 const formattedDate = useFormateDate();
 const overlay = useOverlay();
+const { hasSession, goToAdmin } = useAuth();
 
 const content = ref();
 
@@ -135,14 +144,6 @@ const breadcrumbItems = ref([
     to: `/post/${entry.slug}`,
   },
 ]);
-
-// onMounted(() => {
-//   const img = document.querySelectorAll("img")
-//   for (let i of img) {
-//     i.className.add('img-plus')
-//   }
-//   console.log(img);
-// })
 
 useSeoMeta({
   title: entry.title,

@@ -1,98 +1,59 @@
-import { jwtDecode } from 'jwt-decode';
-
-/** Полезная нагрузка JWT, который выдаёт бэкенд админки */
-interface TokenPayload {
-  username: string;
-  sub: number;
-  name: string;
-  iat: number;
-  exp: number;
-}
-
 export interface AuthUser {
-  id: number;
+  id: string;
   username: string;
   name: string;
 }
 
-/** Базовый URL админки */
+/**
+ * Базовый URL админки.
+ * ВНИМАНИЕ: используем https. Если админка реально по http — поменяй здесь.
+ */
 const ADMIN_URL = 'http://adminnew.infomania.ru';
 
 /**
- * Авторизация на основе общей куки `access_token` (домен `.infomania.ru`),
- * которую ставит бэкенд админки. Форма логина живёт в самой админке —
- * здесь только чтение токена и переход туда.
+ * Авторизация на основе HttpOnly-куки `access_token` (домен `.infomania.ru`),
+ * которую ставит бэкенд админки. Форма логина живёт в самой админке.
+ *
+ * Куку читает серверный роут `/api/auth/session` — на клиент токен не попадает.
  */
 export const useAuth = () => {
-  const token = useCookie<string | null>('access_token', {
-    domain: '.infomania.ru',
-    path: '/',
-    sameSite: 'lax',
-  });
-
-  const payload = computed<TokenPayload | null>(() => {
-    if (!token.value) {
-      return null;
-    }
-
-    try {
-      return jwtDecode<TokenPayload>(token.value);
-    }
-    catch {
-      return null;
-    }
-  });
-
-  /** Токен есть и ещё не истёк */
-  const isTokenValid = computed<boolean>(() => {
-    if (!payload.value) {
-      return false;
-    }
-
-    return payload.value.exp > Math.floor(Date.now() / 1000);
+  const { data, refresh, status } = useFetch('/api/auth/session', {
+    key: 'auth-session',
   });
 
   /** Кука присутствует — пользователь когда-то авторизовывался */
-  const hasSession = computed<boolean>(() => Boolean(token.value));
+  const hasSession = computed<boolean>(() => Boolean(data.value?.hasToken));
 
-  const user = computed<AuthUser | null>(() => {
-    if (!payload.value) {
-      return null;
-    }
+  /** Токен есть и ещё не истёк */
+  const isAuthenticated = computed<boolean>(() =>
+    Boolean(data.value?.authenticated),
+  );
 
-    return {
-      id: payload.value.sub,
-      username: payload.value.username,
-      name: payload.value.name,
-    };
-  });
-
-  /** Убрать протухший/битый токен */
-  const clearAuth = () => {
-    token.value = null;
-  };
+  const user = computed<AuthUser | null>(() => data.value?.user ?? null);
 
   /**
-   * Перейти в админку. Если токен валиден — открываем нужный раздел,
-   * иначе чистим куку и отправляем на форму логина админки с возвратом назад.
+   * Перейти в админку. Перед переходом перепроверяем сессию:
+   * валидна — открываем нужный раздел, иначе — на форму логина админки
+   * с возвратом на текущую страницу.
    */
-  const goToAdmin = (path = '/') => {
-    if (isTokenValid.value) {
+  const goToAdmin = async (path = '/') => {
+    await refresh();
+
+    if (data.value?.authenticated) {
       window.location.href = `${ADMIN_URL}${path}`;
       return;
     }
 
-    clearAuth();
     const back = encodeURIComponent(window.location.href);
     window.location.href = `${ADMIN_URL}/login?redirect=${back}`;
   };
 
   return {
-    token,
     user,
     hasSession,
-    isTokenValid,
-    clearAuth,
+    isAuthenticated,
+    status,
+    refresh,
     goToAdmin,
   };
 };

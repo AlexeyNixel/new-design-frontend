@@ -7,7 +7,6 @@ const { data } = await entryApi.getAllEntry({
   limit: 3,
   include: 'preview',
 });
-console.log(data);
 </script>
 
 <template>

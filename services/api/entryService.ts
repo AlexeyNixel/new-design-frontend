@@ -10,6 +10,9 @@ export const useEntryApi = () => {
     getAllEntry: (params?: ApiQueryParams) =>
       api.get<Post[]>(API_ENDPOINTS.post, { params: params }),
 
+    getPinnedPost: () =>
+      api.getOneWithoutId<Post>(API_ENDPOINTS.post + 'pinned'),
+
     getBySlugEntry: (slug: string, params?: ApiQueryParams) =>
       api.getOne<Post>(API_ENDPOINTS.post, slug, { params: params }),
 

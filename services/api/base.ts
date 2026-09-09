@@ -87,9 +87,26 @@ export const useApi = () => {
     };
   };
 
+  const getOneWithoutId = async <T>(
+    endpoint: string,
+  ): Promise<ApiResponse<T>> => {
+    const { data } = await useFetch(baseApi + endpoint, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    return {
+      data: data.value as T,
+      status: 200,
+    };
+  };
+
   return {
     get,
     getOne,
+    getOneWithoutId,
     getWithoutPagination,
   };
 };

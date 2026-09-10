@@ -90,7 +90,7 @@
             variant="ghost"
             color="error"
             @click="
-              goToAdmin('post/admin/' + entry.id)
+              goToAdmin('/post/admin/' + entry.id)
             "
           />
         </div>

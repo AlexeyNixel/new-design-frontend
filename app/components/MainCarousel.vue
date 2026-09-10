@@ -19,7 +19,16 @@
         "
         class="block w-full h-full"
       >
-        <picture class="block w-full h-full">
+        <picture class="relative block w-full h-full">
+          <UButton
+            v-if="hasSession"
+            icon="akar-icons:gear"
+            variant="soft"
+            color="error"
+            size="xl"
+            class="absolute top-5 right-5 z-50"
+            @click="goToAdmin('/slide?editId=' + item.id)"
+          />
           <source
             v-if="item.imageMobile?.path"
             media="(max-width: 639px)"
@@ -45,7 +54,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 const slideService = useSlides();
-
+const { hasSession, goToAdmin } = useAuth();
 const carouselUi = {
   viewport: 'rounded-b-xl h-full',
   item: 'h-full',

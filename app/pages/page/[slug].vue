@@ -25,6 +25,14 @@
         </h1>
 
         <PageBlocksRenderer :blocks="contentBlocks" />
+        <UButton
+          v-if="hasSession"
+          icon="akar-icons:gear"
+          label="Редактировать"
+          variant="ghost"
+          color="error"
+          @click="goToAdmin('/page/admin/' + page.slug)"
+        />
       </div>
     </div>
   </div>
@@ -55,6 +63,14 @@
             class="tiptap"
             v-html="page.content"
           />
+          <UButton
+            v-if="hasSession"
+            icon="akar-icons:gear"
+            label="Редактировать"
+            variant="ghost"
+            color="error"
+            @click="goToAdmin('/page/admin/' + page.slug)"
+          />
         </div>
       </div>
     </div>
@@ -69,8 +85,8 @@ import type {
 } from '~~/services/types/page.type';
 
 const route = useRoute();
-
 const pageApi = usePageApi();
+const { hasSession, goToAdmin } = useAuth();
 
 const { data: page } = await pageApi.getOnePage(route.params.slug as string);
 

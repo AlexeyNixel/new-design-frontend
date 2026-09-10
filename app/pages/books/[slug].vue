@@ -109,8 +109,16 @@
               icon="i-heroicons-shopping-cart"
               label="Купить на Литрес"
               class="w-full mt-6"
-              :ui="{ rounded: 'rounded-xl' }"
               @click="navigateTo(book.litresLink, { external: true })"
+            />
+            <UButton
+              v-if="hasSession"
+              icon="akar-icons:gear"
+              label="Редактировать"
+              variant="ghost"
+              color="error"
+              class="w-full mt-6"
+              @click="goToAdmin('/book?editId=' + book.id)"
             />
           </div>
 
@@ -295,6 +303,7 @@ import { ModalsCommon } from '#components';
 
 const route = useRoute();
 const bookApi = useBookApi();
+const { hasSession, goToAdmin } = useAuth();
 
 const overlay = useOverlay();
 const modal = overlay.create(ModalsCommon);

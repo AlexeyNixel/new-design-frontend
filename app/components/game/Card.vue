@@ -1,11 +1,13 @@
 <template>
   <NuxtLink
     :to="`/games/${game.id}`"
-    class="min-h-[600px] group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full max-w-[320px] hover:-translate-y-2 border border-gray-100"
+    class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full max-w-[320px] hover:-translate-y-2 border border-gray-100"
+    :class="compact ? '' : 'min-h-[600px]'"
   >
     <!-- Обертка для изображения -->
     <div
-      class="relative overflow-hidden h-80 bg-gradient-to-br from-gray-100 to-gray-200"
+      class="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200"
+      :class="compact ? 'h-56' : 'h-80'"
     >
       <!-- Изображение игры -->
       <img
@@ -66,7 +68,8 @@
     <div class="p-4 md:p-5 flex-1 flex flex-col">
       <!-- Название игры -->
       <h3
-        class="text-lg font-bold h-full text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-tight"
+        class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-tight"
+        :class="compact ? '' : 'h-full'"
         v-html="game.name"
       />
 
@@ -118,6 +121,7 @@ const GENRES = GameGenres;
 defineProps<{
   game: Game;
   showTag?: boolean;
+  compact?: boolean;
 }>();
 
 const baseUrlImage = 'http://infomania.ru/gamelibrary/img/game-cover/';

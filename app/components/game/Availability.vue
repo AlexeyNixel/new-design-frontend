@@ -30,24 +30,27 @@
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
+import { GameStatusLabels } from '~/constants/gameStatus';
 
 const props = defineProps<{ game: Game }>();
 
-const blank = (value: unknown): string => {
-  const str = String(value ?? '').trim();
-  return !str || str.toLowerCase() === 'none' ? '' : str;
-};
-
 const rows = computed(() => {
   const list: { icon: string; label: string; value: string }[] = [];
-  const status = blank(props.game.status_desc);
-  const place = blank(props.game.place);
-  if (status) {
-    list.push({ icon: 'i-heroicons-check-badge', label: 'Статус', value: status });
+
+  list.push({
+    icon: 'i-heroicons-check-badge',
+    label: 'Статус',
+    value: GameStatusLabels[props.game.status],
+  });
+
+  if (props.game.place) {
+    list.push({
+      icon: 'i-heroicons-map-pin',
+      label: 'Место хранения',
+      value: props.game.place,
+    });
   }
-  if (place) {
-    list.push({ icon: 'i-heroicons-map-pin', label: 'Место хранения', value: place });
-  }
+
   return list;
 });
 </script>

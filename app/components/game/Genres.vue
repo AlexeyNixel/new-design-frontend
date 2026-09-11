@@ -5,7 +5,7 @@
   >
     <span
       v-for="genre in list"
-      :key="genre.tag"
+      :key="genre.id"
       :class="
         tone === 'onDark'
           ? 'inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-sm font-semibold text-white ring-1 ring-inset ring-white/25 backdrop-blur-sm'
@@ -17,14 +17,14 @@
         :name="genre.icon"
         class="h-3.5 w-3.5"
       />
-      {{ genre.label }}
+      {{ genre.title }}
     </span>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
-import { GameGenres, GenresIcons } from '~/constants/gameGenres';
+import { GenresIcons } from '~/constants/gameGenres';
 
 const props = withDefaults(
   defineProps<{
@@ -35,13 +35,10 @@ const props = withDefaults(
 );
 
 const list = computed(() => {
-  return (props.game.genres?.split('; ') ?? [])
-    .map(tag => tag.trim())
-    .filter(Boolean)
-    .map(tag => ({
-      tag,
-      label: GameGenres[tag as keyof typeof GameGenres] || tag,
-      icon: GenresIcons[tag as keyof typeof GenresIcons] || '',
-    }));
+  return props.game.genres.map(({ genre }) => ({
+    id: genre.id,
+    title: genre.title,
+    icon: GenresIcons[genre.tag] || '',
+  }));
 });
 </script>

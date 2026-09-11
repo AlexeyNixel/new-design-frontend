@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :to="`/games/${game.id}`"
+    :to="`/games/${game.slug}`"
     class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full max-w-[320px] hover:-translate-y-2 border border-gray-100"
     :class="compact ? '' : 'min-h-[600px]'"
   >
@@ -12,24 +12,22 @@
       <!-- Изображение игры -->
       <img
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        :src="baseUrlImage + game.cover_file"
-        :alt="game.name"
+        :src="game.images[0]?.file.path"
+        :alt="game.title"
         loading="lazy"
         @error="handleImageError"
       >
 
       <UBadge
-        :label="
-          game.status_desc || (game.status === 1 ? 'Доступно' : 'Недоступно')
-        "
+        :label="statusLabel"
         color="success"
         class="absolute top-3 left-3 rounded-full"
       />
 
       <UBadge
-        v-if="game.game_year"
+        v-if="game.year"
         class="absolute top-3 right-3 bg-black/70 font-bold px-3 py-1.5 rounded-full"
-        :label="game.game_year"
+        :label="String(game.year)"
       />
 
       <!-- Индикатор количества игроков -->
@@ -42,23 +40,21 @@
               name="i-heroicons-user-group"
               class="w-4 h-4 text-primary"
             />
-            <span class="font-bold text-gray-900">{{ game.player_min }}-{{ game.player_max }}</span>
+            <span class="font-bold text-gray-900">{{ playersText }}</span>
           </div>
           <div class="flex items-center gap-1">
             <Icon
               name="i-heroicons-clock"
               class="w-4 h-4 text-primary"
             />
-            <span class="font-bold text-gray-900">{{
-              game.game_duration
-            }}</span>
+            <span class="font-bold text-gray-900">{{ durationText }}</span>
           </div>
           <div class="flex items-center gap-1">
             <Icon
               name="i-heroicons-cake"
               class="w-4 h-4 text-primary"
             />
-            <span class="font-bold text-gray-900">{{ game.player_age }}+</span>
+            <span class="font-bold text-gray-900">{{ game.playerAge }}+</span>
           </div>
         </div>
       </div>
@@ -70,19 +66,20 @@
       <h3
         class="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-tight"
         :class="compact ? '' : 'h-full'"
-        v-html="game.name"
-      />
+      >
+        {{ game.title }}
+      </h3>
 
       <!-- Жанры -->
       <div
-        v-if="showTag && game.genres"
+        v-if="game.genres.length"
         class="mb-4"
       >
         <div class="flex flex-wrap gap-2">
           <UBadge
-            v-for="(genre, index) in takeGameGenres(game.genres)"
-            :key="index"
-            :label="GENRES[genre]"
+            v-for="{ genre } in game.genres"
+            :key="genre.id"
+            :label="genre.title"
             color="info"
             variant="soft"
           />
@@ -91,10 +88,11 @@
 
       <!-- Краткое описание -->
       <div
-        v-if="game.short_description"
+        v-if="game.shortDescription"
         class="text-gray-600 text-sm mb-4 line-clamp-2 flex-1"
-        v-html="game.short_description"
-      />
+      >
+        {{ game.shortDescription }}
+      </div>
 
       <div class="pt-4 border-t border-gray-100 mt-auto">
         <div class="flex items-center justify-between">
@@ -114,25 +112,36 @@
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
-import { GameGenres } from '~/constants/gameGenres';
+import { GameStatusLabels } from '~/constants/gameStatus';
 
-const GENRES = GameGenres;
-
-defineProps<{
+const props = defineProps<{
   game: Game;
-  showTag?: boolean;
   compact?: boolean;
 }>();
 
-const baseUrlImage = 'http://infomania.ru/gamelibrary/img/game-cover/';
+const statusLabel = computed(() => GameStatusLabels[props.game.status]);
+
+const playersText = computed(() => {
+  const { playerMin, playerMax } = props.game;
+  if (playerMin == null && playerMax == null) return '—';
+  if (playerMin != null && playerMax != null && playerMin !== playerMax) {
+    return `${playerMin}-${playerMax}`;
+  }
+  return `${playerMin ?? playerMax}`;
+});
+
+const durationText = computed(() => {
+  const { durationMin, durationMax } = props.game;
+  if (durationMin == null && durationMax == null) return '—';
+  if (durationMin != null && durationMax != null && durationMin !== durationMax) {
+    return `${durationMin}-${durationMax}`;
+  }
+  return `${durationMin ?? durationMax}`;
+});
 
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
   target.src = '/placeholder.jpg';
-};
-
-const takeGameGenres = (genres: string) => {
-  return genres.split('; ');
 };
 </script>
 
@@ -142,15 +151,5 @@ const takeGameGenres = (genres: string) => {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-/* Убираем лишние теги из HTML-контента */
-:deep(br) {
-  display: none;
-}
-
-:deep(p) {
-  margin: 0;
-  display: inline;
 }
 </style>

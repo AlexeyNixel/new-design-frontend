@@ -12,10 +12,7 @@
       />
     </section>
 
-    <section
-      v-if="hasAvailability"
-      class="p-5 lg:p-6"
-    >
+    <section class="p-5 lg:p-6">
       <h2 class="info-panel__title">
         Где взять
       </h2>
@@ -45,17 +42,7 @@ import type { Game } from '~~/services/types/game.type';
 
 const props = defineProps<{ game: Game }>();
 
-const blank = (value: unknown) => {
-  const str = String(value ?? '').trim();
-  return !!str && str.toLowerCase() !== 'none';
-};
-
-const hasAvailability = computed(
-  () => blank(props.game.status_desc) || blank(props.game.place),
-);
-const hasGenres = computed(
-  () => (props.game.genres?.split('; ').filter(Boolean).length ?? 0) > 0,
-);
+const hasGenres = computed(() => props.game.genres.length > 0);
 </script>
 
 <style scoped>

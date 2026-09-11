@@ -71,17 +71,22 @@
 <script setup lang="ts">
 import { useGameApi } from '~~/services/api/game.api';
 import { ModalsCommon } from '#components';
-import { useStringCleaner } from '~/composables/useStringCleaner';
 
 type DesignVariant = 'modern' | 'classic';
 
 const route = useRoute();
 const overlay = useOverlay();
 const gameApi = useGameApi();
-const { removeHtmlEntities } = useStringCleaner();
 
-const { data: otherGames } = await gameApi.getAllGames({ limit: 6 });
 const { data: game } = await gameApi.getOneGames(route.params.slug as string);
+
+// Если игра — часть серии, "Смотрите также" показывает другие её части,
+// иначе — произвольную подборку из каталога.
+const { data: otherGames } = await gameApi.getAllGames(
+  game?.seriesId
+    ? { seriesId: game.seriesId, limit: 6 }
+    : { limit: 6 },
+);
 
 const modal = overlay.create(ModalsCommon);
 
@@ -106,12 +111,10 @@ onMounted(() => {
   }
 });
 
-const BASE_URL_IMAGE = 'http://infomania.ru/gamelibrary/img/game-cover/';
-
 if (game) {
-  const title = removeHtmlEntities(game.name);
+  const title = game.title;
   const description
-    = removeHtmlEntities(game.short_description || '')
+    = game.shortDescription
       || `Настольная игра «${title}» в игротеке — параметры, описание и правила.`;
 
   useSeoMeta({
@@ -119,7 +122,7 @@ if (game) {
     description,
     ogTitle: title,
     ogDescription: description,
-    ogImage: BASE_URL_IMAGE + game.cover_file,
+    ogImage: game.images[0]?.file.path,
     ogType: 'article',
   });
 }

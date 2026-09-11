@@ -1,9 +1,7 @@
 <template>
-  <!-- Спец-режим с несколькими изображениями и видео.
-       Пока данные приходят только по одной игре (gm28) — остальное захардкожено.
-       Когда API начнёт отдавать медиа для всех игр, заменить items на props. -->
+  <!-- Несколько изображений и/или видео — карусель с миниатюрами. -->
   <div
-    v-if="isSpecial"
+    v-if="hasMultipleItems"
     class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 lg:p-6"
   >
     <div class="flex flex-col gap-4 sm:flex-row-reverse">
@@ -29,7 +27,7 @@
           <iframe
             :src="item.src"
             class="absolute left-0 top-0 h-full w-full rounded-xl"
-            :allow="item.allow"
+            allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
             frameborder="0"
             allowfullscreen
           />
@@ -72,6 +70,7 @@
     </div>
   </div>
 
+  <!-- Только обложка (или её нет вовсе) — просто картинка. -->
   <div
     v-else-if="coverFallback"
     v-image-gallery="{ modal }"
@@ -80,7 +79,7 @@
   >
     <img
       :src="cover"
-      :alt="alt"
+      :alt="game.title"
       class="max-h-[460px] w-auto cursor-zoom-in object-contain"
       @error="onError"
     >
@@ -89,7 +88,6 @@
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
-import { useStringCleaner } from '~/composables/useStringCleaner';
 
 const props = withDefaults(
   defineProps<{
@@ -101,17 +99,25 @@ const props = withDefaults(
   { coverFallback: true, heroCovered: false },
 );
 
-const BASE_URL_IMAGE = 'http://infomania.ru/gamelibrary/img/game-cover/';
-
-const { removeHtmlEntities } = useStringCleaner();
-
-const isSpecial = computed(() => props.game.id === 'gm28');
-const cover = computed(() => BASE_URL_IMAGE + props.game.cover_file);
-const alt = computed(() => removeHtmlEntities(props.game.name));
+const cover = computed(() => props.game.images[0]?.file.path || '/placeholder.jpg');
 
 const onError = (event: Event) => {
   (event.target as HTMLImageElement).src = '/placeholder.jpg';
 };
+
+type GalleryItem = { type: 'image' | 'video'; src: string };
+
+const items = computed<GalleryItem[]>(() => {
+  const images = props.game.images.map(
+    (image): GalleryItem => ({ type: 'image', src: image.file.path }),
+  );
+  const video = props.game.videoUrl
+    ? [{ type: 'video' as const, src: props.game.videoUrl }]
+    : [];
+  return [...images, ...video];
+});
+
+const hasMultipleItems = computed(() => items.value.length > 1);
 
 const activeIndex = ref(0);
 const carousel = useTemplateRef<{ emblaApi?: { scrollTo: (i: number) => void } }>(
@@ -122,25 +128,4 @@ function select(index: number) {
   activeIndex.value = index;
   carousel.value?.emblaApi?.scrollTo(index);
 }
-
-const items = [
-  {
-    type: 'image',
-    src: 'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Newdawn-1980x1980-wm.webp',
-  },
-  {
-    type: 'image',
-    src: 'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Noviy_Rassvet_02-1980x1980-wm.webp',
-  },
-  {
-    type: 'image',
-    src: 'https://hobbygames.ru/image/cache/hobbygames_beta/data/HobbyWorld/Civilization_Noviy_Rassvet/Civilization_Noviy_Rassvet_03-1980x1980-wm.webp',
-  },
-  {
-    type: 'video',
-    src: 'https://vkvideo.ru/video_ext.php?oid=-187250026&id=456239123&hash=ed3aa8ee4fcd9257&hd=4',
-    allow:
-      'autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;',
-  },
-];
 </script>

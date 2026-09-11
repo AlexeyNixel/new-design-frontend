@@ -1,36 +1,6 @@
-export const GameGenres = {
-  adventures: 'Приключенческие',
-  ameritrash: 'Америтреш',
-  association: 'На ассоциации',
-  book: 'Книга',
-  cards: 'Карточные',
-  child: 'Детские',
-  child_quiz: 'Детские: Викторины',
-  classic: 'Классические',
-  cooperate: 'Кооперативные',
-  detective: 'Детективные',
-  duel: 'Дуэльные',
-  economical: 'Экономические',
-  eurogame: 'Еврогейм',
-  evening: 'Вечериночные',
-  family: 'Семейные',
-  fantasy: 'Фэнтези',
-  fiction: 'Фантастические',
-  filler: 'Филлер',
-  hardcore: 'Хардкор',
-  hiddenrole: 'Со скрытыми ролями',
-  history: 'Исторические',
-  logical: 'Логические',
-  over18: '18+',
-  postap: 'Постапокалипсис',
-  quiz: 'Викторины',
-  reaction: 'На реакцию и координацию',
-  role: 'Ролевые',
-  strategy: 'Стратегические',
-  wargame: 'Варгеймы',
-};
-
-export const GenresIcons = {
+// Русское название жанра теперь приходит с бэка (GameGenre.title) —
+// здесь остаётся только подбор иконки по тому же стабильному tag.
+export const GenresIcons: Record<string, string> = {
   adventures: 'game-icons:treasure-map',
   ameritrash: 'game-icons:american-football-player',
   association: 'ooui:speech-bubbles-ltr',

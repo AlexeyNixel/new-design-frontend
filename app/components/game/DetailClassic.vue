@@ -1,15 +1,14 @@
 <template>
   <div>
     <header class="mb-8">
-      <h1
-        class="game-title text-gray-900"
-        v-html="game.name"
-      />
+      <h1 class="game-title text-gray-900">
+        {{ game.title }}
+      </h1>
       <p
-        v-if="shortDescription"
+        v-if="game.shortDescription"
         class="mt-3 max-w-3xl text-lg leading-relaxed text-gray-600"
       >
-        {{ shortDescription }}
+        {{ game.shortDescription }}
       </p>
       <GameSpecs
         :game="game"
@@ -26,7 +25,7 @@
         />
 
         <article
-          v-if="game.full_description"
+          v-if="game.description"
           class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-gray-100 lg:p-6"
         >
           <h2 class="game-section-title">
@@ -34,7 +33,7 @@
           </h2>
           <div
             class="tiptap mt-4"
-            v-html="game.full_description"
+            v-html="game.description"
           />
         </article>
       </div>
@@ -48,25 +47,19 @@
     <GameAlsoSee
       :games="otherGames"
       :exclude-id="game.id"
+      :series-title="game.series?.title"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
-import { useStringCleaner } from '~/composables/useStringCleaner';
 
-const props = defineProps<{
+defineProps<{
   game: Game;
   otherGames: Game[] | null | undefined;
   modal: unknown;
 }>();
-
-const { removeHtmlEntities } = useStringCleaner();
-
-const shortDescription = computed(() =>
-  removeHtmlEntities(props.game.short_description || ''),
-);
 </script>
 
 <style scoped>

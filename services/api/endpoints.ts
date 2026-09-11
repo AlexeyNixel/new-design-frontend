@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   notification: '/api/notification/',
   game: '/api/games/',
   genres: '/api/games/genres',
+  gameSeries: '/api/games/series',
   tag: '/api/tags/',
   achievements: '/api/achievements',
   club: '/api/clubs/',

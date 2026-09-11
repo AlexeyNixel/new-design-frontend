@@ -22,23 +22,22 @@
         <div class="shrink-0 [perspective:1000px]">
           <img
             :src="cover"
-            :alt="plainName"
+            :alt="game.title"
             class="w-40 rotate-[-2deg] rounded-2xl bg-white p-2 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.6)] transition-transform duration-300 hover:rotate-0 sm:w-52 lg:w-60"
             @error="onCoverError"
           >
         </div>
 
         <div class="min-w-0 flex-1">
-          <h1
-            class="game-title text-white"
-            v-html="game.name"
-          />
+          <h1 class="game-title text-white">
+            {{ game.title }}
+          </h1>
 
           <p
-            v-if="shortDescription"
+            v-if="game.shortDescription"
             class="mt-4 max-w-2xl text-lg leading-relaxed text-white/80"
           >
-            {{ shortDescription }}
+            {{ game.shortDescription }}
           </p>
 
           <GameGenres
@@ -56,8 +55,8 @@
 
           <div class="mt-8 flex flex-wrap gap-3">
             <NuxtLink
-              v-if="game.rules_file"
-              :to="ruleUrl"
+              v-if="game.rulesFile"
+              :to="game.rulesFile.path"
               target="_blank"
               class="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-semibold text-primary-800 transition-colors hover:bg-white/90"
             >
@@ -92,7 +91,7 @@
         />
 
         <article
-          v-if="game.full_description"
+          v-if="game.description"
           class="rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 lg:p-8"
         >
           <h2 class="game-section-title">
@@ -100,7 +99,7 @@
           </h2>
           <div
             class="tiptap mt-4"
-            v-html="game.full_description"
+            v-html="game.description"
           />
         </article>
       </div>
@@ -114,13 +113,13 @@
     <GameAlsoSee
       :games="otherGames"
       :exclude-id="game.id"
+      :series-title="game.series?.title"
     />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
-import { useStringCleaner } from '~/composables/useStringCleaner';
 
 const props = defineProps<{
   game: Game;
@@ -128,17 +127,7 @@ const props = defineProps<{
   modal: unknown;
 }>();
 
-const BASE_URL_IMAGE = 'http://infomania.ru/gamelibrary/img/game-cover/';
-const BASE_URL_RULE = 'http://infomania.ru/gamelibrary/files/rules/';
-
-const { removeHtmlEntities } = useStringCleaner();
-
-const cover = computed(() => BASE_URL_IMAGE + props.game.cover_file);
-const ruleUrl = computed(() => BASE_URL_RULE + props.game.rules_file);
-const plainName = computed(() => removeHtmlEntities(props.game.name));
-const shortDescription = computed(() =>
-  removeHtmlEntities(props.game.short_description || ''),
-);
+const cover = computed(() => props.game.images[0]?.file.path || '/placeholder.jpg');
 
 const onCoverError = (event: Event) => {
   (event.target as HTMLImageElement).src = '/placeholder.jpg';

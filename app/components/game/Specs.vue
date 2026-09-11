@@ -73,26 +73,25 @@ const props = withDefaults(
   { variant: 'card', tone: 'default' },
 );
 
-// API отдаёт числа строками, а пустые значения — литералом "None".
-const clean = (value: unknown): string => {
-  const str = String(value ?? '').trim();
-  if (!str || ['none', 'null', 'undefined', '0'].includes(str.toLowerCase())) {
-    return '';
-  }
-  return str;
-};
-
 const playersText = computed(() => {
-  const min = clean(props.game.player_min);
-  const max = clean(props.game.player_max);
-  if (min && max) return min === max ? min : `${min}–${max}`;
-  return min || max;
+  const { playerMin, playerMax } = props.game;
+  if (playerMin == null && playerMax == null) return '';
+  if (playerMin != null && playerMax != null) {
+    return playerMin === playerMax ? `${playerMin}` : `${playerMin}–${playerMax}`;
+  }
+  return `${playerMin ?? playerMax}`;
 });
 
 const durationText = computed(() => {
-  const value = clean(props.game.game_duration);
-  if (!value) return '';
-  return /^\d+$/.test(value) ? `${value} мин` : value;
+  const { durationMin, durationMax } = props.game;
+  if (durationMin == null && durationMax == null) return '';
+  if (durationMin != null && durationMax != null && durationMin !== durationMax) {
+    return `${durationMin}–${durationMax} мин`;
+  }
+  const value = durationMin ?? durationMax;
+  return durationMax == null && durationMin != null
+    ? `от ${value} мин`
+    : `${value} мин`;
 });
 
 const specs = computed(() => {
@@ -105,11 +104,11 @@ const specs = computed(() => {
       value: playersText.value,
     });
   }
-  if (clean(props.game.player_age)) {
+  if (props.game.playerAge != null) {
     list.push({
       icon: 'i-heroicons-cake',
       label: 'Возраст',
-      value: `${clean(props.game.player_age)}+`,
+      value: `${props.game.playerAge}+`,
     });
   }
   if (durationText.value) {
@@ -119,11 +118,11 @@ const specs = computed(() => {
       value: durationText.value,
     });
   }
-  if (clean(props.game.game_year)) {
+  if (props.game.year != null) {
     list.push({
       icon: 'i-heroicons-calendar-days',
       label: 'Год выпуска',
-      value: clean(props.game.game_year),
+      value: `${props.game.year}`,
     });
   }
 

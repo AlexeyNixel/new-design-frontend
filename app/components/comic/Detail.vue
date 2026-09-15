@@ -55,18 +55,6 @@
 
           <div class="mt-8 flex flex-wrap gap-3">
             <NuxtLink
-              v-if="comic.externalLink"
-              :to="comic.externalLink"
-              target="_blank"
-              class="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-semibold text-primary-800 transition-colors hover:bg-white/90"
-            >
-              <Icon
-                name="i-heroicons-link"
-                class="h-5 w-5"
-              />
-              Читать / купить
-            </NuxtLink>
-            <NuxtLink
               to="/comics"
               class="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-semibold text-white ring-1 ring-inset ring-white/40 transition-colors hover:bg-white/10"
             >

@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import type { TabsItem } from '#ui/components/Tabs.vue';
-import { BookCollections, BookList } from '#components';
+import { BookCollections, BookList, ComicList } from '#components';
 
 const items: TabsItem[] = [
   {
@@ -23,6 +23,11 @@ const items: TabsItem[] = [
     label: 'Подборки',
     icon: 'i-heroicons-rectangle-stack',
     component: BookCollections,
+  },
+  {
+    label: 'Комиксы',
+    icon: 'i-heroicons-paint-brush',
+    component: ComicList,
   },
   {
     label: 'Видеообзоры',

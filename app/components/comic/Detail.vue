@@ -1,17 +1,10 @@
 <template>
   <div>
-    <!-- Hero: обложка на затемнённом фоне -->
-    <section class="relative overflow-hidden rounded-3xl bg-primary-900">
-      <img
-        :src="cover"
-        alt=""
-        aria-hidden="true"
-        class="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl brightness-[0.45] saturate-150"
-        @error="onCoverError"
-      >
-      <div
-        class="absolute inset-0 bg-gradient-to-tr from-primary-900/90 via-primary-900/70 to-primary-800/40"
-      />
+    <!-- Hero: фон — смешанный цвет обложки -->
+    <section
+      class="relative overflow-hidden rounded-3xl bg-primary-900"
+      :style="heroBackground ? { background: heroBackground } : undefined"
+    >
       <div
         class="absolute -left-24 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 rounded-full bg-primary-50/25 blur-3xl"
       />
@@ -107,6 +100,7 @@
 
 <script setup lang="ts">
 import type { Comic } from '~~/services/types/comic.type';
+import type { RgbColor } from '~/composables/useAverageColor';
 
 const props = defineProps<{
   comic: Comic;
@@ -119,6 +113,19 @@ const cover = computed(() => props.comic.images[0]?.file.path || '/placeholder.j
 const onCoverError = (event: Event) => {
   (event.target as HTMLImageElement).src = '/placeholder.jpg';
 };
+
+const averageColor = useAverageColor(cover);
+
+const mixWithBlack = (color: RgbColor, ratio: number) =>
+  `rgb(${Math.round(color.r * ratio)}, ${Math.round(color.g * ratio)}, ${Math.round(color.b * ratio)})`;
+
+// Затемняем смешанный цвет, чтобы белый текст поверх оставался читаемым.
+const heroBackground = computed(() => {
+  if (!averageColor.value) return null;
+  const from = mixWithBlack(averageColor.value, 0.55);
+  const to = mixWithBlack(averageColor.value, 0.3);
+  return `linear-gradient(135deg, ${from}, ${to})`;
+});
 </script>
 
 <style scoped>

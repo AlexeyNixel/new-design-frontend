@@ -72,13 +72,6 @@
         </div>
       </div>
 
-      <div
-        v-if="comic.description"
-        class="text-gray-600 text-sm mb-4 line-clamp-2 flex-1"
-      >
-        {{ comic.description }}
-      </div>
-
       <div class="pt-4 border-t border-gray-100 mt-auto">
         <div class="flex items-center justify-between">
           <div class="flex items-center text-primary font-semibold text-sm">

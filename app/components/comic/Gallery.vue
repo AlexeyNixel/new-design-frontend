@@ -4,17 +4,17 @@
     v-if="hasMultipleItems"
     class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 lg:p-6"
   >
-    <div class="flex flex-col gap-4 sm:flex-row-reverse">
+    <div class="flex flex-col gap-4 sm:flex-row-reverse sm:items-start h-full">
       <UCarousel
         ref="carousel"
         v-slot="{ item }"
         v-image-gallery="{ modal }"
-        class="w-full sm:w-4/5"
+        class="w-full sm:w-4/5 flex items-center justify-center h-full"
         :items="items"
         :ui="{ item: 'basis-full flex items-center justify-center' }"
       >
         <img
-          class="max-h-[440px] w-auto cursor-zoom-in rounded-xl object-contain"
+          class="max-h-[650px] w-auto cursor-zoom-in rounded-xl object-contain"
           :src="item.src"
           alt=""
         >

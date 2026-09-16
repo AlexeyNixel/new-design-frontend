@@ -4,7 +4,7 @@
     v-if="hasMultipleItems"
     class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 lg:p-6"
   >
-    <div class="flex flex-col gap-4 sm:flex-row-reverse">
+    <div class="flex flex-col gap-4 sm:flex-row-reverse sm:items-start">
       <UCarousel
         ref="carousel"
         v-slot="{ item }"

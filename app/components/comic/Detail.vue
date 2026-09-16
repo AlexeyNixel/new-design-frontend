@@ -17,7 +17,7 @@
       />
 
       <div
-        class="relative z-10 flex flex-col gap-8 p-6 sm:p-10 lg:flex-row lg:items-end lg:gap-12"
+        class="relative z-10 flex flex-col gap-8 p-6 sm:p-10 lg:flex-row lg:items-start lg:gap-12"
       >
         <div class="shrink-0 [perspective:1000px]">
           <img

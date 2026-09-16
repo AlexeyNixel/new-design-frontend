@@ -274,6 +274,7 @@ onMounted(async () => {
                   v-else
                   class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium"
                   :class="DAY_CIRCLE_CLASS[dayState(day)]"
+                  @click.stop
                 >
                   {{ day.day }}
                 </div>

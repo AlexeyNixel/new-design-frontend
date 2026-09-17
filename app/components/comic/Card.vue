@@ -54,7 +54,7 @@
         v-if="authorLine"
         class="text-sm text-gray-500 mb-3"
       >
-        {{ authorLine }}
+        {{ useStringSlice(authorLine, 64) }}
       </p>
 
       <div
@@ -89,13 +89,16 @@
 
 <script setup lang="ts">
 import type { Comic } from '~~/services/types/comic.type';
+import { useStringSlice } from '~/composables/useStringSlice';
 
 const props = defineProps<{
   comic: Comic;
   compact?: boolean;
 }>();
 
-const cover = computed(() => props.comic.images[0]?.file.path || '/placeholder.jpg');
+const cover = computed(
+  () => props.comic.images[0]?.file.path || '/placeholder.jpg',
+);
 
 const volumeLabel = computed(() => {
   if (!props.comic.volumeNumber) return '';
@@ -104,7 +107,8 @@ const volumeLabel = computed(() => {
 
 const authorLine = computed(() => {
   const { author, illustrator } = props.comic;
-  if (author && illustrator && author !== illustrator) return `${author} / ${illustrator}`;
+  if (author && illustrator && author !== illustrator)
+    return `${author} / ${illustrator}`;
   return author || illustrator || '';
 });
 

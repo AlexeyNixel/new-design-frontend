@@ -68,16 +68,16 @@
       <div class="block justify-between md:flex">
         <FeedbackGos />
         <NuxtLink class="rounded-xl overflow-hidden">
-          <img
-            src="/banner-uvazhaemye-posetiteli.png"
-            alt=""
-          >
+          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
         </NuxtLink>
       </div>
     </CommonSectionWrapper>
 
     <CommonSectionWrapper>
-      <EntryCarousel title="Новости партнеров" />
+      <EntryCarousel
+        title="Новости партнеров"
+        by-tag="b7ffa631-8d88-4f10-8e79-cacac4cda04d"
+      />
     </CommonSectionWrapper>
   </div>
 </template>

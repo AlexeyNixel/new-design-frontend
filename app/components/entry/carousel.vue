@@ -38,9 +38,9 @@ const carouselUi = {
 
 <template>
   <div>
-    <h3 class="mb-6 text-xl font-bold text-gray-900 md:mb-8 md:text-2xl lg:text-3xl">
+    <h2 class="mb-6 text-xl font-bold text-gray-900 md:mb-8 md:text-2xl lg:text-3xl">
       {{ title }}
-    </h3>
+    </h2>
 
     <UCarousel
       v-if="data && data.length"

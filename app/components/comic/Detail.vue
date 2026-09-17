@@ -57,6 +57,17 @@
               />
               К каталогу комиксов
             </NuxtLink>
+            <NuxtLink
+              target="_blank"
+              to="https://t.me/ComicBookCenter"
+              class="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-semibold text-white ring-1 ring-inset ring-white/40 transition-colors hover:bg-white/10"
+            >
+              <Icon
+                name="i-ix-telegram-logo"
+                class="h-5 w-5"
+              />
+              Наш телеграм канал
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -108,7 +119,9 @@ const props = defineProps<{
   modal: unknown;
 }>();
 
-const cover = computed(() => props.comic.images[0]?.file.path || '/placeholder.jpg');
+const cover = computed(
+  () => props.comic.images[0]?.file.path || '/placeholder.jpg',
+);
 
 const onCoverError = (event: Event) => {
   (event.target as HTMLImageElement).src = '/placeholder.jpg';

@@ -1,11 +1,5 @@
 import { generateScale, normalizeHex, PRIMARY_STEPS } from '~/utils/colorScale';
 
-/**
- * Движок цветов dev-панели.
- * Правит CSS-переменные --color-primary-* и --color-link-500 инлайново на <html>,
- * персистит изменения в localStorage и умеет отдавать готовый CSS-блок для вставки в theme.css.
- */
-
 const STORAGE_KEY = 'dev:theme-overrides';
 const LINK_VAR = '--color-link-500';
 

@@ -1,9 +1,3 @@
-/**
- * Состояние dev-панели: открыта/закрыта, активный таб, настройки оверлея сетки.
- * init() вызывается один раз из plugins/devtools.client.ts — навешивает персист,
- * инъекцию outline-стилей и горячую клавишу Ctrl+Shift+D.
- */
-
 export type DevTab = 'colors' | 'grid' | 'page';
 
 const UI_KEY = 'dev:tools-ui';

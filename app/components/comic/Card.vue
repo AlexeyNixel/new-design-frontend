@@ -12,7 +12,11 @@
       <img
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         :src="cover"
+        :srcset="imageSrcset(comic.images[0]?.file)"
+        sizes="(max-width: 640px) 100vw, 320px"
         :alt="comic.title"
+        width="400"
+        height="320"
         loading="lazy"
         @error="handleImageError"
       >
@@ -114,6 +118,7 @@ const authorLine = computed(() => {
 
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
+  target.removeAttribute('srcset');
   target.src = '/placeholder.jpg';
 };
 </script>

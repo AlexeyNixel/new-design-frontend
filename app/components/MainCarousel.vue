@@ -2,7 +2,7 @@
 <template>
   <div class="relative w-full h-full">
     <UCarousel
-      v-slot="{ item }"
+      v-slot="{ item, index }"
       arrows
       loop
       dots
@@ -32,14 +32,20 @@
           <source
             v-if="item.imageMobile?.path"
             media="(max-width: 639px)"
-            :srcset="item.imageMobile.path"
+            :srcset="imageSrcset(item.imageMobile) || item.imageMobile.path"
+            sizes="100vw"
           >
           <img
             :src="item.image.path"
+            :srcset="imageSrcset(item.image)"
+            sizes="(max-width: 1024px) 100vw, 75vw"
             :alt="item.title || 'Слайд'"
             class="w-full h-full object-cover"
             :style="{ objectPosition: 'center center' }"
-            loading="lazy"
+            width="1200"
+            height="480"
+            :loading="index === 0 ? 'eager' : 'lazy'"
+            :fetchpriority="index === 0 ? 'high' : 'auto'"
           >
         </picture>
       </NuxtLink>

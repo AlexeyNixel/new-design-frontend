@@ -9,7 +9,11 @@
     >
       <img
         :src="book?.preview?.path"
+        :srcset="imageSrcset(book?.preview)"
+        sizes="(max-width: 640px) 50vw, 200px"
         :alt="book.title"
+        width="400"
+        height="600"
         class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
         loading="lazy"
         @error="handleImageError"
@@ -79,6 +83,7 @@ defineProps<{
 // Обработка ошибок изображения
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
+  target.removeAttribute('srcset');
   target.src = 'https://placehold.co/320x480/e5e7eb/6b7280?text=Обложка+книги';
 
   // Можно использовать иконку вместо placeholder

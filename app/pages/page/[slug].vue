@@ -134,6 +134,9 @@ usePageSeo({
     toMetaDescription(page?.content) || heroBlock.value?.subtitle || page?.title,
 });
 
+// Формы могут быть и в HTML-контенте, и внутри блоков
+useYandexFormsEmbed(() => page?.content + JSON.stringify(page?.blocks ?? []));
+
 // Крошки показываются только в старом формате страницы
 useBreadcrumbSchema(computed(() => (hasBlocks.value ? [] : breadcrumbItems.value)));
 </script>

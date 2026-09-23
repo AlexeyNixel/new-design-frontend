@@ -9,7 +9,12 @@
       <img
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
         :src="imgSrc"
+        :srcset="imgSrcset"
+        sizes="(max-width: 768px) 100vw, 288px"
         :alt="post.title"
+        width="288"
+        height="256"
+        loading="lazy"
         @error="notFoundImage"
       >
 
@@ -106,6 +111,10 @@ const props = defineProps<{
 const DEFAULT_IMAGE = '/placeholder.jpg';
 
 const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
+// После подмены на заглушку srcset убираем — иначе браузер продолжит брать картинку из него
+const imgSrcset = computed(() =>
+  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview),
+);
 
 // Хелпер для форматирования даты
 const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {

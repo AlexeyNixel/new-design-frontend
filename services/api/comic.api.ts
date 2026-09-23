@@ -1,4 +1,4 @@
-import { useApi, type ApiQueryParams } from './base';
+import { omitListFields, useApi, type ApiQueryParams } from './base';
 import { API_ENDPOINTS } from './endpoints';
 import type {
   Comic,
@@ -12,7 +12,10 @@ export const useComicApi = () => {
 
   return {
     getAllComics: (params?: ComicQueryParams) =>
-      api.get<Comic[]>(API_ENDPOINTS.comic, { params }),
+      api.get<Comic[]>(API_ENDPOINTS.comic, {
+        params,
+        transform: omitListFields(['content']),
+      }),
     getAllGenres: (params?: ApiQueryParams) =>
       api.getWithoutPagination<ComicGenre[]>(API_ENDPOINTS.comicGenres, {
         params,

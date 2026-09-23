@@ -10,7 +10,12 @@
         <img
           class="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
           :src="imgSrc"
+          :srcset="imgSrcset"
+          sizes="144px"
           :alt="post.title"
+          width="144"
+          height="112"
+          loading="lazy"
           @error="notFoundImage"
         >
       </div>
@@ -51,6 +56,10 @@ interface Props {
 const props = defineProps<Props>();
 const DEFAULT_IMAGE = '/placeholder.jpg';
 const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
+// После подмены на заглушку srcset убираем — иначе браузер продолжит брать картинку из него
+const imgSrcset = computed(() =>
+  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview),
+);
 
 const notFoundImage = () => {
   if (imgSrc.value !== DEFAULT_IMAGE) {

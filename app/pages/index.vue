@@ -77,6 +77,9 @@ usePageSeo({
           <img
             src="/banner-uvazhaemye-posetiteli.png"
             alt=""
+            width="974"
+            height="526"
+            loading="lazy"
           >
         </NuxtLink>
       </div>

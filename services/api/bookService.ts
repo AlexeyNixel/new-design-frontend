@@ -1,4 +1,4 @@
-import { useApi, type ApiQueryParams } from './base';
+import { omitListFields, useApi, type ApiQueryParams } from './base';
 import type { Book, BookCollections } from '../types/book.type';
 import { API_ENDPOINTS } from './endpoints';
 
@@ -7,7 +7,10 @@ export const useBookApi = () => {
 
   return {
     getAllBooks: (params?: ApiQueryParams) =>
-      api.get<Book[]>(API_ENDPOINTS.book, { params: params }),
+      api.get<Book[]>(API_ENDPOINTS.book, {
+        params: params,
+        transform: omitListFields(['content']),
+      }),
 
     getOneBook: (id: string, params?: ApiQueryParams) =>
       api.getOne<Book>(API_ENDPOINTS.book, id, { params: params }),

@@ -19,13 +19,6 @@ const { isAuthenticated } = useAuth();
 useHead({
   titleTemplate: title =>
     title && title !== 'НОМБ' ? `${title} — НОМБ` : 'НОМБ',
-  script: [
-    { src: 'https://forms.yandex.ru/_static/embed.js' },
-    {
-      src: 'https://pos.gosuslugi.ru/bin/script.min.js',
-      body: true,
-    },
-  ],
 });
 // Значения по умолчанию — страницы переопределяют их через usePageSeo()
 usePageSeo({

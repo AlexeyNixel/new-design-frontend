@@ -1,4 +1,9 @@
-import { useApi, type ApiQueryParams } from './base';
+import {
+  omitListFields,
+  POST_HEAVY_FIELDS,
+  useApi,
+  type ApiQueryParams,
+} from './base';
 import type { Post } from '../types/post.type';
 import { API_ENDPOINTS } from './endpoints';
 import type { Tag } from '~~/services/types/tag.type';
@@ -8,7 +13,10 @@ export const useEntryApi = () => {
 
   return {
     getAllEntry: (params?: ApiQueryParams) =>
-      api.get<Post[]>(API_ENDPOINTS.post, { params: params }),
+      api.get<Post[]>(API_ENDPOINTS.post, {
+        params: params,
+        transform: omitListFields(POST_HEAVY_FIELDS),
+      }),
 
     getPinnedPost: () =>
       api.getOneWithoutId<Post>(API_ENDPOINTS.post + 'pinned'),

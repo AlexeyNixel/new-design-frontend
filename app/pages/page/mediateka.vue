@@ -15,6 +15,11 @@ const hero: Omit<PageHeroBlock, 'type'> = {
   },
 };
 
+usePageSeo({
+  title: hero.title,
+  description: hero.subtitle,
+});
+
 const blocks: PageContentBlock[] = [
   {
     type: 'stats',

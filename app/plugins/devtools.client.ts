@@ -1,11 +1,19 @@
+import type { AuthSession } from '~~/server/api/auth/session.get';
+
 /**
  * Применяет сохранённые цвета dev-панели как можно раньше (до гидрации),
  * чтобы не было вспышки исходной палитры при перезагрузке.
  *
- * TODO(prod-gate): перед релизом отключить панель в production —
- * добавить `if (!import.meta.dev) return;` здесь и убрать <DevPanel /> из app.vue.
- * Сейчас панель включена всегда, чтобы её можно было продемонстрировать.
+ * Только для авторизованных в админке — как и сама панель (см. app.vue).
+ * Сессию берём из SSR-payload запроса `useAuth()` (ключ `auth-session`),
+ * чтобы не делать отдельный запрос до гидрации.
  */
-export default defineNuxtPlugin(() => {
+export default defineNuxtPlugin((nuxtApp) => {
+  const session = nuxtApp.payload.data['auth-session'] as
+    | AuthSession
+    | undefined;
+
+  if (!session?.authenticated) return;
+
   useDevTheme().load();
 });

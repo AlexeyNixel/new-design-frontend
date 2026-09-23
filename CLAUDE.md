@@ -129,6 +129,6 @@ modal.open({ imgLinks: [...], startIndex: 0 });
 
 ## Важные замечания
 
-- В `app/pages/page/[slug].vue` URL бэкенда захардкожен как `http://localhost:3300` вместо использования `useApi()` — при правках этой страницы нужно использовать `useApi()` через `runtimeConfig`.
+- SEO: `sitemap.xml` генерирует `@nuxtjs/sitemap` (динамические URL — `server/api/__sitemap__/urls.ts`), `robots.txt` — серверный маршрут `server/routes/robots.txt.ts`. Адрес сайта — `NUXT_PUBLIC_SITE_URL` (по умолчанию `https://alt.infomania.ru`). Не добавлять `nitro.devProxy` с ключом `/site`: он матчит по префиксу и перехватывает `/sitemap.xml`.
 - `app/layouts/ContentLayout.vue` содержит устаревшую ссылку `/entry` вместо `/post` — можно исправить при случае.
 - Внешние скрипты (Яндекс.Формы, Госуслуги, VK Widgets) подключены глобально в `app.vue` через `useHead`.

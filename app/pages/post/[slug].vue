@@ -123,7 +123,7 @@ const entryApi = useEntryApi();
 const { data: entry } = await entryApi.getBySlugEntry(
   route.params.slug as string,
   {
-    include: 'department',
+    include: 'department, preview',
   },
 );
 
@@ -145,11 +145,29 @@ const breadcrumbItems = ref([
   },
 ]);
 
-useSeoMeta({
+usePageSeo({
   title: entry.title,
   description: entry.description || entry.title,
-  ogTitle: entry.title,
-  ogDescription: entry.description || entry.title,
+  image: entry.preview?.path,
+  type: 'article',
+  publishedTime: entry.publishedAt,
+  modifiedTime: entry.updatedAt,
+});
+
+useBreadcrumbSchema(breadcrumbItems);
+
+const toAbsolute = useAbsoluteUrl();
+useJsonLd('content', {
+  '@type': 'NewsArticle',
+  'headline': entry.title,
+  'description': entry.description || undefined,
+  'image': toAbsolute(entry.preview?.path || DEFAULT_OG_IMAGE),
+  'datePublished': entry.publishedAt,
+  'dateModified': entry.updatedAt,
+  'mainEntityOfPage': toAbsolute(`/post/${entry.slug}`),
+  'inLanguage': 'ru-RU',
+  'author': { '@id': `${toAbsolute('/')}#organization` },
+  'publisher': { '@id': `${toAbsolute('/')}#organization` },
 });
 </script>
 

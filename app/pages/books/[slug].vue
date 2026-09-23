@@ -384,12 +384,23 @@ const breadcrumbItems = computed(() => [
 ]);
 
 // SEO
-useSeoMeta({
-  title: book?.title + ' | Библиотека',
+usePageSeo({
+  title: book?.title,
   description: book.description,
-  ogImage: book.preview?.path,
-  ogTitle: book?.title,
-  ogDescription: book.description,
+  image: book.preview?.path,
+  type: 'article',
+});
+
+useBreadcrumbSchema(breadcrumbItems);
+
+const toAbsolute = useAbsoluteUrl();
+useJsonLd('content', {
+  '@type': 'Book',
+  'name': book.title,
+  'description': toMetaDescription(book.description, 500),
+  'image': toAbsolute(book.preview?.path),
+  'url': toAbsolute(route.path),
+  'inLanguage': 'ru',
 });
 </script>
 

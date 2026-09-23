@@ -3,6 +3,12 @@ import { useEntryApi } from '~~/services/api/entryService';
 
 const entryApi = useEntryApi();
 
+usePageSeo({
+  title: 'Архив конкурсов',
+  description:
+    'Архив конкурсов Новосибирской областной молодёжной библиотеки: условия, итоги и победители прошедших конкурсов.',
+});
+
 const { data: competitions } = await entryApi.getAllEntry({
   tags: '0ad82318-87f3-4c0c-a0b2-a0d765f9d7e3',
   include: 'preview',

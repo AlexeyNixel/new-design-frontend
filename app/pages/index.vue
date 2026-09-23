@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+usePageSeo({
+  title: 'Новосибирская областная молодёжная библиотека',
+  description:
+    'Новосибирская областная молодёжная библиотека (НОМБ): новости и события, книги, настольные игры и комиксы, клубы, выставки и услуги для читателей.',
+});
+</script>
 
 <!-- pages/index.vue -->
 <template>
@@ -68,7 +74,10 @@
       <div class="block justify-between md:flex">
         <FeedbackGos />
         <NuxtLink class="rounded-xl overflow-hidden">
-          <img src="/banner-uvazhaemye-posetiteli.png" alt="" />
+          <img
+            src="/banner-uvazhaemye-posetiteli.png"
+            alt=""
+          >
         </NuxtLink>
       </div>
     </CommonSectionWrapper>

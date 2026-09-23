@@ -128,8 +128,12 @@ const breadcrumbItems = computed(() => [
 ]);
 
 // SEO
-useSeoMeta({
+usePageSeo({
   title: page?.title,
-  description: page?.content?.substring(0, 160) || heroBlock.value?.subtitle,
+  description:
+    toMetaDescription(page?.content) || heroBlock.value?.subtitle || page?.title,
 });
+
+// Крошки показываются только в старом формате страницы
+useBreadcrumbSchema(computed(() => (hasBlocks.value ? [] : breadcrumbItems.value)));
 </script>

@@ -9,6 +9,9 @@
           <img
             src="/logo.png"
             alt="Логотип библиотеки"
+            width="800"
+            height="260"
+            loading="lazy"
             class="h-12 w-auto"
           >
         </div>

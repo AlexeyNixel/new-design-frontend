@@ -1,9 +1,13 @@
+/* Единая точка входа стилей: Tailwind и Nuxt UI подключаются ровно один раз.
+   Остальные файлы импортируются сюда, а не в nuxt.config — иначе каждый из них
+   заново генерирует весь Tailwind (раньше CSS дублировался трижды). */
 @import 'tailwindcss';
 @import '@nuxt/ui';
 
-@theme {
-
-}
+@import './fonts.css';
+@import './editor.css';
+@import './theme.css';
+@import './feedback-gos.css';
 
 html {
   scroll-behavior: smooth;

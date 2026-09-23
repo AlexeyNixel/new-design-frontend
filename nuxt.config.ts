@@ -1,6 +1,22 @@
+import { readdirSync } from 'node:fs';
 import tailwindcss from '@tailwindcss/vite';
 
 // Публичный адрес сайта — для sitemap, robots.txt и canonical
+// Кеш для медиа из CMS (30 дней) и для файлов public/ без хеша в имени (7 дней)
+const MEDIA_CACHE = 'public, max-age=2592000';
+const STATIC_CACHE = 'public, max-age=604800, stale-while-revalidate=86400';
+
+// Правила кеша для файлов в корне public/ (картинки, иконки, манифест).
+// Маски вида '/*.png' роутер Nitro не поддерживает — перечисляем файлы явно.
+const publicFileCacheRules = Object.fromEntries(
+  readdirSync('public', { withFileTypes: true })
+    .filter(entry => entry.isFile() && !entry.name.endsWith('.txt'))
+    .map(entry => [
+      `/${entry.name}`,
+      { headers: { 'cache-control': STATIC_CACHE } },
+    ]),
+);
+
 const SITE_URL = process.env.NUXT_PUBLIC_SITE_URL || 'https://alt.infomania.ru';
 
 export default defineNuxtConfig({
@@ -32,13 +48,8 @@ export default defineNuxtConfig({
       ],
     },
   },
-  css: [
-    '~/assets/css/main.css',
-    '~/assets/css/fonts.css',
-    '~/assets/css/editor.css',
-    '~/assets/css/theme.css',
-    '~/assets/css/feedback-gos.css',
-  ],
+  // Остальные CSS подключаются внутри main.css (см. комментарий там)
+  css: ['~/assets/css/main.css'],
   site: {
     url: SITE_URL,
     name: 'НОМБ — Новосибирская областная молодёжная библиотека',
@@ -55,19 +66,30 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2025-07-15',
   nitro: {
+    // Заранее сжатые .gz/.br-версии статики (_nuxt, public) — Nitro отдаёт их по Accept-Encoding
+    compressPublicAssets: { gzip: true, brotli: true },
+
     // Проксирование медиа работает и в dev, и в production.
     // devProxy с ключом '/site' не используем: он матчит по префиксу и перехватывает /sitemap.xml
     routeRules: {
+      // Медиа из CMS: имена файлов уникальны (uuid/timestamp), содержимое не меняется —
+      // хранилище не отдаёт Cache-Control, поэтому выставляем сами
       '/site/**': {
         proxy: 'http://static.infomania.ru/site/**',
+        headers: { 'cache-control': MEDIA_CACHE },
       },
       // Картинки игр и комиксов (`/dev/images/...`) — в production vite.server.proxy не работает
       '/dev/**': {
         proxy: 'http://static.infomania.ru/dev/**',
+        headers: { 'cache-control': MEDIA_CACHE },
       },
       '/media/**': {
         proxy: 'http://static.infomania.ru/site/**',
+        headers: { 'cache-control': MEDIA_CACHE },
       },
+      // Файлы из public/ без хеша в имени — кешируем, но не навсегда
+      '/fonts/**': { headers: { 'cache-control': STATIC_CACHE } },
+      ...publicFileCacheRules,
       // Старый раздел /entry переименован в /post — постоянный редирект (передаёт вес ссылок)
       '/entry': { redirect: { to: '/post', statusCode: 301 } },
       '/entry/**': { redirect: { to: '/post/**', statusCode: 301 } },

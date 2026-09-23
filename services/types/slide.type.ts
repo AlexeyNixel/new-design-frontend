@@ -1,6 +1,8 @@
 export interface SlideImage {
   path: string;
   preview?: string;
+  width?: number | null;
+  variants?: Record<string, string> | null;
 }
 
 export interface Slide {

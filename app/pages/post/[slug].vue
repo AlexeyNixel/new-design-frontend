@@ -155,6 +155,7 @@ usePageSeo({
 });
 
 useBreadcrumbSchema(breadcrumbItems);
+useYandexFormsEmbed(entry.content);
 
 const toAbsolute = useAbsoluteUrl();
 useJsonLd('content', {

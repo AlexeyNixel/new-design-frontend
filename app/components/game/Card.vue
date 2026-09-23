@@ -13,7 +13,11 @@
       <img
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         :src="game.images[0]?.file.path"
+        :srcset="imageSrcset(game.images[0]?.file)"
+        sizes="(max-width: 640px) 100vw, 320px"
         :alt="game.title"
+        width="400"
+        height="320"
         loading="lazy"
         @error="handleImageError"
       >
@@ -141,6 +145,7 @@ const durationText = computed(() => {
 
 const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
+  target.removeAttribute('srcset');
   target.src = '/placeholder.jpg';
 };
 </script>

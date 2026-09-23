@@ -78,6 +78,7 @@ usePageSeo({
 });
 
 useBreadcrumbSchema(breadcrumbItems);
+useYandexFormsEmbed(document.document.content);
 </script>
 
 <style scoped>

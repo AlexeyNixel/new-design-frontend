@@ -16,6 +16,40 @@ export interface ApiResponse<T = unknown> {
   status?: number;
 }
 
+type ApiRecord = Record<string, unknown>;
+
+/** Тяжёлые текстовые поля поста, которые не нужны карточкам и спискам */
+export const POST_HEAVY_FIELDS = ['content', 'contentText'];
+
+const omitFields = (item: ApiRecord, fields: string[]) =>
+  Object.fromEntries(
+    Object.entries(item).filter(([key]) => !fields.includes(key)),
+  );
+
+/**
+ * transform для списков: убирает тяжёлые поля (например, полный HTML `content`),
+ * которые не нужны карточкам. useFetch применяет его на сервере, поэтому поля
+ * не попадают в payload страницы (__NUXT_DATA__).
+ * `nested` — чистить не сам элемент, а вложенный объект (например, `post` у слайда).
+ */
+export const omitListFields
+  = (fields: string[], nested?: string) => (response: unknown) => {
+    const typed = response as ApiResponse<ApiRecord[]> | null;
+    if (!typed || !Array.isArray(typed.data)) return typed;
+
+    return {
+      ...typed,
+      data: typed.data.map((item) => {
+        if (!nested) return omitFields(item, fields);
+
+        const child = item[nested];
+        return child && typeof child === 'object'
+          ? { ...item, [nested]: omitFields(child as ApiRecord, fields) }
+          : item;
+      }),
+    };
+  };
+
 export const useApi = () => {
   const config = useRuntimeConfig();
 

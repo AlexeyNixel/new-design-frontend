@@ -248,6 +248,12 @@ const SORT_OPTIONS: { label: string; value: SortOption }[] = [
 const bookApi = useBookApi();
 const route = useRoute();
 
+usePageSeo({
+  title: 'Книги',
+  description:
+    'Книжные подборки и видеообзоры Новосибирской областной молодёжной библиотеки: что почитать и где взять книгу.',
+});
+
 const { data: allBooks } = await bookApi.getAllBooks({
   include: 'preview',
   limit: 500,

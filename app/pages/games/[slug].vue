@@ -117,13 +117,30 @@ if (game) {
     = game.shortDescription
       || `Настольная игра «${title}» в игротеке — параметры, описание и правила.`;
 
-  useSeoMeta({
+  usePageSeo({
     title,
     description,
-    ogTitle: title,
-    ogDescription: description,
-    ogImage: game.images[0]?.file.path,
-    ogType: 'article',
+    image: game.images[0]?.file.path,
+    type: 'article',
+  });
+
+  const toAbsolute = useAbsoluteUrl();
+  useJsonLd('content', {
+    '@type': 'Game',
+    'name': game.title,
+    'description': description,
+    'image': game.images.map(image => toAbsolute(image.file.path)),
+    'url': toAbsolute(`/games/${game.slug}`),
+    'numberOfPlayers':
+      game.playerMin || game.playerMax
+        ? {
+            '@type': 'QuantitativeValue',
+            'minValue': game.playerMin ?? undefined,
+            'maxValue': game.playerMax ?? undefined,
+          }
+        : undefined,
+    'typicalAgeRange': game.playerAge ? `${game.playerAge}-` : undefined,
+    'dateCreated': game.year ? String(game.year) : undefined,
   });
 }
 </script>

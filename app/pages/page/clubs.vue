@@ -3,6 +3,12 @@ import { useClubApi } from '~~/services/api/club.api';
 
 const clubApi = useClubApi();
 
+usePageSeo({
+  title: 'Клубы и творческие объединения',
+  description:
+    'Клубы и творческие объединения Новосибирской областной молодёжной библиотеки: расписание встреч, направления и как присоединиться.',
+});
+
 const { data: clubs } = await clubApi.getAllClubs({
   limit: 20,
   include: 'preview',

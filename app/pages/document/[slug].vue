@@ -72,12 +72,12 @@ const { data: document } = await documentApi.getBySlugDocument(
 );
 
 // SEO
-useSeoMeta({
+usePageSeo({
   title: document.document.title,
   description: document.document.title,
-  ogTitle: document.document.title,
-  ogDescription: document.document.title,
 });
+
+useBreadcrumbSchema(breadcrumbItems);
 </script>
 
 <style scoped>

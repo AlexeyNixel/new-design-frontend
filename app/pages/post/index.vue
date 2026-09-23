@@ -322,6 +322,12 @@ const entryApi = useEntryApi();
 const departmentApi = useDepartmentApi();
 const route = useRoute();
 
+usePageSeo({
+  title: 'Новости и события',
+  description:
+    'Новости, мероприятия и события Новосибирской областной молодёжной библиотеки: встречи, выставки, мастер-классы и клубы.',
+});
+
 const BREADCRUMB_ITEMS = [
   {
     label: 'Главная',
@@ -334,6 +340,8 @@ const BREADCRUMB_ITEMS = [
     to: '/post',
   },
 ];
+
+useBreadcrumbSchema(BREADCRUMB_ITEMS);
 
 const SORT_OPTIONS = [
   { label: 'Сначала новые', value: 'desc' },

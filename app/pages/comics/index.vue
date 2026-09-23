@@ -1,5 +1,8 @@
 <template>
   <CommonContentContainer>
+    <h1 class="sr-only">
+      Комиксы
+    </h1>
     <div class="flex gap-4">
       <div class="flex flex-col bg-white p-5 shadow rounded-xl w-1/4 h-max">
         <div class="border-b border-gray-100 pb-2 mb-4">
@@ -182,6 +185,12 @@ import type { ApiResponse } from '~~/services/api/base';
 const comicApi = useComicApi();
 
 const route = useRoute();
+
+usePageSeo({
+  title: 'Комиксы',
+  description:
+    'Каталог комиксов и манги Новосибирской областной молодёжной библиотеки: серии, жанры и возрастные рейтинги.',
+});
 
 const comics = ref<ApiResponse<Comic[]>>();
 

@@ -67,13 +67,30 @@ if (comic) {
     = comic.description
       || `Комикс «${title}» — параметры, описание и где почитать.`;
 
-  useSeoMeta({
+  usePageSeo({
     title,
     description,
-    ogTitle: title,
-    ogDescription: description,
-    ogImage: comic.images[0]?.file.path,
-    ogType: 'article',
+    image: comic.images[0]?.file.path,
+    type: 'article',
+  });
+
+  const toAbsolute = useAbsoluteUrl();
+  useJsonLd('content', {
+    '@type': 'Book',
+    'bookFormat': 'https://schema.org/GraphicNovel',
+    'name': comic.title,
+    'description': description,
+    'image': comic.images.map(image => toAbsolute(image.file.path)),
+    'url': toAbsolute(`/comics/${comic.slug}`),
+    'author': comic.author ? { '@type': 'Person', 'name': comic.author } : undefined,
+    'illustrator': comic.illustrator
+      ? { '@type': 'Person', 'name': comic.illustrator }
+      : undefined,
+    'volumeNumber': comic.volumeNumber ?? undefined,
+    'datePublished': comic.year ? String(comic.year) : undefined,
+    'typicalAgeRange': comic.ageRating ? `${comic.ageRating}-` : undefined,
+    'genre': comic.genres.map(({ genre }) => genre.title),
+    'inLanguage': 'ru',
   });
 }
 </script>

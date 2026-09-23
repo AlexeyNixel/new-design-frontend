@@ -1,5 +1,8 @@
 <template>
   <CommonContentContainer>
+    <h1 class="sr-only">
+      Настольные игры
+    </h1>
     <div class="flex gap-4">
       <div class="flex flex-col bg-white p-5 shadow rounded-xl w-1/4 h-max">
         <div class="border-b border-gray-100 pb-2 mb-4">
@@ -184,6 +187,12 @@ import { GenresIcons } from '~/constants/gameGenres';
 const gameApi = useGameApi();
 
 const route = useRoute();
+
+usePageSeo({
+  title: 'Настольные игры',
+  description:
+    'Каталог настольных игр Новосибирской областной молодёжной библиотеки: жанры, количество игроков, возраст и правила.',
+});
 
 const games = ref<ApiResponse<Game[]>>();
 

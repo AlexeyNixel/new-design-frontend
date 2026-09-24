@@ -1,5 +1,8 @@
 /** Часы работы библиотеки по дням недели (0 — воскресенье, как в Date.getDay) */
-export const LIBRARY_HOURS: Record<number, { open: number; close: number } | null> = {
+export const LIBRARY_HOURS: Record<
+  number,
+  { open: number; close: number } | null
+> = {
   0: { open: 10, close: 19 },
   1: null,
   2: { open: 10, close: 20 },
@@ -40,7 +43,7 @@ const nowInNovosibirsk = (date = new Date()) => {
       hourCycle: 'h23',
     })
       .formatToParts(date)
-      .map(part => [part.type, Number(part.value)]),
+      .map((part) => [part.type, Number(part.value)])
   );
   // Дата без часового пояса: дальше считаем только календарь
   return {
@@ -77,7 +80,12 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
   const hours = hoursFor(day);
 
   if (hours && minutes >= hours.open * 60 && minutes < hours.close * 60) {
-    return { isOpen: true, text: `Открыто до ${hours.close}:00`, today, isSanitaryToday };
+    return {
+      isOpen: true,
+      text: `Открыто до ${hours.close}:00`,
+      today,
+      isSanitaryToday,
+    };
   }
 
   if (hours && minutes < hours.open * 60) {
@@ -97,7 +105,7 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
     if (!nextHours) continue;
 
     const when = offset === 1 ? 'завтра' : WEEKDAY_ACCUSATIVE[next.getUTCDay()];
-    const reason = isSanitaryToday ? 'Санитарный день' : 'Закрыто';
+    const reason = isSanitaryToday ? 'Технический день' : 'Закрыто';
     return {
       isOpen: false,
       text: `${reason}, откроемся ${when} в ${nextHours.open}:00`,

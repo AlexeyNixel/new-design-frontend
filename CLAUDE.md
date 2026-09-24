@@ -27,6 +27,13 @@ npx prettier --write . # форматирование кода
 
 Тестов нет — проект без тестовой инфраструктуры.
 
+Docker (`Dockerfile` + `.dockerignore` в корне):
+```bash
+docker build -t nomb-frontend .
+docker run -p 3000:3000 -e NUXT_PUBLIC_API_BASE_URL=https://api2.infomania.ru nomb-frontend
+```
+Адрес API при запуске задаётся через `NUXT_PUBLIC_API_BASE_URL` (ключ `apiBaseUrl`), а не `NUXT_PUBLIC_API_BASE` — последний читается только на этапе сборки.
+
 ## Переменные окружения
 
 `NUXT_PUBLIC_API_BASE` — базовый URL бэкенда (обязателен для работы API).

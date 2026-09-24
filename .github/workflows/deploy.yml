@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    name: Lint → Build → Deploy
+    name: Lint → Deploy (Dokploy)
     runs-on: self-hosted
 
     steps:
@@ -23,13 +23,15 @@ jobs:
       - name: Lint
         run: npx eslint .
 
-      - name: Build
-        run: npm run build
-        env:
-          NUXT_PUBLIC_API_BASE: ${{ secrets.NUXT_PUBLIC_API_BASE }}
-
-      - name: Deploy to production
+      # Сборку Docker-образа и запуск контейнера делает Dokploy (по Dockerfile из репозитория).
+      # Доступ к Dokploy лежит на сервере раннера, а не в секретах GitHub:
+      #   ~/.config/dokploy/frontend.env — DOKPLOY_URL, DOKPLOY_TOKEN, DOKPLOY_APP_ID (chmod 600)
+      - name: Deploy via Dokploy
         run: |
-          rm -rf /var/www/frontend/.output
-          cp -r .output /var/www/frontend/.output
-          pm2 restart frontend-v2
+          set -euo pipefail
+          source "$HOME/.config/dokploy/frontend.env"
+          curl --fail-with-body -sS -X POST "$DOKPLOY_URL/api/application.deploy" \
+            -H "x-api-key: $DOKPLOY_TOKEN" \
+            -H 'Content-Type: application/json' \
+            -d "{\"applicationId\": \"$DOKPLOY_APP_ID\"}"
+          echo "Деплой запущен — ход сборки и логи в Dokploy"

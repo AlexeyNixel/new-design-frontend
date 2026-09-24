@@ -34,7 +34,7 @@ docker run -p 3000:3000 -e NUXT_PUBLIC_API_BASE_URL=https://api2.infomania.ru no
 ```
 Адрес API при запуске задаётся через `NUXT_PUBLIC_API_BASE_URL` (ключ `apiBaseUrl`), а не `NUXT_PUBLIC_API_BASE` — последний читается только на этапе сборки.
 
-Деплой: прод — контейнер в Dokploy (http://192.168.0.35:3000, проект «infomania.ru» → `frontend`), собирается из `master` по `Dockerfile`, порт хоста 3006. Автодеплой в Dokploy выключен: после push в `master` CI (`.github/workflows/deploy.yml`) запускает линт и затем деплой через API Dokploy. Переменные окружения контейнера меняются в Dokploy (Environment), не в CI. pm2-процесс `frontend-v2` на сервере оставлен остановленным для отката — не запускать его, пока работает контейнер (конфликт за порт 3006).
+Деплой: прод — контейнер в Dokploy (http://192.168.0.35:3000, проект «infomania.ru» → `frontend`), собирается из `master` по `Dockerfile`, порт хоста 3006. Деплой запускает сам Dokploy (автодеплой по push в `master` через GitHub App «Dokploy-NOMB»); GitHub Actions (`.github/workflows/deploy.yml`) только проверяет линт и деплой не блокирует. Переменные окружения контейнера меняются в Dokploy (Environment), не в CI. pm2-процесс `frontend-v2` на сервере оставлен остановленным для отката — не запускать его, пока работает контейнер (конфликт за порт 3006).
 
 ## Переменные окружения
 

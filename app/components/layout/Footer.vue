@@ -17,7 +17,9 @@
           <p class="mt-8 text-sm text-white/60">
             Новосибирская областная молодёжная библиотека
           </p>
-          <p class="mt-1 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+          <p
+            class="mt-1 text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight"
+          >
             Красный проспект, 26
           </p>
 
@@ -28,7 +30,13 @@
             >
               <span
                 class="size-2.5 rounded-full"
-                :class="status ? (status.isOpen ? 'bg-emerald-400' : 'bg-amber-300') : 'bg-white/30'"
+                :class="
+                  status
+                    ? status.isOpen
+                      ? 'bg-emerald-400'
+                      : 'bg-amber-300'
+                    : 'bg-white/30'
+                "
                 aria-hidden="true"
               />
               <span :class="status ? 'text-white' : 'text-white/60'">
@@ -41,10 +49,7 @@
               rel="noopener"
               class="footer-link inline-flex items-center gap-1.5"
             >
-              <UIcon
-                name="i-heroicons-map-pin"
-                class="size-4"
-              />
+              <UIcon name="i-heroicons-map-pin" class="size-4" />
               Как добраться
             </a>
           </div>
@@ -60,32 +65,37 @@
               v-for="day in week"
               :key="day.index"
               class="rounded-xl px-1.5 sm:px-3 py-2.5 text-center transition-colors"
-              :class="day.index === status?.today
-                ? 'bg-white text-primary-800'
-                : 'bg-white/[0.06] text-white'"
+              :class="
+                day.index === status?.today
+                  ? 'bg-white text-primary-800'
+                  : 'bg-white/[0.06] text-white'
+              "
             >
               <span
                 class="block text-xs font-semibold"
-                :class="day.index === status?.today ? 'text-primary-700' : 'text-white/60'"
+                :class="
+                  day.index === status?.today
+                    ? 'text-primary-700'
+                    : 'text-white/60'
+                "
               >
                 {{ day.label }}
               </span>
-              <span class="mt-1 block text-xs sm:text-sm font-semibold whitespace-nowrap">
+              <span
+                class="mt-1 block text-xs sm:text-sm font-semibold whitespace-nowrap"
+              >
                 <template v-if="day.hours">{{ day.hours }}</template>
                 <!-- На узких экранах «выходной» не помещается в ячейку: показываем прочерк,
                      а слово оставляем для скринридеров -->
                 <template v-else>
-                  <span
-                    class="sm:hidden"
-                    aria-hidden="true"
-                  >—</span>
+                  <span class="sm:hidden" aria-hidden="true">—</span>
                   <span class="sr-only sm:not-sr-only">выходной</span>
                 </template>
               </span>
             </li>
           </ol>
           <p class="mt-3 text-xs text-white/50">
-            Последняя пятница месяца — санитарный день
+            Последний день месяца — технический день
           </p>
         </div>
       </div>
@@ -104,10 +114,7 @@
           {{ group.title }}
         </h2>
         <ul class="mt-4 space-y-2.5">
-          <li
-            v-for="link in group.links"
-            :key="link.label"
-          >
+          <li v-for="link in group.links" :key="link.label">
             <NuxtLink
               :to="link.to"
               :target="link.external ? '_blank' : undefined"
@@ -121,19 +128,14 @@
       </nav>
 
       <div>
-        <h2 class="text-base! font-bold mb-0!">
-          Связаться с нами
-        </h2>
+        <h2 class="text-base! font-bold mb-0!">Связаться с нами</h2>
         <ul class="mt-4 space-y-2.5 text-sm">
           <li>
             <a
               :href="`tel:${PHONE_HREF}`"
               class="footer-link inline-flex items-center gap-2"
             >
-              <UIcon
-                name="i-heroicons-phone"
-                class="size-4 text-primary-200"
-              />
+              <UIcon name="i-heroicons-phone" class="size-4 text-primary-200" />
               {{ LIBRARY_INFO.telephone }}
             </a>
           </li>
@@ -159,14 +161,8 @@
           Задать вопрос
         </UButton>
 
-        <ul
-          class="mt-6 flex gap-2"
-          aria-label="Мы в соцсетях"
-        >
-          <li
-            v-for="social in socials"
-            :key="social.label"
-          >
+        <ul class="mt-6 flex gap-2" aria-label="Мы в соцсетях">
+          <li v-for="social in socials" :key="social.label">
             <a
               :href="social.href"
               target="_blank"
@@ -175,15 +171,8 @@
               :title="social.label"
               class="grid place-items-center size-10 rounded-xl bg-white/[0.08] hover:bg-white/15 text-white transition-colors focus-visible:outline-2 focus-visible:outline-primary-200"
             >
-              <UIcon
-                v-if="social.icon"
-                :name="social.icon"
-                class="size-5"
-              />
-              <span
-                v-else
-                class="text-xs font-bold"
-              >{{ social.text }}</span>
+              <UIcon v-if="social.icon" :name="social.icon" class="size-5" />
+              <span v-else class="text-xs font-bold">{{ social.text }}</span>
             </a>
           </li>
         </ul>
@@ -195,16 +184,12 @@
       <div
         class="max-w-[1710px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col-reverse gap-4 lg:flex-row lg:items-center lg:justify-between text-xs text-white/60"
       >
-        <p>© {{ currentYear }} Новосибирская областная молодёжная библиотека</p>
+        <p>
+          © {{ currentYear }} Новосибирская областная молодёжная библиотека
+        </p>
         <ul class="flex flex-wrap gap-x-5 gap-y-2">
-          <li
-            v-for="link in legalLinks"
-            :key="link.label"
-          >
-            <NuxtLink
-              :to="link.to"
-              class="footer-link"
-            >
+          <li v-for="link in legalLinks" :key="link.label">
+            <NuxtLink :to="link.to" class="footer-link">
               {{ link.label }}
             </NuxtLink>
           </li>
@@ -270,18 +255,24 @@ const linkGroups: { title: string; links: FooterLink[] }[] = [
 
 const legalLinks: FooterLink[] = [
   { label: 'Доступная среда', to: '/page/dostupnaya-sreda' },
-  { label: 'Антикоррупционная политика', to: '/page/antikorrupcionnaya-politika' },
+  {
+    label: 'Антикоррупционная политика',
+    to: '/page/antikorrupcionnaya-politika',
+  },
   {
     label: 'Обработка персональных данных',
     to: '/page/politika-obrabotki-i-zashity-personalnyh-dannyh',
   },
-  { label: 'Оценка качества услуг', to: '/page/nezavisimaya-ocenka-kachestva-okazaniya-uslug' },
+  {
+    label: 'Оценка качества услуг',
+    to: '/page/nezavisimaya-ocenka-kachestva-okazaniya-uslug',
+  },
   { label: 'Карта сайта', to: '/page/karta-sajta' },
 ];
 
 const socials = [
   { label: 'ВКонтакте', href: 'https://vk.ru/oub_nsk', icon: 'i-bxl-vk' },
-  { label: 'Telegram', href: 'https://t.me/oub_nsk', icon: 'i-ix-telegram-logo' },
+  // { label: 'Telegram', href: 'https://t.me/oub_nsk', icon: 'i-ix-telegram-logo' },
   { label: 'MAX', href: 'https://max.ru/id5406132173_gos', text: 'MAX' },
 ];
 
@@ -315,7 +306,8 @@ onBeforeUnmount(() => clearInterval(timer));
   background: linear-gradient(
     180deg,
     var(--color-primary-800) 0%,
-    color-mix(in oklab, var(--color-primary-800) 70%, var(--color-primary-900)) 100%
+    color-mix(in oklab, var(--color-primary-800) 70%, var(--color-primary-900))
+      100%
   );
 }
 

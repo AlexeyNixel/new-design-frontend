@@ -1,0 +1,28 @@
+# Зависимости и артефакты ставятся/собираются внутри образа
+node_modules
+.output
+.nuxt
+.nitro
+.cache
+.data
+dist
+
+# Локальные секреты — в образ не попадают, передаются через -e / env_file
+.env
+.env.*
+!.env.example
+
+# Всё, что не нужно для сборки
+.git
+.github
+.idea
+.vscode
+.claude
+.agents
+.superpowers
+temp
+reports
+docs
+*.log
+Dockerfile
+.dockerignore

@@ -1,23 +1,21 @@
 
 :root {
-    h1 {
-        @apply font-bold text-3xl md:text-4xl mb-2;
-    }
-
-    h2 {
-        @apply font-bold text-2xl md:text-3xl mb-2;
-    }
-
-    h3 {
-        @apply font-bold text-xl md:text-2xl mb-2;
-    }
-
-    h4 {
-        @apply font-bold text-lg md:text-xl mb-2;
-    }
-
-
     .tiptap {
+        h1 {
+            @apply font-bold text-3xl md:text-4xl mb-2;
+        }
+
+        h2 {
+            @apply font-bold text-2xl md:text-3xl mb-2;
+        }
+
+        h3 {
+            @apply font-bold text-xl md:text-2xl mb-2;
+        }
+
+        h4 {
+            @apply font-bold text-lg md:text-xl mb-2;
+        }
 
         .iframe-wrapper {
             @apply flex items-center justify-center bg-white p-4 rounded-lg shadow my-5;
@@ -46,7 +44,7 @@
 
         ul,
         ol {
-            @apply list-disc ml-12 mr-6 pl-6 ;
+            @apply my-6 ml-12 mr-6 pl-6 space-y-2;
 
             p {
                 @apply indent-0;
@@ -54,7 +52,7 @@
         }
 
         ul {
-            @apply list-disc my-6 pl-6 space-y-2;
+            @apply list-disc;
         }
 
         ol {
@@ -67,17 +65,21 @@
 
         table {
             @apply shadow;
-            border-collapse: collapse;
+            box-sizing: border-box;
+            border-collapse: separate;
+            border-spacing: 0;
             margin: 0;
             table-layout: fixed;
             width: 100%;
+            border: 1px solid var(--color-neutral-300);
             border-radius: 10px;
             overflow: hidden;
 
 
             td,
             th {
-                border: 1px solid var(--color-neutral-300);
+                border-right: 1px solid var(--color-neutral-300);
+                border-bottom: 1px solid var(--color-neutral-300);
 
                 box-sizing: border-box;
                 min-width: 1em;
@@ -88,6 +90,22 @@
                 > * {
                     margin-bottom: 0;
                 }
+
+                p {
+                    @apply indent-0;
+                }
+            }
+
+            tr:last-child {
+                td,
+                th {
+                    border-bottom: none;
+                }
+            }
+
+            td:last-child,
+            th:last-child {
+                border-right: none;
             }
 
             th {

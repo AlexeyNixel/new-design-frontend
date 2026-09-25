@@ -2,7 +2,7 @@
   <!-- Новый формат: страница собрана из контентных блоков -->
   <div
     v-if="page && hasBlocks"
-    class="bg-neutral-100"
+    class="bg-neutral-100 tiptap"
   >
     <PageBlocksHero
       v-if="heroBlock"

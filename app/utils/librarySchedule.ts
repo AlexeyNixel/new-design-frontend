@@ -43,7 +43,7 @@ const nowInNovosibirsk = (date = new Date()) => {
       hourCycle: 'h23',
     })
       .formatToParts(date)
-      .map((part) => [part.type, Number(part.value)])
+      .map(part => [part.type, Number(part.value)]),
   );
   // Дата без часового пояса: дальше считаем только календарь
   return {

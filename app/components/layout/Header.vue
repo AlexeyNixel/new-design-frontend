@@ -32,7 +32,9 @@
                   class="w-5 h-5 transition-all duration-300"
                 />
               </div>
-              <span class="text-[10px] text-gray-500 font-medium text-center leading-tight max-w-[76px]">{{ link.label }}</span>
+              <span
+                class="text-[10px] text-gray-500 font-medium text-center leading-tight max-w-[76px]"
+              >{{ link.label }}</span>
             </UButton>
           </div>
 
@@ -311,9 +313,9 @@ const socialLinks = [
     label: 'Вконтакте',
   },
   {
-    icon: 'i-ix-telegram-logo',
-    link: 'https://t.me/oub_nsk',
-    label: 'Телеграм',
+    icon: 'cbi:max',
+    link: 'https://max.ru/id5406132173_gos',
+    label: 'MAX',
   },
 ];
 </script>

@@ -1,15 +1,15 @@
 <template>
   <div class="bg-white">
-    <header class="max-w-[1710px] mx-auto">
+    <header class="max-w-[1710px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="w-full">
-        <div class="flex items-center justify-between h-20 lg:h-24">
+        <div class="flex items-center justify-between gap-3 h-16 sm:h-20 lg:h-24">
           <NuxtLink
             to="/"
             class="group flex-shrink-0"
           >
             <div class="relative">
               <div
-                class="relative w-44 fill-primary group-hover:fill-primary/80 transition-all duration-300"
+                class="relative w-28 sm:w-36 lg:w-44 fill-primary group-hover:fill-primary/80 transition-all duration-300"
               >
                 <Logo class="w-full h-auto drop-shadow-sm" />
               </div>
@@ -38,8 +38,8 @@
             </UButton>
           </div>
 
-          <div class="flex items-center gap-4">
-            <div class="hidden md:flex items-center gap-3">
+          <div class="flex items-center gap-2 sm:gap-4">
+            <div class="hidden md:flex lg:hidden xl:flex items-center gap-3">
               <NuxtLink
                 to="tel:+73832101053"
                 class="group flex items-center gap-2.5 px-4 py-2.5 rounded-2xl hover:from-primary/10 transition-all duration-300"
@@ -105,7 +105,7 @@
               </a>
             </div>
 
-            <div class="hidden 2xl:flex items-center gap-1.5">
+            <div class="hidden 3xl:flex items-center gap-1.5">
               <div class="w-px h-8 bg-gray-200 mx-1" />
 
               <UPopover
@@ -250,15 +250,18 @@
               <span class="hidden sm:inline">В админку</span>
             </UButton>
 
-            <!-- Мобильная кнопка меню -->
-            <div class="lg:hidden px-5">
-              <UButton
-                icon="i-lucide-menu"
-                color="neutral"
-                variant="outline"
-                @click="mobileMenuOpen = true"
-              />
-            </div>
+            <!-- Мобильная кнопка меню: видна, пока нет горизонтальной навигации (до xl) -->
+            <UButton
+              icon="i-lucide-menu"
+              color="neutral"
+              variant="outline"
+              size="lg"
+              class="xl:hidden rounded-xl"
+              aria-label="Открыть меню"
+              :aria-expanded="mobileMenuOpen"
+              data-menu-toggle
+              @click="openMenu"
+            />
           </div>
         </div>
       </div>
@@ -267,6 +270,8 @@
     <MobileMenu
       v-model="mobileMenuOpen"
       :items="items"
+      :quick-links="navigateLinks"
+      :social-links="socialLinks"
     />
   </div>
 </template>
@@ -282,6 +287,28 @@ const items = await navigationApi.getAllNavigation();
 const { hasSession, goToAdmin } = useAuth();
 
 const mobileMenuOpen = ref(false);
+
+const openMenu = () => {
+  mobileMenuOpen.value = true;
+};
+
+// Кнопка меню видна раньше, чем Vue успевает её «оживить» (на телефоне — несколько секунд).
+// Запоминаем тап до гидратации и открываем меню, как только компонент смонтирован.
+useHead({
+  script: [
+    {
+      key: 'menu-early-tap',
+      innerHTML:
+        'document.addEventListener("click",function(e){if(e.target.closest&&e.target.closest("[data-menu-toggle]"))window.__menuRequested=true},true);',
+    },
+  ],
+});
+
+onMounted(() => {
+  const win = window as Window & { __menuRequested?: boolean };
+  if (win.__menuRequested) openMenu();
+  win.__menuRequested = false;
+});
 
 const navigateLinks = [
   {

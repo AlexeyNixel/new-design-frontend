@@ -15,7 +15,7 @@
 
     <div class="container mx-auto px-4 py-16 max-w-7xl">
       <div
-        class="bg-white border border-gray-100 rounded-2xl shadow-sm p-8 md:p-12"
+        class="bg-white border border-gray-100 rounded-2xl shadow-sm p-5 sm:p-8 md:p-12"
       >
         <h1
           v-if="!heroBlock"
@@ -58,7 +58,7 @@
       <div
         class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden"
       >
-        <div class="p-8 md:p-10">
+        <div class="p-5 sm:p-8 md:p-10">
           <div
             v-image-gallery="{ modal }"
             class="tiptap"

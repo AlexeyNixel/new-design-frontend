@@ -1,5 +1,5 @@
 import type { UseFetchOptions } from 'nuxt/app';
-import { useRuntimeConfig } from 'nuxt/app';
+import { createError, useRuntimeConfig } from 'nuxt/app';
 
 export type ApiRequestOptions = UseFetchOptions<unknown>;
 
@@ -107,7 +107,7 @@ export const useApi = () => {
     slug: string,
     options?: ApiRequestOptions,
   ): Promise<ApiResponse<T>> => {
-    const { data } = await useFetch(baseApi + endpoint + slug, {
+    const { data, error } = await useFetch(baseApi + endpoint + slug, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -115,6 +115,23 @@ export const useApi = () => {
       },
       ...options,
     });
+
+    // Бэкенд на несуществующую запись отвечает то 404, то 200 с телом
+    // { message: '... не найден' }. В обоих случаях отдаём 404, иначе страница
+    // падает на обращении к полям и посетитель видит 500 вместо «страницы нет».
+    const value = data.value as Record<string, unknown> | null;
+    const notFound
+      = error.value?.statusCode === 404
+        || !value
+        || ('message' in value && !('id' in value));
+    if (notFound) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Not Found',
+        fatal: true,
+      });
+    }
+
     return {
       data: data.value as T,
       status: 200,

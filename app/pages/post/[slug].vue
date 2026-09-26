@@ -1,5 +1,6 @@
 <template>
-  <CommonContentContainer>
+  <!-- Без данных не рисуем: иначе при 404 шаблон падает и мешает показать страницу ошибки -->
+  <CommonContentContainer v-if="entry">
     <UBreadcrumb
       :ui="breadcrumbUI"
       :items="breadcrumbItems"

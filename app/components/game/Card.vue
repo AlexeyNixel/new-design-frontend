@@ -1,8 +1,11 @@
 <template>
   <NuxtLink
     :to="`/games/${game.slug}`"
-    class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full max-w-[320px] hover:-translate-y-2 border border-gray-100"
-    :class="compact ? '' : 'min-h-[600px]'"
+    class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full hover:-translate-y-2 border border-gray-100"
+    :class="[
+      compact ? '' : stretch ? 'sm:min-h-[600px]' : 'min-h-[600px]',
+      stretch ? 'sm:max-w-[320px]' : 'max-w-[320px]',
+    ]"
   >
     <!-- Обертка для изображения -->
     <div
@@ -121,6 +124,8 @@ import { GameStatusLabels } from '~/constants/gameStatus';
 const props = defineProps<{
   game: Game;
   compact?: boolean;
+  /** На телефоне — во всю ширину колонки и без выравнивания по высоте (сетка каталога) */
+  stretch?: boolean;
 }>();
 
 const statusLabel = computed(() => GameStatusLabels[props.game.status]);

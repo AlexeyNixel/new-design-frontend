@@ -9,9 +9,12 @@ export type ApiQueryParams = Record<string, unknown>;
 export interface ApiResponse<T = unknown> {
   data: T;
   meta?: {
-    page: number;
-    pageSize: number;
+    /** API присылает page и limit строками */
+    page: number | string;
+    pageSize?: number;
+    limit?: number | string;
     total: number;
+    totalPages?: number;
   };
   status?: number;
 }

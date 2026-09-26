@@ -16,7 +16,7 @@ export interface Post {
   departmentId: string;
   pinned: boolean;
   preview: File;
-  tags: Tag[];
+  tags: [{ tag: Tag }];
   department: {
     title: string;
     id: string;

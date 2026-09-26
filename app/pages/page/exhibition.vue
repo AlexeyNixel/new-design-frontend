@@ -18,11 +18,14 @@ const page = ref(Number(route.query.page) || 1);
 const exhibitions = ref<ApiResponse<Exhibition[]>>();
 
 const loadExhibitions = async () => {
-  exhibitions.value = await exhibitionApi.getAllExhibitions({
-    page: page.value,
-    limit: PAGE_SIZE,
-    sortOrder: 'desc',
-  });
+  // Если API недоступно — показываем сообщение на странице, а не ошибку 500
+  exhibitions.value = await exhibitionApi
+    .getAllExhibitions({
+      page: page.value,
+      limit: PAGE_SIZE,
+      sortOrder: 'desc',
+    })
+    .catch(() => undefined);
 };
 
 await loadExhibitions();

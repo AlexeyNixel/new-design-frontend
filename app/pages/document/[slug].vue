@@ -24,8 +24,9 @@
       <main class="max-w-none">
         <div
           ref="documentRef"
+          v-image-gallery="{ modal }"
           class="tiptap"
-          v-html="document.document.content"
+          v-html="contentHtml"
         />
       </main>
 
@@ -38,8 +39,10 @@
 
 <script setup lang="ts">
 import { useDocumentApi } from '~~/services/api/documentService';
+import { ModalsCommon } from '#components';
 
 const route = useRoute();
+const modal = useOverlay().create(ModalsCommon);
 
 const breadcrumbUI = {
   link: 'text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400',
@@ -79,6 +82,9 @@ usePageSeo({
 });
 
 useBreadcrumbSchema(breadcrumbItems);
+
+// Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
+const contentHtml = computed(() => markImageTables(document.document.content));
 useYandexFormsEmbed(document.document.content);
 </script>
 

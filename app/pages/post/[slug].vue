@@ -71,7 +71,7 @@
           ref="content"
           v-image-gallery="{ modal }"
           class="tiptap"
-          v-html="entry.content"
+          v-html="contentHtml"
         />
       </main>
 
@@ -156,6 +156,9 @@ usePageSeo({
 });
 
 useBreadcrumbSchema(breadcrumbItems);
+
+// Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
+const contentHtml = computed(() => markImageTables(entry.content));
 useYandexFormsEmbed(entry.content);
 
 const toAbsolute = useAbsoluteUrl();

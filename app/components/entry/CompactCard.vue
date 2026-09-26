@@ -31,7 +31,7 @@
             color="secondary"
             variant="soft"
           >
-            {{ post.tags[0].title }}
+            {{ post.tags[0].tag.title }}
           </UBadge>
         </div>
 

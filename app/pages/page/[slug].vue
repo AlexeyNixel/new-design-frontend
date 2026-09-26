@@ -60,8 +60,9 @@
       >
         <div class="p-8 md:p-10">
           <div
+            v-image-gallery="{ modal }"
             class="tiptap"
-            v-html="page.content"
+            v-html="contentHtml"
           />
           <UButton
             v-if="hasSession"
@@ -79,6 +80,7 @@
 
 <script setup lang="ts">
 import { usePageApi } from '~~/services/api/page.api';
+import { ModalsCommon } from '#components';
 import type {
   PageContentBlock,
   PageHeroBlock,
@@ -87,6 +89,7 @@ import type {
 const route = useRoute();
 const pageApi = usePageApi();
 const { hasSession, goToAdmin } = useAuth();
+const modal = useOverlay().create(ModalsCommon);
 
 const { data: page } = await pageApi.getOnePage(route.params.slug as string);
 
@@ -96,6 +99,9 @@ if (!page) {
     statusText: 'Страницы не существует',
   });
 }
+
+// Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
+const contentHtml = computed(() => markImageTables(page?.content));
 
 // Новый формат страницы: контент собран из типизированных блоков (см. docs/page-content-blocks.md)
 const hasBlocks = computed(() => !!page?.blocks?.length);

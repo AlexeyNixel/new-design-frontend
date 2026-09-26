@@ -18,3 +18,19 @@ html {
 body {
   @apply bg-neutral-100;
 }
+
+/* Картинки, которые открываются в галерее (директива v-image-gallery ставит класс is-zoomable).
+   Без transform — у обложек книг и галерей игр свои эффекты увеличения. */
+.image-gallery img.is-zoomable {
+  cursor: zoom-in;
+  transition: filter 0.2s ease, box-shadow 0.2s ease;
+}
+
+.image-gallery img.is-zoomable:hover {
+  filter: brightness(0.92);
+}
+
+.image-gallery img.is-zoomable:focus-visible {
+  outline: 3px solid var(--color-primary-500);
+  outline-offset: 3px;
+}

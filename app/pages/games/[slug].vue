@@ -1,5 +1,6 @@
 <template>
-  <CommonContentContainer>
+  <!-- Без данных не рисуем: иначе при 404 шаблон падает и мешает показать страницу ошибки -->
+  <CommonContentContainer v-if="game">
     <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
       <NuxtLink
         to="/games"

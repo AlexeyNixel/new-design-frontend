@@ -161,7 +161,7 @@
         <div class="lg:col-span-3 space-y-8">
           <!-- Заголовок и описание -->
           <div
-            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-gray-700 relative overflow-hidden"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-5 sm:p-8 border border-gray-200 dark:border-gray-700 relative overflow-hidden"
           >
             <!-- Декоративный фон -->
             <div
@@ -230,7 +230,7 @@
             </div>
 
             <!-- Контент -->
-            <div class="p-8">
+            <div class="p-5 sm:p-8">
               <div
                 class="ck-content prose prose-lg dark:prose-invert max-w-none"
                 v-html="book.content"

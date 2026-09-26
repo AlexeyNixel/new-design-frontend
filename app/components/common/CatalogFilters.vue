@@ -87,7 +87,7 @@
             <UButton
               label="Показать"
               class="rounded-xl px-5"
-              @click="open = false"
+              @click="close"
             />
           </div>
         </div>
@@ -116,9 +116,65 @@ const emit = defineEmits<{
 
 const search = defineModel<string>('search', { default: '' });
 const open = ref(false);
+
+const close = () => {
+  open.value = false;
+};
 </script>
 
 <style scoped>
+/* Кнопки жанров и плашки активных фильтров приходят из страниц через слоты */
+:slotted(.genre-pill) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 2.25rem;
+  padding: 0.25rem 0.75rem;
+  border: 1px solid var(--color-neutral-200);
+  border-radius: 9999px;
+  background: white;
+  font-size: 0.8125rem;
+  color: var(--color-gray-700);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+@media (hover: hover) {
+  :slotted(.genre-pill:hover) {
+    border-color: var(--ui-primary);
+    color: var(--ui-primary);
+  }
+}
+
+:slotted(.genre-pill--active),
+:slotted(.genre-pill--active:hover) {
+  border-color: var(--ui-primary);
+  background: var(--ui-primary);
+  color: white;
+}
+
+@media (min-width: 640px) {
+  :slotted(.genre-pill) {
+    min-height: 2.5rem;
+    padding: 0.375rem 0.875rem;
+    font-size: 0.875rem;
+  }
+}
+
+:slotted(.filter-chip) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  background: color-mix(in oklab, var(--ui-primary) 12%, white);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--ui-primary);
+}
+
 /* Плавное раскрытие на произвольную высоту через grid-template-rows */
 .filters-collapse {
   display: grid;

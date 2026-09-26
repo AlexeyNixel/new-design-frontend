@@ -1,8 +1,11 @@
 <template>
   <NuxtLink
     :to="`/comics/${comic.slug}`"
-    class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full max-w-[320px] hover:-translate-y-2 border border-gray-100"
-    :class="compact ? '' : 'min-h-[560px]'"
+    class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full hover:-translate-y-2 border border-gray-100"
+    :class="[
+      compact ? '' : stretch ? 'sm:min-h-[560px]' : 'min-h-[560px]',
+      stretch ? 'sm:max-w-[320px]' : 'max-w-[320px]',
+    ]"
   >
     <!-- Обертка для изображения -->
     <div
@@ -98,6 +101,8 @@ import { useStringSlice } from '~/composables/useStringSlice';
 const props = defineProps<{
   comic: Comic;
   compact?: boolean;
+  /** На телефоне — во всю ширину колонки и без выравнивания по высоте (сетка каталога) */
+  stretch?: boolean;
 }>();
 
 const cover = computed(

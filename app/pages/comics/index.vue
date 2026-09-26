@@ -3,175 +3,152 @@
     <h1 class="sr-only">
       Комиксы
     </h1>
-    <div class="flex gap-4">
-      <div class="flex flex-col bg-white p-5 shadow rounded-xl w-1/4 h-max">
-        <div class="border-b border-gray-100 pb-2 mb-4">
-          <h2>
-            <Icon
-              name="i-heroicons-funnel"
-              class="w-5 h-5 text-primary"
-            />
-            Фильтры
-          </h2>
-        </div>
+    <CommonCatalogFilters
+      v-model:search="searchText"
+      search-placeholder="Поиск комикса..."
+      :active-count="activeFiltersCount"
+      @search="searchData"
+      @reset="resetFilters"
+    >
+      <template #active>
+        <button
+          v-for="genre in selectedGenres"
+          :key="genre.id"
+          type="button"
+          class="filter-chip"
+          :aria-label="`Убрать фильтр «${genre.title}»`"
+          @click="toggleGenre(genre)"
+        >
+          {{ genre.title }}
+          <Icon
+            name="i-heroicons-x-mark"
+            class="size-3.5"
+          />
+        </button>
+        <span
+          v-if="ageMax"
+          class="filter-chip"
+        >До {{ ageMax }}+</span>
+        <span
+          v-if="yearFrom || yearTo"
+          class="filter-chip"
+        >Годы: {{ yearFrom || '…' }}–{{ yearTo || '…' }}</span>
+      </template>
 
-        <div class="mb-6">
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+        <section>
           <header class="flex items-center justify-between mb-3">
-            <h3 class="flex items-center gap-2 text-sm font-medium">
+            <h2 class="flex items-center gap-2 text-sm font-semibold text-gray-900">
               <Icon
                 name="i-heroicons-tag"
-                class="w-4 h-4"
+                class="size-4 text-primary"
               />
               Жанры
-            </h3>
-
-            <div class="text-sm text-gray-500">
-              {{ selectedGenres.length }} / {{ genres.length }}
-            </div>
+            </h2>
+            <span class="text-xs text-gray-500">
+              выбрано {{ selectedGenres.length }} из {{ genres.length }}
+            </span>
           </header>
 
-          <div
-            v-if="selectedGenres.length > 0"
-            class="flex gap-2 flex-wrap mb-3"
-          >
-            <UBadge
-              v-for="genre in selectedGenres"
-              :key="genre.id"
-              :label="genre.title"
-              class="rounded-xl flex items-center"
-            >
-              <template #trailing>
-                <button
-                  class="flex items-center ml-1 hover:scale-125 transition-transform"
-                  @click="toggleGenre(genre)"
-                >
-                  <Icon
-                    name="i-heroicons-x-mark"
-                    class="w-3 h-3"
-                  />
-                </button>
-              </template>
-            </UBadge>
-          </div>
-
-          <div class="flex flex-col h-64 overflow-y-auto">
-            <UButton
+          <div class="flex flex-wrap gap-2">
+            <button
               v-for="genre in genres"
               :key="genre.id"
-              class="mb-2"
-              variant="ghost"
-              :label="genre.title"
-              :class="isGenreSelected(genre) ? 'border border-primary' : ''"
+              type="button"
+              class="genre-pill"
+              :class="{ 'genre-pill--active': isGenreSelected(genre) }"
+              :aria-pressed="isGenreSelected(genre)"
               @click="toggleGenre(genre)"
-            />
+            >
+              {{ genre.title }}
+            </button>
           </div>
-        </div>
+        </section>
 
-        <!-- Возрастной рейтинг -->
-        <div class="mb-6">
-          <header class="flex items-center justify-between mb-3">
-            <h3 class="flex items-center gap-2 text-sm font-medium">
+        <div class="order-first lg:order-none grid gap-5 grid-cols-2 lg:grid-cols-1 content-start">
+          <section>
+            <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
               <Icon
                 name="i-heroicons-cake"
-                class="w-4 h-4"
+                class="size-4 text-primary"
               />
-              Возрастной рейтинг, не выше
-            </h3>
-          </header>
+              Возраст, до
+            </h2>
+            <UInput
+              v-model.number="ageMax"
+              type="number"
+              inputmode="numeric"
+              placeholder="Например, 16"
+              min="0"
+              class="w-full"
+              @change="applyFilters"
+            />
+          </section>
 
-          <UInput
-            v-model.number="ageMax"
-            type="number"
-            placeholder="Например, 16"
-            size="sm"
-            min="0"
-            class="w-full"
-            @change="applyFilters"
-          />
-        </div>
-
-        <!-- Год издания -->
-        <div class="mb-6">
-          <header class="flex items-center justify-between mb-3">
-            <h3 class="flex items-center gap-2 text-sm font-medium">
+          <section>
+            <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
               <Icon
                 name="i-heroicons-calendar-days"
-                class="w-4 h-4"
+                class="size-4 text-primary"
               />
               Год издания
-            </h3>
-          </header>
-
-          <div class="flex items-center gap-2">
-            <UInput
-              v-model.number="yearFrom"
-              type="number"
-              placeholder="От"
-              size="sm"
-              min="0"
-              class="w-full"
-              @change="applyFilters"
-            />
-            <span class="text-gray-400">—</span>
-            <UInput
-              v-model.number="yearTo"
-              type="number"
-              placeholder="До"
-              size="sm"
-              min="0"
-              class="w-full"
-              @change="applyFilters"
-            />
-          </div>
-        </div>
-
-        <!-- Кнопка сброса фильтров -->
-        <div class="mt-6 pt-4 border-t border-gray-100">
-          <UButton
-            color="neutral"
-            variant="ghost"
-            size="sm"
-            class="w-full"
-            @click="resetFilters"
-          >
-            <Icon
-              name="i-heroicons-arrow-path"
-              class="w-4 h-4 mr-2"
-            />
-            Сбросить все фильтры
-          </UButton>
+            </h2>
+            <div class="flex items-center gap-2">
+              <UInput
+                v-model.number="yearFrom"
+                type="number"
+                inputmode="numeric"
+                placeholder="От"
+                min="0"
+                class="w-full"
+                @change="applyFilters"
+              />
+              <span class="text-gray-400">—</span>
+              <UInput
+                v-model.number="yearTo"
+                type="number"
+                inputmode="numeric"
+                placeholder="До"
+                min="0"
+                class="w-full"
+                @change="applyFilters"
+              />
+            </div>
+          </section>
         </div>
       </div>
+    </CommonCatalogFilters>
 
-      <div class="flex flex-col rounded-xl w-full">
-        <div class="mb-4 bg-white border border-neutral-200 rounded-xl shadow">
-          <UInput
-            v-model="searchText"
-            variant="none"
-            class="w-full rounded-xl bg-white"
-            placeholder="Поиск комикса..."
-            size="xl"
-            @keydown.enter="searchData"
-          />
-        </div>
-        <div v-if="comics">
-          <div class="grid grid-cols-4 gap-4 mb-6">
-            <ComicCard
-              v-for="comic in comics.data"
-              :key="comic.id"
-              :comic="comic"
-            />
-          </div>
-          <div class="flex items-center justify-center w-full">
-            <UPagination
-              v-model:page="page"
-              show-edges
-              :total="comics.meta?.total"
-              :items-per-page="Number(comics.meta?.limit)"
-              @update:page="handleNavigate"
-            />
-          </div>
-        </div>
+    <div v-if="comics">
+      <div
+        v-if="comics.data?.length"
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-4 justify-items-center mb-8"
+      >
+        <ComicCard
+          v-for="comic in comics.data"
+          :key="comic.id"
+          :comic="comic"
+          stretch
+        />
+      </div>
+      <p
+        v-else
+        class="py-16 text-center text-gray-500"
+      >
+        Ничего не найдено. Попробуйте изменить запрос или фильтры.
+      </p>
+      <div
+        v-if="(comics.meta?.total ?? 0) > Number(comics.meta?.limit)"
+        class="flex items-center justify-center w-full"
+      >
+        <UPagination
+          v-model:page="page"
+          show-edges
+          :sibling-count="1"
+          :total="comics.meta?.total"
+          :items-per-page="Number(comics.meta?.limit)"
+          @update:page="handleNavigate"
+        />
       </div>
     </div>
   </CommonContentContainer>
@@ -274,6 +251,13 @@ const toggleGenre = async (genre: ComicGenre) => {
   await applyFilters();
 };
 
+const activeFiltersCount = computed(
+  () =>
+    selectedGenres.value.length
+    + (ageMax.value ? 1 : 0)
+    + (yearFrom.value || yearTo.value ? 1 : 0),
+);
+
 const isGenreSelected = (genre: ComicGenre) => {
   return activeGenreIds.value.includes(genre.id);
 };
@@ -283,7 +267,6 @@ const resetFilters = async () => {
   ageMax.value = undefined;
   yearFrom.value = undefined;
   yearTo.value = undefined;
-  searchText.value = '';
   page.value = 1;
 
   updateUrl();

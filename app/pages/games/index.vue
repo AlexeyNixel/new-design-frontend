@@ -70,7 +70,7 @@
           </div>
         </section>
 
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-1 content-start">
+        <div class="order-first lg:order-none grid gap-5 grid-cols-2 lg:grid-cols-1 content-start">
           <section>
             <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
               <Icon
@@ -108,7 +108,7 @@
                 name="i-heroicons-user-group"
                 class="size-4 text-primary"
               />
-              Игроков в компании
+              Число игроков
             </h2>
             <UInput
               v-model.number="players"
@@ -133,6 +133,7 @@
           v-for="game in games.data"
           :key="game.id"
           :game="game"
+          stretch
         />
       </div>
       <p
@@ -141,7 +142,10 @@
       >
         Ничего не найдено. Попробуйте изменить запрос или фильтры.
       </p>
-      <div class="flex items-center justify-center w-full">
+      <div
+        v-if="(games.meta?.total ?? 0) > Number(games.meta?.limit)"
+        class="flex items-center justify-center w-full"
+      >
         <UPagination
           v-model:page="page"
           show-edges
@@ -277,48 +281,3 @@ const resetFilters = async () => {
 
 await fetchData();
 </script>
-
-<style scoped>
-.genre-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  min-height: 2.5rem;
-  padding: 0.375rem 0.875rem;
-  border: 1px solid var(--color-neutral-200);
-  border-radius: 9999px;
-  background: white;
-  font-size: 0.875rem;
-  color: var(--color-gray-700);
-  transition:
-    background-color 0.15s ease,
-    border-color 0.15s ease,
-    color 0.15s ease;
-}
-
-@media (hover: hover) {
-  .genre-pill:hover {
-    border-color: var(--ui-primary);
-    color: var(--ui-primary);
-  }
-}
-
-.genre-pill--active,
-.genre-pill--active:hover {
-  border-color: var(--ui-primary);
-  background: var(--ui-primary);
-  color: white;
-}
-
-.filter-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  background: color-mix(in oklab, var(--ui-primary) 12%, white);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--ui-primary);
-}
-</style>

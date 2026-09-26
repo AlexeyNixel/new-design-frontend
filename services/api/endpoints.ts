@@ -20,4 +20,5 @@ export const API_ENDPOINTS = {
   achievements: '/api/achievements',
   club: '/api/clubs/',
   page: '/api/page/',
+  exhibitions: '/api/files/exhibitions/',
 };

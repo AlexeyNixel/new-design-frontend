@@ -68,7 +68,7 @@ usePageSeo({
       <BookShelf />
     </CommonSectionWrapper>
 
-    <CommonSectionWrapper />
+    <ExhibitionShowcase />
 
     <CommonSectionWrapper>
       <div class="block justify-between md:flex">

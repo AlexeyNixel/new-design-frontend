@@ -2,19 +2,15 @@ import { useApi, type ApiQueryParams } from './base';
 import { API_ENDPOINTS } from './endpoints';
 import type { File } from '../types/file.type';
 
+/** Виртуальная выставка — загруженный в CMS HTML-пакет (File с type=EXHIBITION) */
+export type Exhibition = File;
+
 export const useExhibitionApi = () => {
   const api = useApi();
 
   return {
-    getAllExhibition: (params?: ApiQueryParams) =>
-      api.get<File[]>(API_ENDPOINTS.file, {
-        params: {
-          searchByField: 'type=EXHIBITION',
-          ...params,
-        },
-      }),
-
-    // getOneBook: (id: string, params?: any) =>
-    //   api.getOne<Book>(API_ENDPOINTS.book, id, { params: params }),
+    /** Параметры: page, limit, sortOrder ('asc' | 'desc', по дате загрузки) */
+    getAllExhibitions: (params?: ApiQueryParams) =>
+      api.get<Exhibition[]>(API_ENDPOINTS.exhibitions, { params }),
   };
 };

@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full bg-primary">
-    <div class="max-w-[1710px] mx-auto flex justify-between px-4 sm:px-6 lg:px-8 py-2">
+  <div class="w-full bg-primary shadow-sm">
+    <div class="max-w-[1710px] mx-auto flex items-center justify-between gap-1 px-4 sm:px-6 lg:px-8 py-1.5">
       <div
         v-for="item in items"
         :key="item.id"

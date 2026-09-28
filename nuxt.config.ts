@@ -46,6 +46,44 @@ export default defineNuxtConfig({
           href: 'http://static.infomania.ru',
         },
       ],
+      script: [
+        // Виджет онлайн-чата Jivo — подключается на всех страницах
+        {
+          src: '//code.jivo.ru/widget/yWouUDfRrz',
+          tagPosition: 'bodyClose',
+        },
+        // Яндекс.Метрика (счётчик 29661290): Вебвизор, карта кликов, точный отказ,
+        // ssr:true — чтобы переходы между страницами (client-side навигация Nuxt) тоже считались визитами
+        {
+          innerHTML: `
+            (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+            k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+            (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+            ym(29661290, "init", {
+              ssr: true,
+              webvisor: true,
+              clickmap: true,
+              accurateTrackBounce: true,
+              trackLinks: true
+            });
+          `,
+        },
+        // Счётчик culturaltracking.ru (pixelId 25706)
+        {
+          async: 'true',
+          src: 'https://culturaltracking.ru/static/js/spxl.js?pixelId=25706',
+          'data-pixel-id': 25706,
+        },
+      ],
+      noscript: [
+        {
+          innerHTML:
+            '<div><img src="https://mc.yandex.ru/watch/29661290" style="position:absolute; left:-9999px;" alt="" /></div>',
+        },
+      ],
     },
   },
   // Остальные CSS подключаются внутри main.css (см. комментарий там)

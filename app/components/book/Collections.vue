@@ -3,8 +3,7 @@
     <swiper-container
       ref="swiperElRef"
       class="block w-full py-4"
-      loop="true"
-      :breakpoints="breakpoints"
+      init="false"
     >
       <swiper-slide
         v-for="item in collections"
@@ -57,7 +56,16 @@
 import { useBookApi } from '~~/services/api/bookService';
 
 // Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
-type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+// breakpoints — объект, а не примитив: при SSR Vue не может отрендерить его атрибутом,
+// а при гидратации не переустанавливает такие пропсы на кастомном элементе, поэтому
+// задаём их вручную через свойства после монтирования (init="false" — чтобы swiper
+// не успел инициализироваться раньше с дефолтными параметрами).
+type SwiperContainerEl = HTMLElement & {
+  swiper?: SwiperInstance;
+  initialize?: () => void;
+  breakpoints?: Record<number, { slidesPerView: number; spaceBetween?: number }>;
+  loop?: boolean;
+};
 interface SwiperInstance {
   slidePrev: () => void;
   slideNext: () => void;
@@ -78,6 +86,14 @@ const { data: collections } = await bookApi.getAllCollections({
 });
 
 const swiperElRef = ref<SwiperContainerEl | null>(null);
+
+onMounted(async () => {
+  await customElements.whenDefined('swiper-container');
+  const el = swiperElRef.value;
+  if (!el) return;
+  Object.assign(el, { loop: true, breakpoints });
+  el.initialize?.();
+});
 
 const goPrev = () => swiperElRef.value?.swiper?.slidePrev();
 const goNext = () => swiperElRef.value?.swiper?.slideNext();

@@ -1,94 +1,69 @@
 <template>
   <NuxtLink
     :to="`/comics/${comic.slug}`"
-    class="group h-full bg-white rounded-2xl overflow-hidden shadow transition-all duration-300 flex flex-col w-full hover:-translate-y-2 border border-gray-100"
-    :class="[
-      compact ? '' : stretch ? 'sm:min-h-[560px]' : 'min-h-[560px]',
-      stretch ? 'sm:max-w-[320px]' : 'max-w-[320px]',
-    ]"
+    class="group h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md border border-gray-100"
   >
-    <!-- Обертка для изображения -->
+    <!-- Обертка для изображения: обложка всегда видна целиком -->
     <div
-      class="relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200"
-      :class="compact ? 'h-56' : 'h-80'"
+      class="relative aspect-[2/3] overflow-hidden bg-gray-100 flex items-center justify-center"
     >
       <img
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         :src="cover"
         :srcset="imageSrcset(comic.images[0]?.file)"
-        sizes="(max-width: 640px) 100vw, 320px"
+        sizes="(max-width: 640px) 50vw, 200px"
         :alt="comic.title"
         width="400"
-        height="320"
+        height="600"
+        class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
         loading="lazy"
         @error="handleImageError"
       >
 
-      <UBadge
-        v-if="volumeLabel"
-        :label="volumeLabel"
-        color="primary"
-        class="absolute top-3 left-3 rounded-full"
-      />
-
-      <UBadge
-        v-if="comic.year"
-        class="absolute top-3 right-3 bg-black/70 font-bold px-3 py-1.5 rounded-full"
-        :label="String(comic.year)"
-      />
-
+      <!-- Возрастной рейтинг -->
       <div
         v-if="comic.ageRating != null"
-        class="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm rounded-xl px-3 py-1.5 shadow-lg flex items-center gap-1"
+        class="absolute top-2.5 right-2.5"
       >
-        <Icon
-          name="i-heroicons-cake"
-          class="w-4 h-4 text-primary"
-        />
-        <span class="font-bold text-gray-900">{{ comic.ageRating }}+</span>
+        <div
+          class="h-8 px-2 min-w-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow"
+        >
+          <span class="text-xs font-bold text-primary">{{ comic.ageRating }}+</span>
+        </div>
       </div>
     </div>
 
-    <!-- Контент карточки -->
-    <div class="p-4 md:p-5 flex-1 flex flex-col">
+    <!-- Контент карточки: фиксированная структура, чтобы карточки были одной высоты -->
+    <div class="p-3 flex flex-1 flex-col">
+      <!-- Заголовок: всегда резервирует 2 строки -->
       <h3
-        class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-primary transition-colors duration-300 leading-tight"
+        class="min-h-[2.5rem] text-sm font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300"
       >
         {{ comic.title }}
       </h3>
 
-      <p
-        v-if="authorLine"
-        class="text-sm text-gray-500 mb-3"
-      >
-        {{ useStringSlice(authorLine, 64) }}
-      </p>
-
-      <div
-        v-if="comic.genres.length"
-        class="mb-4"
-      >
-        <div class="flex flex-wrap gap-2">
-          <UBadge
-            v-for="{ genre } in comic.genres"
-            :key="genre.id"
-            :label="genre.title"
-            color="info"
-            variant="soft"
+      <!-- Том / автор: строка всегда занимает место -->
+      <div class="mt-1.5 min-h-[1.125rem]">
+        <div
+          v-if="secondaryLine"
+          class="flex items-center gap-1 text-[11px] text-gray-500"
+        >
+          <Icon
+            :name="comic.volumeNumber ? 'i-heroicons-bookmark' : 'i-heroicons-pencil-square'"
+            class="w-3 h-3 shrink-0"
           />
+          <span class="truncate">{{ secondaryLine }}</span>
         </div>
       </div>
 
-      <div class="pt-4 border-t border-gray-100 mt-auto">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center text-primary font-semibold text-sm">
-            <span>Подробнее</span>
-            <Icon
-              name="i-heroicons-arrow-right-20-solid"
-              class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300"
-            />
-          </div>
-        </div>
+      <!-- Ссылка/действие: прижата к низу -->
+      <div
+        class="mt-auto pt-1.5 flex items-center text-primary font-semibold text-xs"
+      >
+        <span>Подробнее</span>
+        <Icon
+          name="i-heroicons-arrow-right-20-solid"
+          class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform duration-300"
+        />
       </div>
     </div>
   </NuxtLink>
@@ -96,25 +71,18 @@
 
 <script setup lang="ts">
 import type { Comic } from '~~/services/types/comic.type';
-import { useStringSlice } from '~/composables/useStringSlice';
 
 const props = defineProps<{
   comic: Comic;
-  compact?: boolean;
-  /** На телефоне — во всю ширину колонки и без выравнивания по высоте (сетка каталога) */
-  stretch?: boolean;
 }>();
 
 const cover = computed(
   () => props.comic.images[0]?.file.path || '/placeholder.jpg',
 );
 
-const volumeLabel = computed(() => {
-  if (!props.comic.volumeNumber) return '';
-  return `Том ${props.comic.volumeNumber}`;
-});
+const secondaryLine = computed(() => {
+  if (props.comic.volumeNumber) return `Том ${props.comic.volumeNumber}`;
 
-const authorLine = computed(() => {
   const { author, illustrator } = props.comic;
   if (author && illustrator && author !== illustrator)
     return `${author} / ${illustrator}`;
@@ -128,11 +96,4 @@ const handleImageError = (e: Event) => {
 };
 </script>
 
-<style scoped>
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>
+<style scoped></style>

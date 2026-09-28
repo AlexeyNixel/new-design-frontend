@@ -122,13 +122,12 @@
     <div v-if="comics">
       <div
         v-if="comics.data?.length"
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 3xl:grid-cols-5 gap-4 justify-items-center mb-8"
+        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-5 gap-4 mb-8"
       >
         <ComicCard
           v-for="comic in comics.data"
           :key="comic.id"
           :comic="comic"
-          stretch
         />
       </div>
       <p

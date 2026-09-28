@@ -16,7 +16,6 @@
         v-for="comic in list"
         :key="comic.id"
         :comic="comic"
-        compact
       />
     </div>
   </section>

@@ -2,7 +2,9 @@
   <div class="bg-white">
     <header class="max-w-[1710px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="w-full">
-        <div class="flex items-center justify-between gap-3 h-16 sm:h-20 lg:h-24">
+        <div
+          class="flex items-center justify-between gap-3 h-16 sm:h-20 lg:h-24"
+        >
           <NuxtLink
             to="/"
             class="group flex-shrink-0"
@@ -66,11 +68,11 @@
 
               <NuxtLink
                 to="mailto:noub@nso.ru"
-                class="group flex items-center gap-2.5 px-4 py-2.5 rounded-2xl hover:from-gray-200 transition-all duration-300"
+                class="group flex items-center gap-2.5 px-4 py-2.5 rounded-2xl hover:from-primary/10 transition-all duration-300"
               >
                 <div class="relative">
                   <div
-                    class="relative w-9 h-9 bg-gradient-to-br from-gray-700 to-gray-900 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300"
+                    class="relative w-9 h-9 bg-gradient-to-br from-primary to-primary/80 rounded-xl flex items-center justify-center shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300"
                   >
                     <Icon
                       name="material-symbols:mail-outline"
@@ -99,9 +101,16 @@
                 class="relative w-10 h-10 bg-gray-100 hover:bg-gradient-to-br hover:from-primary hover:to-primary/80 rounded-xl flex items-center justify-center transition-all duration-300 group shadow-sm hover:shadow-lg"
               >
                 <Icon
+                  v-if="link.icon"
                   :name="link.icon"
                   class="w-5 h-5 text-gray-600 group-hover:text-white transition-all relative z-10"
                 />
+                <img
+                  v-else
+                  class="w-5 h-5 brightness-0 opacity-60 group-hover:invert group-hover:opacity-100 transition-all relative z-10"
+                  src="/max-dark.svg"
+                  alt=""
+                >
               </a>
             </div>
 
@@ -340,7 +349,6 @@ const socialLinks = [
     label: 'Вконтакте',
   },
   {
-    icon: 'cbi:max',
     link: 'https://max.ru/id5406132173_gos',
     label: 'MAX',
   },

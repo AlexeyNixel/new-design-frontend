@@ -37,26 +37,36 @@
         :label="String(game.year)"
       />
 
-      <!-- Индикатор количества игроков -->
+      <!-- Индикатор количества игроков, длительности и возраста: только заполненные поля -->
       <div
+        v-if="hasPlayers || hasDuration || hasAge"
         class="absolute bottom-3 left-3 right-3 bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
       >
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-1">
+        <div class="flex items-center justify-center gap-4">
+          <div
+            v-if="hasPlayers"
+            class="flex items-center gap-1"
+          >
             <Icon
               name="i-heroicons-user-group"
               class="w-4 h-4 text-primary"
             />
             <span class="font-bold text-gray-900">{{ playersText }}</span>
           </div>
-          <div class="flex items-center gap-1">
+          <div
+            v-if="hasDuration"
+            class="flex items-center gap-1"
+          >
             <Icon
               name="i-heroicons-clock"
               class="w-4 h-4 text-primary"
             />
             <span class="font-bold text-gray-900">{{ durationText }}</span>
           </div>
-          <div class="flex items-center gap-1">
+          <div
+            v-if="hasAge"
+            class="flex items-center gap-1"
+          >
             <Icon
               name="i-heroicons-cake"
               class="w-4 h-4 text-primary"
@@ -130,9 +140,18 @@ const props = defineProps<{
 
 const statusLabel = computed(() => GameStatusLabels[props.game.status]);
 
+const hasPlayers = computed(
+  () => props.game.playerMin != null || props.game.playerMax != null,
+);
+
+const hasDuration = computed(
+  () => props.game.durationMin != null || props.game.durationMax != null,
+);
+
+const hasAge = computed(() => props.game.playerAge != null);
+
 const playersText = computed(() => {
   const { playerMin, playerMax } = props.game;
-  if (playerMin == null && playerMax == null) return '—';
   if (playerMin != null && playerMax != null && playerMin !== playerMax) {
     return `${playerMin}-${playerMax}`;
   }
@@ -141,7 +160,6 @@ const playersText = computed(() => {
 
 const durationText = computed(() => {
   const { durationMin, durationMax } = props.game;
-  if (durationMin == null && durationMax == null) return '—';
   if (durationMin != null && durationMax != null && durationMin !== durationMax) {
     return `${durationMin}-${durationMax}`;
   }

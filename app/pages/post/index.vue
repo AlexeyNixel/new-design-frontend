@@ -495,9 +495,12 @@ const loadEntries = async () => {
 
 await loadEntries();
 
+// immediate: false — начальные данные уже загружены выше; здесь реагируем на смену query
+// (в т.ч. переход по ссылке /post?... на ту же страницу с другими параметрами,
+// когда Vue Router переиспользует компонент и setup() повторно не выполняется).
 watch(
   () => route.query,
-  (newQuery) => {
+  async (newQuery) => {
     page.value = Number(newQuery.page) || 1;
     search.value = (newQuery.search as string) || '';
     filters.value = {
@@ -506,10 +509,10 @@ watch(
       dateTo: (newQuery.dateTo as string) || undefined,
       department: (newQuery.department as string) || undefined,
       tags: (newQuery.tags as string)?.split(',') || [],
-      sort: newQuery.sort as string,
+      sort: (newQuery.sort as string) || 'desc',
     };
+    await loadEntries();
   },
-  { immediate: true },
 );
 </script>
 

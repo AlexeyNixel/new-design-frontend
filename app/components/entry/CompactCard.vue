@@ -4,23 +4,23 @@
     class="group block h-full"
   >
     <div
-      class="flex gap-4 bg-white rounded-xl hover:shadow-md p-3 transition-all duration-300 h-full"
+      class="flex bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full"
     >
-      <div class="flex-shrink-0 my-auto w-36 h-28 rounded-l-lg overflow-hidden">
-        <img
-          class="object-cover w-full h-full transition-transform duration-300 group-hover:scale-110"
-          :src="imgSrc"
-          :srcset="imgSrcset"
-          sizes="144px"
+      <!-- Картинка вплотную к краю карточки и на всю её высоту: 160×128 — это 5:4,
+           формат большинства превью с бэкенда (420×336); если текст выше,
+           картинка всё равно видна целиком (object-contain в EntryPreviewImage) -->
+      <div class="shrink-0 w-40 min-h-32 self-stretch overflow-hidden">
+        <EntryPreviewImage
+          :file="post.preview"
           :alt="post.title"
-          width="144"
-          height="112"
-          loading="lazy"
-          @error="notFoundImage"
-        >
+          sizes="160px"
+          :width="160"
+          :height="128"
+          img-class="duration-300 group-hover:scale-105"
+        />
       </div>
 
-      <div class="flex-1 min-w-0">
+      <div class="flex-1 min-w-0 p-3">
         <div class="flex items-center gap-2 mb-1">
           <span class="text-xs text-gray-500">
             {{ dayjs(post.publishedAt).format('DD.MM.YYYY') }}
@@ -53,17 +53,5 @@ interface Props {
   post: Post;
 }
 
-const props = defineProps<Props>();
-const DEFAULT_IMAGE = '/placeholder.jpg';
-const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
-// После подмены на заглушку srcset убираем — иначе браузер продолжит брать картинку из него
-const imgSrcset = computed(() =>
-  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview),
-);
-
-const notFoundImage = () => {
-  if (imgSrc.value !== DEFAULT_IMAGE) {
-    imgSrc.value = DEFAULT_IMAGE;
-  }
-};
+defineProps<Props>();
 </script>

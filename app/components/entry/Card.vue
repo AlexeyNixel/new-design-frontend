@@ -1,21 +1,19 @@
 <template>
   <NuxtLink
     :to="{ name: 'post-slug', params: { slug: post.slug } }"
-    class="group my-2 relative flex flex-col min-h-[520px] bg-white w-full rounded-2xl overflow-hidden transition-all duration-300 hover:shadow hover:-translate-y-1 shadow"
+    class="group my-2 relative flex flex-col bg-white w-full rounded-2xl overflow-hidden transition-all duration-300 hover:shadow hover:-translate-y-1 shadow"
   >
-    <div class="relative w-full h-[260px] overflow-hidden">
+    <!-- 5:4 — формат большинства превью с бэкенда (420×336) -->
+    <div class="relative w-full aspect-[5/4] shrink-0 overflow-hidden">
       <!-- Изображение с эффектом зума -->
-      <img
-        class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-        :src="imgSrc"
-        :srcset="imgSrcset"
-        sizes="(max-width: 640px) 100vw, 400px"
+      <EntryPreviewImage
+        :file="post.preview"
         :alt="post.title"
-        width="400"
-        height="260"
-        loading="lazy"
-        @error="notFoundImage"
-      >
+        sizes="(max-width: 640px) 100vw, 400px"
+        :width="400"
+        :height="320"
+        img-class="duration-500 group-hover:scale-105"
+      />
       <div class="absolute top-4 left-4">
         <div
           class="flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
@@ -72,21 +70,7 @@ interface Props {
   post: Post;
 }
 
-const props = defineProps<Props>();
-
-const DEFAULT_IMAGE = '/placeholder.jpg';
-
-const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
-// После подмены на заглушку srcset убираем — иначе браузер продолжит брать картинку из него
-const imgSrcset = computed(() =>
-  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview),
-);
-
-const notFoundImage = () => {
-  if (imgSrc.value !== DEFAULT_IMAGE) {
-    imgSrc.value = DEFAULT_IMAGE;
-  }
-};
+defineProps<Props>();
 </script>
 
 <style scoped></style>

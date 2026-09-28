@@ -4,11 +4,20 @@ const props = defineProps<{
   startIndex: number;
 }>();
 
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  activeIndex: number;
+  slideTo: (index: number) => void;
+  slidePrev: () => void;
+  slideNext: () => void;
+}
+
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 3;
 const ZOOM_STEP = 0.25;
 
-const carousel = ref();
+const swiperElRef = ref<SwiperContainerEl | null>(null);
 const activeIndex = ref(props.startIndex || 0);
 const zoom = ref(MIN_ZOOM);
 const baseRect = ref<{ width: number; height: number } | null>(null);
@@ -30,11 +39,17 @@ const resetZoom = () => {
   baseRect.value = null;
 };
 
-const handleSelectSlide = (index: number) => {
-  carousel.value?.emblaApi?.scrollTo(index);
-  activeIndex.value = index;
+const handleSlideChange = () => {
+  activeIndex.value = swiperElRef.value?.swiper?.activeIndex ?? 0;
   resetZoom();
 };
+
+const selectSlide = (index: number) => {
+  swiperElRef.value?.swiper?.slideTo(index);
+};
+
+const goPrev = () => swiperElRef.value?.swiper?.slidePrev();
+const goNext = () => swiperElRef.value?.swiper?.slideNext();
 
 const handleWheelZoom = (event: WheelEvent) => {
   const img = (event.currentTarget as HTMLElement).querySelector('img');
@@ -76,36 +91,56 @@ const handleWheelZoom = (event: WheelEvent) => {
           @click="close"
         />
 
-        <div class="min-h-0 flex-1">
-          <UCarousel
-            ref="carousel"
-            v-slot="{ item, index }"
-            :items="imgLinks"
-            :start-index="startIndex || 0"
-            arrows
-            class="h-full w-full"
-            :ui="{
-              root: 'h-full w-full',
-              viewport: 'h-full w-full',
-              container: 'h-full',
-              item: 'h-full w-full',
-              prev: 'bg-white/10 hover:bg-white/20 text-white ring-0 border-0',
-              next: 'bg-white/10 hover:bg-white/20 text-white ring-0 border-0',
-            }"
-            @select="handleSelectSlide"
+        <div class="relative min-h-0 flex-1">
+          <swiper-container
+            ref="swiperElRef"
+            class="block h-full w-full"
+            :initial-slide="startIndex || 0"
+            @swiperslidechange="handleSlideChange"
           >
-            <div
-              class="flex h-full w-full items-center justify-center overflow-auto"
-              @wheel="handleWheelZoom"
+            <swiper-slide
+              v-for="(item, index) in imgLinks"
+              :key="index"
             >
-              <img
-                :src="item"
-                alt=""
-                class="max-h-full max-w-full cursor-zoom-in select-none object-contain"
-                :style="index === activeIndex ? zoomStyle : undefined"
+              <div
+                class="flex h-full w-full items-center justify-center overflow-auto"
+                @wheel="handleWheelZoom"
               >
-            </div>
-          </UCarousel>
+                <img
+                  :src="item"
+                  alt=""
+                  class="max-h-full max-w-full cursor-zoom-in select-none object-contain"
+                  :style="index === activeIndex ? zoomStyle : undefined"
+                >
+              </div>
+            </swiper-slide>
+          </swiper-container>
+
+          <!-- Стрелки -->
+          <button
+            v-if="imgLinks.length > 1"
+            type="button"
+            aria-label="Предыдущее изображение"
+            class="absolute z-10 top-1/2 -translate-y-1/2 left-2 sm:left-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 hover:cursor-pointer transition-colors"
+            @click="goPrev"
+          >
+            <Icon
+              name="i-heroicons-chevron-left-20-solid"
+              class="w-6 h-6"
+            />
+          </button>
+          <button
+            v-if="imgLinks.length > 1"
+            type="button"
+            aria-label="Следующее изображение"
+            class="absolute z-10 top-1/2 -translate-y-1/2 right-2 sm:right-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 hover:cursor-pointer transition-colors"
+            @click="goNext"
+          >
+            <Icon
+              name="i-heroicons-chevron-right-20-solid"
+              class="w-6 h-6"
+            />
+          </button>
         </div>
 
         <div
@@ -122,7 +157,7 @@ const handleWheelZoom = (event: WheelEvent) => {
                 ? 'opacity-100 ring-white'
                 : 'ring-transparent hover:opacity-80'
             "
-            @click="handleSelectSlide(index)"
+            @click="selectSlide(index)"
           >
             <img
               :src="item"

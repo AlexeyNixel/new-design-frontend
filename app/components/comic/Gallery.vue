@@ -5,20 +5,26 @@
     class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 lg:p-6"
   >
     <div class="flex flex-col gap-4 sm:flex-row-reverse sm:items-start h-full">
-      <UCarousel
-        ref="carousel"
-        v-slot="{ item }"
+      <swiper-container
+        ref="swiperElRef"
         v-image-gallery="{ modal }"
-        class="w-full sm:w-4/5 flex items-center justify-center h-full"
-        :items="items"
-        :ui="{ item: 'basis-full flex items-center justify-center' }"
+        class="block w-full sm:w-4/5 h-full"
+        auto-height="true"
+        @swiperslidechange="handleSlideChange"
       >
-        <img
-          class="max-h-[650px] w-auto cursor-zoom-in rounded-xl object-contain"
-          :src="item.src"
-          alt=""
+        <swiper-slide
+          v-for="(item, index) in items"
+          :key="index"
         >
-      </UCarousel>
+          <div class="flex items-center justify-center">
+            <img
+              class="max-h-[650px] w-auto cursor-zoom-in rounded-xl object-contain"
+              :src="item.src"
+              alt=""
+            >
+          </div>
+        </swiper-slide>
+      </swiper-container>
 
       <div
         class="flex gap-3 overflow-x-auto sm:w-1/5 sm:flex-col sm:overflow-visible"
@@ -65,6 +71,13 @@
 <script setup lang="ts">
 import type { Comic } from '~~/services/types/comic.type';
 
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  activeIndex: number;
+  slideTo: (index: number) => void;
+}
+
 const props = withDefaults(
   defineProps<{
     comic: Comic;
@@ -90,12 +103,13 @@ const items = computed<GalleryItem[]>(() =>
 const hasMultipleItems = computed(() => items.value.length > 1);
 
 const activeIndex = ref(0);
-const carousel = useTemplateRef<{ emblaApi?: { scrollTo: (i: number) => void } }>(
-  'carousel',
-);
+const swiperElRef = ref<SwiperContainerEl | null>(null);
+
+const handleSlideChange = () => {
+  activeIndex.value = swiperElRef.value?.swiper?.activeIndex ?? 0;
+};
 
 function select(index: number) {
-  activeIndex.value = index;
-  carousel.value?.emblaApi?.scrollTo(index);
+  swiperElRef.value?.swiper?.slideTo(index);
 }
 </script>

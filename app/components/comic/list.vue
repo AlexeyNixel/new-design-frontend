@@ -11,7 +11,10 @@
         :key="comic.id"
         class="h-auto"
       >
-        <ComicCard :comic="comic" />
+        <!-- Отступ вокруг карточки — иначе тень/сдвиг при ховере обрезает overflow:hidden внутри swiper -->
+        <div class="h-full py-3">
+          <ComicCard :comic="comic" />
+        </div>
       </swiper-slide>
     </swiper-container>
 

@@ -1,33 +1,72 @@
 <template>
-  <UCarousel
-    v-slot="{ item }"
-    class="h-full m-4"
-    :ui="ui"
-    :items="games"
-  >
-    <GameCard
-      class="my-4"
-      :game="item"
-    />
-  </UCarousel>
+  <div class="relative w-full">
+    <swiper-container
+      ref="swiperElRef"
+      class="block w-full py-4"
+      loop="true"
+      :breakpoints="breakpoints"
+    >
+      <swiper-slide
+        v-for="game in games"
+        :key="game.id"
+        class="h-auto"
+      >
+        <!-- Отступ вокруг карточки — иначе тень/сдвиг при ховере обрезает overflow:hidden внутри swiper -->
+        <div class="h-full py-3">
+          <GameCard :game="game" />
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <!-- Стрелки -->
+    <button
+      type="button"
+      aria-label="Предыдущие игры"
+      class="absolute z-10 top-1/2 -translate-y-1/2 left-2 sm:left-4 md:left-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      @click="goPrev"
+    >
+      <Icon
+        name="i-heroicons-chevron-left-20-solid"
+        class="w-5 h-5"
+      />
+    </button>
+    <button
+      type="button"
+      aria-label="Следующие игры"
+      class="absolute z-10 top-1/2 -translate-y-1/2 right-2 sm:right-4 md:right-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      @click="goNext"
+    >
+      <Icon
+        name="i-heroicons-chevron-right-20-solid"
+        class="w-5 h-5"
+      />
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useGameApi } from '~~/services/api/game.api';
 
-const ui = {
-  root: 'h-full flex',
-  viewport: 'h-full ',
-  item: 'h-full w-full sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 transition-opacity ',
-  container: 'h-full',
-  arrows: 'absolute right-15 bottom-5',
-  prev: ' rounded  bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
-  next: ' rounded  bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  slidePrev: () => void;
+  slideNext: () => void;
+}
+
+const breakpoints = {
+  0: { slidesPerView: 1, spaceBetween: 12 },
+  640: { slidesPerView: 2, spaceBetween: 16 },
+  768: { slidesPerView: 3, spaceBetween: 16 },
+  1024: { slidesPerView: 4, spaceBetween: 16 },
+  1280: { slidesPerView: 5, spaceBetween: 16 },
 };
 
 const gameApi = useGameApi();
-
 const { data: games } = await gameApi.getAllGames();
-</script>
 
-<style scoped></style>
+const swiperElRef = ref<SwiperContainerEl | null>(null);
+
+const goPrev = () => swiperElRef.value?.swiper?.slidePrev();
+const goNext = () => swiperElRef.value?.swiper?.slideNext();
+</script>

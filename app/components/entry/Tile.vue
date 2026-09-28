@@ -3,20 +3,19 @@
     :to="{ name: 'post-slug', params: { slug: post.slug } }"
     class="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col md:flex-row items-stretch min-h-64 hover:-translate-y-2 border border-gray-100"
   >
+    <!-- 5:4 — формат большинства превью с бэкенда (420×336): 320×256 при min-h-64;
+         если текст выше, картинка всё равно видна целиком (object-contain в EntryPreviewImage) -->
     <div
-      class="md:w-72 min-w-72 h-64 md:h-auto overflow-hidden relative shrink-0"
+      class="w-full aspect-[5/4] md:w-80 md:aspect-auto overflow-hidden relative shrink-0"
     >
-      <img
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-        :src="imgSrc"
-        :srcset="imgSrcset"
-        sizes="(max-width: 768px) 100vw, 288px"
+      <EntryPreviewImage
+        :file="post.preview"
         :alt="post.title"
-        width="288"
-        height="256"
-        loading="lazy"
-        @error="notFoundImage"
-      >
+        sizes="(max-width: 768px) 100vw, 320px"
+        :width="320"
+        :height="256"
+        img-class="duration-500 group-hover:scale-110"
+      />
 
       <!-- Дата в стиле карточки -->
       <div
@@ -104,17 +103,9 @@
 <script setup lang="ts">
 import type { Post } from '~~/services/types/post.type';
 
-const props = defineProps<{
+defineProps<{
   post: Post;
 }>();
-
-const DEFAULT_IMAGE = '/placeholder.jpg';
-
-const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
-// После подмены на заглушку srcset убираем — иначе браузер продолжит брать картинку из него
-const imgSrcset = computed(() =>
-  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview),
-);
 
 // Хелпер для форматирования даты
 const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
@@ -136,12 +127,6 @@ const formateDate = (dateString: string, format: string = 'DD MMMM YYYY') => {
   }
 
   return date.toLocaleDateString('ru-RU', options);
-};
-
-const notFoundImage = () => {
-  if (imgSrc.value !== DEFAULT_IMAGE) {
-    imgSrc.value = DEFAULT_IMAGE;
-  }
 };
 </script>
 

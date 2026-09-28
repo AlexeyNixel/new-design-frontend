@@ -11,8 +11,7 @@
       <swiper-container
         ref="swiperElRef"
         class="block w-full"
-        :loop="loopEnabled"
-        :breakpoints="breakpoints"
+        init="false"
         @swiperslidechange="handleSlideChange"
       >
         <swiper-slide
@@ -79,7 +78,16 @@
 import { useEntryApi } from '~~/services/api/entryService';
 
 // Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
-type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+// breakpoints — объект, а не примитив: при SSR Vue не может отрендерить его атрибутом,
+// а при гидратации не переустанавливает такие пропсы на кастомном элементе, поэтому
+// задаём их вручную через свойства после монтирования (init="false" — чтобы swiper
+// не успел инициализироваться раньше с дефолтными параметрами).
+type SwiperContainerEl = HTMLElement & {
+  swiper?: SwiperInstance;
+  initialize?: () => void;
+  breakpoints?: Record<number, { slidesPerView: number; spaceBetween?: number }>;
+  loop?: boolean;
+};
 interface SwiperInstance {
   realIndex: number;
   slidePrev: () => void;
@@ -115,6 +123,14 @@ const showDots = (data?.length ?? 0) > 1;
 
 const swiperElRef = ref<SwiperContainerEl | null>(null);
 const activeIndex = ref(0);
+
+onMounted(async () => {
+  await customElements.whenDefined('swiper-container');
+  const el = swiperElRef.value;
+  if (!el) return;
+  Object.assign(el, { loop: loopEnabled, breakpoints });
+  el.initialize?.();
+});
 
 const handleSlideChange = () => {
   activeIndex.value = swiperElRef.value?.swiper?.realIndex ?? 0;

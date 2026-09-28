@@ -5,34 +5,40 @@
     class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-gray-100 lg:p-6"
   >
     <div class="flex flex-col gap-4 sm:flex-row-reverse sm:items-start">
-      <UCarousel
-        ref="carousel"
-        v-slot="{ item }"
+      <swiper-container
+        ref="swiperElRef"
         v-image-gallery="{ modal }"
-        class="w-full sm:w-4/5"
-        :items="items"
-        :ui="{ item: 'basis-full flex items-center justify-center' }"
+        class="block w-full sm:w-4/5"
+        auto-height="true"
+        @swiperslidechange="handleSlideChange"
       >
-        <img
-          v-if="item.type === 'image'"
-          class="max-h-[440px] w-auto cursor-zoom-in rounded-xl object-contain"
-          :src="item.src"
-          alt=""
+        <swiper-slide
+          v-for="(item, index) in items"
+          :key="index"
         >
-        <div
-          v-else
-          class="relative w-full"
-          style="padding-bottom: 56.25%"
-        >
-          <iframe
-            :src="item.src"
-            class="absolute left-0 top-0 h-full w-full rounded-xl"
-            allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
-            frameborder="0"
-            allowfullscreen
-          />
-        </div>
-      </UCarousel>
+          <div class="flex items-center justify-center">
+            <img
+              v-if="item.type === 'image'"
+              class="max-h-[440px] w-auto cursor-zoom-in rounded-xl object-contain"
+              :src="item.src"
+              alt=""
+            >
+            <div
+              v-else
+              class="relative w-full"
+              style="padding-bottom: 56.25%"
+            >
+              <iframe
+                :src="item.src"
+                class="absolute left-0 top-0 h-full w-full rounded-xl"
+                allow="autoplay; encrypted-media; fullscreen; picture-in-picture; screen-wake-lock;"
+                frameborder="0"
+                allowfullscreen
+              />
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper-container>
 
       <div
         class="flex gap-3 overflow-x-auto sm:w-1/5 sm:flex-col sm:overflow-visible"
@@ -89,6 +95,13 @@
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
 
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  activeIndex: number;
+  slideTo: (index: number) => void;
+}
+
 const props = withDefaults(
   defineProps<{
     game: Game;
@@ -120,12 +133,13 @@ const items = computed<GalleryItem[]>(() => {
 const hasMultipleItems = computed(() => items.value.length > 1);
 
 const activeIndex = ref(0);
-const carousel = useTemplateRef<{ emblaApi?: { scrollTo: (i: number) => void } }>(
-  'carousel',
-);
+const swiperElRef = ref<SwiperContainerEl | null>(null);
+
+const handleSlideChange = () => {
+  activeIndex.value = swiperElRef.value?.swiper?.activeIndex ?? 0;
+};
 
 function select(index: number) {
-  activeIndex.value = index;
-  carousel.value?.emblaApi?.scrollTo(index);
+  swiperElRef.value?.swiper?.slideTo(index);
 }
 </script>

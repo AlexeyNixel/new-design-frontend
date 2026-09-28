@@ -1,65 +1,78 @@
 <template>
-  <div class="h-28 sm:h-32 md:h-36 shrink-0">
-    <UCarousel
-      v-slot="{ item }"
-      dots
-      :items="displayItems"
-      :ui="{
-        dots: 'bottom-2 sm:bottom-2.5',
-        dot: 'w-1.5 h-1.5 sm:w-2 sm:h-2 data-[state=active]:bg-white bg-white/35 mx-0.5 transition-colors duration-200',
-        viewport: 'h-full',
-        container: 'h-full',
-        item: 'h-full',
-      }"
-      class="h-full"
+  <div class="relative h-28 sm:h-32 md:h-36 shrink-0">
+    <swiper-container
+      ref="swiperElRef"
+      class="block w-full h-full rounded-2xl overflow-hidden"
+      @swiperslidechange="handleSlideChange"
     >
-      <div
-        class="relative rounded-2xl p-2.5 sm:p-3 text-white shadow-lg flex items-center justify-between gap-2.5 h-full overflow-hidden"
-        :class="STYLE_BY_TYPE[item.type]"
+      <swiper-slide
+        v-for="item in displayItems"
+        :key="item.id"
       >
         <div
-          v-if="item.type === 'festive'"
-          class="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10 pointer-events-none"
-        />
-        <div
-          v-if="item.type === 'festive'"
-          class="absolute -bottom-4 right-8 w-16 h-16 rounded-full bg-white/5 pointer-events-none"
-        />
-
-        <div class="flex-1 min-w-0 relative z-10">
-          <span class="text-[10px] font-semibold uppercase tracking-widest opacity-70 block mb-0.5">
-            {{ LABEL_BY_TYPE[item.type] }}
-          </span>
-          <div class="font-bold text-sm sm:text-base line-clamp-1 leading-tight">
-            {{ item.title }}
-          </div>
-          <p class="text-xs opacity-90 mt-1 line-clamp-1 sm:line-clamp-2 leading-relaxed">
-            {{ item.description }}
-          </p>
-          <NuxtLink
-            v-if="item.postId"
-            :to="`/post/${item.postId}`"
-            class="inline-flex items-center gap-1 mt-1.5 sm:mt-2 bg-white/20 hover:bg-white/30 border border-white/30 text-white text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
-          >
-            Подробнее
-            <Icon
-              name="i-heroicons-arrow-right"
-              class="w-3 h-3"
-            />
-          </NuxtLink>
-        </div>
-
-        <div
-          class="text-2xl sm:text-3xl flex-shrink-0 relative z-10 opacity-90"
-          :class="{
-            'animate-pulse': item.type === 'error',
-            'animate-bounce': item.type === 'festive',
-          }"
+          class="relative rounded-2xl p-2.5 sm:p-3 text-white shadow-lg flex items-center justify-between gap-2.5 h-full overflow-hidden"
+          :class="STYLE_BY_TYPE[item.type]"
         >
-          <Icon :name="ICON_BY_TYPE[item.type]" />
+          <div
+            v-if="item.type === 'festive'"
+            class="absolute -top-6 -right-6 w-24 h-24 rounded-full bg-white/10 pointer-events-none"
+          />
+          <div
+            v-if="item.type === 'festive'"
+            class="absolute -bottom-4 right-8 w-16 h-16 rounded-full bg-white/5 pointer-events-none"
+          />
+
+          <div class="flex-1 min-w-0 relative z-10">
+            <span class="text-[10px] font-semibold uppercase tracking-widest opacity-70 block mb-0.5">
+              {{ LABEL_BY_TYPE[item.type] }}
+            </span>
+            <div class="font-bold text-sm sm:text-base line-clamp-1 leading-tight">
+              {{ item.title }}
+            </div>
+            <p class="text-xs opacity-90 mt-1 line-clamp-1 sm:line-clamp-2 leading-relaxed">
+              {{ item.description }}
+            </p>
+            <NuxtLink
+              v-if="item.postId"
+              :to="`/post/${item.postId}`"
+              class="inline-flex items-center gap-1 mt-1.5 sm:mt-2 bg-white/20 hover:bg-white/30 border border-white/30 text-white text-[11px] sm:text-xs font-semibold px-2.5 sm:px-3 py-1 rounded-full transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              Подробнее
+              <Icon
+                name="i-heroicons-arrow-right"
+                class="w-3 h-3"
+              />
+            </NuxtLink>
+          </div>
+
+          <div
+            class="text-2xl sm:text-3xl flex-shrink-0 relative z-10 opacity-90"
+            :class="{
+              'animate-pulse': item.type === 'error',
+              'animate-bounce': item.type === 'festive',
+            }"
+          >
+            <Icon :name="ICON_BY_TYPE[item.type]" />
+          </div>
         </div>
-      </div>
-    </UCarousel>
+      </swiper-slide>
+    </swiper-container>
+
+    <!-- Точки -->
+    <div
+      v-if="displayItems.length > 1"
+      class="absolute z-10 bottom-2 sm:bottom-2.5 left-1/2 -translate-x-1/2 flex items-center gap-1"
+    >
+      <button
+        v-for="(item, index) in displayItems"
+        :key="item.id"
+        type="button"
+        :aria-label="`Перейти к слайду ${index + 1}`"
+        class="rounded-full w-1.5 h-1.5 sm:w-2 sm:h-2 transition-colors hover:cursor-pointer"
+        :class="index === activeIndex ? 'bg-white' : 'bg-white/35 hover:bg-white/60'"
+        @click="goTo(index)"
+      />
+    </div>
   </div>
 </template>
 
@@ -68,6 +81,13 @@ import { useNotificationApi } from '~~/services/api/notification.api';
 import type { Notification } from '~~/services/types/notification.type';
 
 type NotificationItem = Notification | typeof empty;
+
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  activeIndex: number;
+  slideTo: (index: number) => void;
+}
 
 const notificationApi = useNotificationApi();
 
@@ -106,4 +126,21 @@ const displayItems = computed<NotificationItem[]>(() => {
   if (notifications.data?.length) return notifications.data;
   return [empty];
 });
+
+const swiperElRef = ref<SwiperContainerEl | null>(null);
+const activeIndex = ref(0);
+
+const handleSlideChange = () => {
+  activeIndex.value = swiperElRef.value?.swiper?.activeIndex ?? 0;
+};
+
+const goTo = (index: number) => swiperElRef.value?.swiper?.slideTo(index);
 </script>
+
+<style scoped>
+swiper-slide {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+</style>

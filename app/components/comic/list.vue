@@ -1,29 +1,72 @@
 <template>
-  <UCarousel
-    v-slot="{ item }"
-    arrows
-    loop
-    :ui="ui"
-    :items="comics"
-  >
-    <ComicCard :comic="item" />
-  </UCarousel>
+  <div class="relative w-full">
+    <swiper-container
+      ref="swiperElRef"
+      class="block w-full py-4"
+      loop="true"
+      :breakpoints="breakpoints"
+    >
+      <swiper-slide
+        v-for="comic in comics"
+        :key="comic.id"
+        class="h-auto"
+      >
+        <!-- Отступ вокруг карточки — иначе тень/сдвиг при ховере обрезает overflow:hidden внутри swiper -->
+        <div class="h-full py-3">
+          <ComicCard :comic="comic" />
+        </div>
+      </swiper-slide>
+    </swiper-container>
+
+    <!-- Стрелки -->
+    <button
+      type="button"
+      aria-label="Предыдущие комиксы"
+      class="absolute z-10 top-1/2 -translate-y-1/2 left-2 sm:left-4 md:left-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      @click="goPrev"
+    >
+      <Icon
+        name="i-heroicons-chevron-left-20-solid"
+        class="w-5 h-5"
+      />
+    </button>
+    <button
+      type="button"
+      aria-label="Следующие комиксы"
+      class="absolute z-10 top-1/2 -translate-y-1/2 right-2 sm:right-4 md:right-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      @click="goNext"
+    >
+      <Icon
+        name="i-heroicons-chevron-right-20-solid"
+        class="w-5 h-5"
+      />
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useComicApi } from '~~/services/api/comic.api';
 
-const ui = {
-  root: 'relative w-full',
-  viewport: 'w-full overflow-hidden py-4',
-  item: 'basis-1/2 sm:basis-1/3 md:basis-1/4 xl:basis-1/5 2xl:basis-1/7',
-  container: 'flex items-stretch',
-  prev: 'rounded ml-[60px] bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
-  next: 'rounded mr-[60px] bg-primary text-white border-0 ring-0 hover:bg-primary-100 hover:cursor-pointer',
-  dots: 'bottom-5',
-  dot: 'w-6 h-1',
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  slidePrev: () => void;
+  slideNext: () => void;
+}
+
+const breakpoints = {
+  0: { slidesPerView: 2, spaceBetween: 12 },
+  640: { slidesPerView: 3, spaceBetween: 16 },
+  768: { slidesPerView: 4, spaceBetween: 16 },
+  1280: { slidesPerView: 5, spaceBetween: 16 },
+  1536: { slidesPerView: 7, spaceBetween: 16 },
 };
 
 const comicApi = useComicApi();
 const { data: comics } = await comicApi.getAllComics({ limit: 9 });
+
+const swiperElRef = ref<SwiperContainerEl | null>(null);
+
+const goPrev = () => swiperElRef.value?.swiper?.slidePrev();
+const goNext = () => swiperElRef.value?.swiper?.slideNext();
 </script>

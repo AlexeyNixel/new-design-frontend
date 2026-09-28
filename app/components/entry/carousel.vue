@@ -1,5 +1,92 @@
+<template>
+  <div>
+    <h2 class="mb-6 text-xl font-bold text-gray-900 md:mb-8 md:text-2xl lg:text-3xl">
+      {{ title }}
+    </h2>
+
+    <div
+      v-if="data && data.length"
+      class="relative pb-8 lg:pb-0"
+    >
+      <swiper-container
+        ref="swiperElRef"
+        class="block w-full"
+        :loop="loopEnabled"
+        :breakpoints="breakpoints"
+        @swiperslidechange="handleSlideChange"
+      >
+        <swiper-slide
+          v-for="item in data"
+          :key="item.id"
+          class="h-auto"
+        >
+          <!-- Отступ вокруг карточки — иначе тень/сдвиг при ховере обрезает overflow:hidden внутри swiper -->
+          <div class="h-full py-3">
+            <EntryCard
+              :post="item"
+              class="h-full"
+            />
+          </div>
+        </swiper-slide>
+      </swiper-container>
+
+      <!-- Стрелки: видны от md и только если карточек достаточно для цикла -->
+      <template v-if="showArrows">
+        <button
+          type="button"
+          aria-label="Предыдущие новости"
+          class="hidden md:flex absolute z-10 top-1/2 -translate-y-1/2 -left-2 lg:-left-4 items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+          @click="goPrev"
+        >
+          <Icon
+            name="i-heroicons-chevron-left-20-solid"
+            class="w-5 h-5"
+          />
+        </button>
+        <button
+          type="button"
+          aria-label="Следующие новости"
+          class="hidden md:flex absolute z-10 top-1/2 -translate-y-1/2 -right-2 lg:-right-4 items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+          @click="goNext"
+        >
+          <Icon
+            name="i-heroicons-chevron-right-20-solid"
+            class="w-5 h-5"
+          />
+        </button>
+      </template>
+
+      <!-- Точки: видны только там, где скрыты стрелки -->
+      <div
+        v-if="showDots"
+        class="lg:hidden absolute -bottom-7 left-1/2 -translate-x-1/2 flex items-center gap-1"
+      >
+        <button
+          v-for="(item, index) in data"
+          :key="item.id"
+          type="button"
+          :aria-label="`Перейти к слайду ${index + 1}`"
+          class="rounded-full w-2 h-2 transition-colors hover:cursor-pointer"
+          :class="index === activeIndex ? 'bg-primary' : 'bg-gray-300 hover:bg-gray-400'"
+          @click="goTo(index)"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { useEntryApi } from '~~/services/api/entryService';
+
+// Нативный веб-компонент из nuxt-swiper (swiper/element), см. app/components/MainCarousel.vue.
+type SwiperContainerEl = HTMLElement & { swiper?: SwiperInstance };
+interface SwiperInstance {
+  realIndex: number;
+  slidePrev: () => void;
+  slideNext: () => void;
+  slideTo: (index: number) => void;
+  slideToLoop: (index: number) => void;
+}
 
 const entryApi = useEntryApi();
 
@@ -14,52 +101,33 @@ const { data } = await entryApi.getAllEntry({
   ...(props.byTag ? { tags: [props.byTag] } : {}),
 });
 
-const carouselUi = {
-  root: 'relative',
-  viewport: 'overflow-hidden',
-  container: '-ms-4 items-stretch',
-  item: 'ps-4 basis-[82%] sm:basis-1/2 md:basis-1/3 lg:basis-1/4',
-  prev: `
-    hidden md:flex -start-2 lg:-start-4
-    rounded bg-primary text-white border-0 ring-0
-    hover:bg-primary/60 hover:cursor-pointer
-    disabled:opacity-40
-  `,
-  next: `
-    hidden md:flex -end-2 lg:-end-4
-    rounded bg-primary text-white border-0 ring-0
-    hover:bg-primary/60 hover:cursor-pointer
-    disabled:opacity-40
-  `,
-  dots: 'lg:hidden -bottom-7',
-  dot: 'w-2 h-2 data-[state=active]:bg-primary mx-0.5',
+const breakpoints = {
+  0: { slidesPerView: 1.22, spaceBetween: 16 },
+  640: { slidesPerView: 2, spaceBetween: 16 },
+  768: { slidesPerView: 3, spaceBetween: 16 },
+  1024: { slidesPerView: 4, spaceBetween: 16 },
+};
+
+// Цикл и стрелки включаем, только если карточек хватает, чтобы прокрутка была осмысленной
+const loopEnabled = (data?.length ?? 0) > 4;
+const showArrows = loopEnabled;
+const showDots = (data?.length ?? 0) > 1;
+
+const swiperElRef = ref<SwiperContainerEl | null>(null);
+const activeIndex = ref(0);
+
+const handleSlideChange = () => {
+  activeIndex.value = swiperElRef.value?.swiper?.realIndex ?? 0;
+};
+
+const goPrev = () => swiperElRef.value?.swiper?.slidePrev();
+const goNext = () => swiperElRef.value?.swiper?.slideNext();
+const goTo = (index: number) => {
+  const swiper = swiperElRef.value?.swiper;
+  if (!swiper) return;
+  if (loopEnabled) swiper.slideToLoop(index);
+  else swiper.slideTo(index);
 };
 </script>
-
-<template>
-  <div>
-    <h2 class="mb-6 text-xl font-bold text-gray-900 md:mb-8 md:text-2xl lg:text-3xl">
-      {{ title }}
-    </h2>
-
-    <UCarousel
-      v-if="data && data.length"
-      v-slot="{ item }"
-      :items="data"
-      :arrows="data.length > 4"
-      :dots="data.length > 1"
-      :loop="data.length > 4"
-      align="start"
-      :ui="carouselUi"
-      class="pb-8 lg:pb-0"
-    >
-      <EntryCard
-        :key="item.id"
-        :post="item"
-        class="h-full"
-      />
-    </UCarousel>
-  </div>
-</template>
 
 <style scoped></style>

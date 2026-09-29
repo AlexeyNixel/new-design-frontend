@@ -74,8 +74,8 @@
     </section>
 
     <!-- Тело -->
-    <div class="mt-8 grid gap-6 lg:grid-cols-3">
-      <div class="flex flex-col gap-6 lg:col-span-2">
+    <div class="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div class="flex min-w-0 flex-col gap-6 lg:col-span-2">
         <ComicGallery
           :comic="comic"
           :modal="modal"

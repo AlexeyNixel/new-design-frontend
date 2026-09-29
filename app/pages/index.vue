@@ -52,20 +52,20 @@ usePageSeo({
     </CommonSectionWrapper>
 
     <CommonSectionWrapper
-      title="Игровая библиотека"
-      link="/games"
-      link-label="Полный список игр"
-    >
-      <GameCarousel />
-    </CommonSectionWrapper>
-
-    <CommonSectionWrapper
       bg-gray
       title="Книги"
       link="/books"
       link-label="Полный список книг"
     >
       <BookShelf />
+    </CommonSectionWrapper>
+
+    <CommonSectionWrapper
+      title="Игровая библиотека"
+      link="/games"
+      link-label="Полный список игр"
+    >
+      <GameCarousel />
     </CommonSectionWrapper>
 
     <ExhibitionShowcase />

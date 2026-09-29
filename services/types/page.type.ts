@@ -44,10 +44,18 @@ export interface PageFeaturesBlock {
   items: PageFeaturesBlockItem[];
 }
 
+export interface PageTagsBlockLinkItem {
+  text: string;
+  url?: string;
+}
+
+/** Строка — старый формат (тег без ссылки), объект — тег, который может быть ссылкой. */
+export type PageTagsBlockItem = string | PageTagsBlockLinkItem;
+
 export interface PageTagsBlock {
   type: 'tags';
   title?: string;
-  items: string[];
+  items: PageTagsBlockItem[];
 }
 
 export interface PageAdvantagesBlock {

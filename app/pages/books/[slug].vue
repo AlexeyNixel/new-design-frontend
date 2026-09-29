@@ -233,7 +233,7 @@
             <div class="p-5 sm:p-8">
               <div
                 class="ck-content prose prose-lg dark:prose-invert max-w-none"
-                v-html="book.content"
+                v-html="fitTables(book.content)"
               />
 
               <!-- Декоративный элемент в конце -->

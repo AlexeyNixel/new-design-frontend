@@ -91,7 +91,7 @@
           </h2>
           <div
             class="tiptap mt-4"
-            v-html="comic.content"
+            v-html="fitTables(comic.content)"
           />
         </article>
       </div>

@@ -158,7 +158,7 @@ usePageSeo({
 useBreadcrumbSchema(breadcrumbItems);
 
 // Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
-const contentHtml = computed(() => markImageTables(entry.content));
+const contentHtml = computed(() => fitTables(markImageTables(entry.content)));
 useYandexFormsEmbed(entry.content);
 
 const toAbsolute = useAbsoluteUrl();

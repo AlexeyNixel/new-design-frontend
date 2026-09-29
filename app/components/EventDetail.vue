@@ -103,7 +103,7 @@ const formatTime = (date: Date | string) => {
     >
       <div
         class="tiptap max-w-none text-sm"
-        v-html="selectedEvent.content"
+        v-html="fitTables(selectedEvent.content)"
       />
     </div>
   </div>

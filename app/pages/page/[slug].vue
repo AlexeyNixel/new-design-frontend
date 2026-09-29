@@ -101,7 +101,7 @@ if (!page) {
 }
 
 // Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
-const contentHtml = computed(() => markImageTables(page?.content));
+const contentHtml = computed(() => fitTables(markImageTables(page?.content)));
 
 // Новый формат страницы: контент собран из типизированных блоков (см. docs/page-content-blocks.md)
 const hasBlocks = computed(() => !!page?.blocks?.length);

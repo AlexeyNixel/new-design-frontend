@@ -52,16 +52,15 @@ const nowInNovosibirsk = (date = new Date()) => {
   };
 };
 
-/** Последняя пятница месяца — санитарный день */
-const isSanitaryDay = (day: Date) => {
-  if (day.getUTCDay() !== 5) return false;
-  const nextWeek = new Date(day);
-  nextWeek.setUTCDate(day.getUTCDate() + 7);
-  return nextWeek.getUTCMonth() !== day.getUTCMonth();
+/** Последний день месяца — технический день */
+const isTechnicalDay = (day: Date) => {
+  const tomorrow = new Date(day);
+  tomorrow.setUTCDate(day.getUTCDate() + 1);
+  return tomorrow.getUTCMonth() !== day.getUTCMonth();
 };
 
 const hoursFor = (day: Date) =>
-  isSanitaryDay(day) ? null : LIBRARY_HOURS[day.getUTCDay()];
+  isTechnicalDay(day) ? null : LIBRARY_HOURS[day.getUTCDay()];
 
 export interface LibraryStatus {
   isOpen: boolean;
@@ -69,14 +68,14 @@ export interface LibraryStatus {
   text: string;
   /** День недели сегодня (0 — воскресенье) */
   today: number;
-  isSanitaryToday: boolean;
+  isTechnicalToday: boolean;
 }
 
 /** Открыта ли библиотека сейчас и когда откроется/закроется */
 export const getLibraryStatus = (date = new Date()): LibraryStatus => {
   const { day, minutes } = nowInNovosibirsk(date);
   const today = day.getUTCDay();
-  const isSanitaryToday = isSanitaryDay(day);
+  const isTechnicalToday = isTechnicalDay(day);
   const hours = hoursFor(day);
 
   if (hours && minutes >= hours.open * 60 && minutes < hours.close * 60) {
@@ -84,7 +83,7 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
       isOpen: true,
       text: `Открыто до ${hours.close}:00`,
       today,
-      isSanitaryToday,
+      isTechnicalToday,
     };
   }
 
@@ -93,7 +92,7 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
       isOpen: false,
       text: `Закрыто, откроемся сегодня в ${hours.open}:00`,
       today,
-      isSanitaryToday,
+      isTechnicalToday,
     };
   }
 
@@ -105,14 +104,14 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
     if (!nextHours) continue;
 
     const when = offset === 1 ? 'завтра' : WEEKDAY_ACCUSATIVE[next.getUTCDay()];
-    const reason = isSanitaryToday ? 'Технический день' : 'Закрыто';
+    const reason = isTechnicalToday ? 'Технический день' : 'Закрыто';
     return {
       isOpen: false,
       text: `${reason}, откроемся ${when} в ${nextHours.open}:00`,
       today,
-      isSanitaryToday,
+      isTechnicalToday,
     };
   }
 
-  return { isOpen: false, text: 'Закрыто', today, isSanitaryToday };
+  return { isOpen: false, text: 'Закрыто', today, isTechnicalToday };
 };

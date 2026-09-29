@@ -159,6 +159,8 @@
                 padding: 6px 8px;
                 position: relative;
                 vertical-align: top;
+                /* длинные слова и ссылки переносятся, а не распирают столбец */
+                overflow-wrap: anywhere;
 
                 > * {
                     margin-bottom: 0;
@@ -166,6 +168,16 @@
 
                 p {
                     @apply indent-0;
+                }
+
+                img,
+                video {
+                    max-width: 100%;
+                    height: auto;
+                }
+
+                iframe {
+                    max-width: 100%;
                 }
             }
 

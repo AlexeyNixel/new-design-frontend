@@ -33,7 +33,7 @@
           </h2>
           <div
             class="tiptap mt-4"
-            v-html="game.description"
+            v-html="fitTables(game.description)"
           />
         </article>
       </div>

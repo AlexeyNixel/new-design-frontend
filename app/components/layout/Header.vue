@@ -186,7 +186,7 @@
                     </div>
                     <div class="mt-3 pt-3 border-t border-gray-100">
                       <p class="text-xs text-gray-500">
-                        Последняя пятница месяца — санитарный день
+                        Последний день месяца — технический день
                       </p>
                     </div>
                   </div>

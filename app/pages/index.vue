@@ -43,7 +43,7 @@ usePageSeo({
 
     <!-- Остальные секции -->
     <CommonSectionWrapper
-      title="Последние новости"
+      title="Анонсы и события"
       link="/post"
       link-label="Все новости"
       bg-gray
@@ -88,7 +88,7 @@ usePageSeo({
     <CommonSectionWrapper>
       <EntryCarousel
         title="Новости партнеров"
-        by-tag="b7ffa631-8d88-4f10-8e79-cacac4cda04d"
+        :by-tag="POST_TAG.partner"
       />
     </CommonSectionWrapper>
   </div>

@@ -115,7 +115,7 @@ const slideService = useSlides();
 const { hasSession, goToAdmin } = useAuth();
 
 const { data: slides } = await slideService.getAllSlides({
-  limit: 5,
+  limit: 10,
 });
 
 const swiperElRef = ref<SwiperContainerEl | null>(null);

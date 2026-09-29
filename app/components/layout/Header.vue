@@ -217,7 +217,7 @@
                     <p
                       class="text-sm font-bold text-gray-900 whitespace-nowrap"
                     >
-                      Красный пр., 26
+                      г. Новосибирск <br>Красный пр., 26
                     </p>
                   </div>
                   <Icon

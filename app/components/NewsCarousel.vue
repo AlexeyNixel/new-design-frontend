@@ -45,13 +45,13 @@
           class="group flex flex-1 items-stretch bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
         >
           <!-- 5:4 — формат большинства превью с бэкенда -->
-          <div class="shrink-0 w-24 min-h-20 overflow-hidden">
+          <div class="shrink-0 w-32 sm:w-40 min-h-28 overflow-hidden">
             <EntryPreviewImage
               :file="post.preview"
               :alt="post.title"
-              sizes="96px"
-              :width="96"
-              :height="77"
+              sizes="160px"
+              :width="160"
+              :height="128"
               img-class="duration-300 group-hover:scale-105"
             />
           </div>
@@ -60,7 +60,7 @@
               {{ dayjs(post.publishedAt).format('D MMMM YYYY') }}
             </span>
             <span
-              class="font-semibold text-sm text-gray-900 line-clamp-2 group-hover:text-primary transition-colors"
+              class="font-semibold text-sm text-gray-900 line-clamp-3 group-hover:text-primary transition-colors"
             >
               {{ post.title }}
             </span>
@@ -116,7 +116,7 @@ import { useEntryApi } from '~~/services/api/entryService';
 import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 
-const ANNOUNCEMENTS_LIMIT = 5;
+const ANNOUNCEMENTS_LIMIT = 4;
 const EVENTS_LIMIT = 4;
 
 const entryApi = useEntryApi();

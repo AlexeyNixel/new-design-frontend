@@ -30,9 +30,9 @@ usePageSeo({
           </div>
 
           <!-- Поиск -->
-<!--          <div class="mt-4 block">-->
-<!--            <CatalogSearch class="w-full" />-->
-<!--          </div>-->
+          <!--          <div class="mt-4 block"> -->
+          <!--            <CatalogSearch class="w-full" /> -->
+          <!--          </div> -->
 
           <div class="mt-4">
             <Achievements />
@@ -73,7 +73,10 @@ usePageSeo({
     <CommonSectionWrapper>
       <div class="block justify-between md:flex">
         <FeedbackGos />
-        <NuxtLink class="rounded-xl overflow-hidden">
+        <NuxtLink
+          to="https://forms.mkrf.ru/e/2579/xTPLeBU7/?ap_orgcode=225601"
+          class="rounded-xl overflow-hidden"
+        >
           <img
             src="/banner-uvazhaemye-posetiteli.png"
             alt=""

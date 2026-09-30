@@ -13,8 +13,8 @@ COPY . .
 
 # Значения по умолчанию, «зашиваемые» в сборку. Оба переопределяются при запуске
 # контейнера (см. ENV ниже), поэтому один образ подходит для разных окружений.
-ARG NUXT_PUBLIC_API_BASE=https://api2.infomania.ru
-ARG NUXT_PUBLIC_SITE_URL=https://alt.infomania.ru
+ARG NUXT_PUBLIC_API_BASE=https://api.infomania.ru
+ARG NUXT_PUBLIC_SITE_URL=https://infomania.ru
 ENV NUXT_PUBLIC_API_BASE=$NUXT_PUBLIC_API_BASE \
     NUXT_PUBLIC_SITE_URL=$NUXT_PUBLIC_SITE_URL
 

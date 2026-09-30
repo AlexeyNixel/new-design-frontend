@@ -11,12 +11,6 @@ const isNotFound = computed(() => statusCode.value === 404);
 /** Путь, который не нашёлся (без адреса сайта) */
 const requestedPath = computed(() => route.fullPath);
 
-/** Старый сайт ещё работает — по старым ссылкам страница может найтись там */
-const OLD_SITE = 'http://dev.infomania.ru';
-const showOldSiteHint = computed(
-  () => isNotFound.value && requestedPath.value !== '/',
-);
-
 const sections = [
   { label: 'Новости и события', to: '/post', icon: 'i-heroicons-newspaper' },
   { label: 'Книги', to: '/books', icon: 'i-heroicons-book-open' },
@@ -121,18 +115,6 @@ const reload = () => window.location.reload();
                 Назад
               </UButton>
             </div>
-
-            <p
-              v-if="showOldSiteHint"
-              class="mt-6 text-sm text-gray-500 max-w-2xl"
-            >
-              Перешли по старой ссылке? Страница могла остаться на прежней версии
-              сайта:
-              <a
-                :href="`${OLD_SITE}${requestedPath}`"
-                class="font-semibold text-primary-500 hover:underline"
-              >открыть на старом сайте</a>.
-            </p>
           </div>
         </div>
 

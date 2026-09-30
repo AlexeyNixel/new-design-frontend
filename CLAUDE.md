@@ -32,7 +32,7 @@ npx prettier --write . # форматирование кода
 Docker (`Dockerfile` + `.dockerignore` в корне):
 ```bash
 docker build -t nomb-frontend .
-docker run -p 3000:3000 -e NUXT_PUBLIC_API_BASE_URL=https://api2.infomania.ru nomb-frontend
+docker run -p 3000:3000 -e NUXT_PUBLIC_API_BASE_URL=https://api.infomania.ru nomb-frontend
 ```
 Адрес API при запуске задаётся через `NUXT_PUBLIC_API_BASE_URL` (ключ `apiBaseUrl`), а не `NUXT_PUBLIC_API_BASE` — последний читается только на этапе сборки.
 
@@ -140,7 +140,7 @@ modal.open({ imgLinks: [...], startIndex: 0 });
 
 ## Важные замечания
 
-- SEO: `sitemap.xml` генерирует `@nuxtjs/sitemap` (динамические URL — `server/api/__sitemap__/urls.ts`), `robots.txt` — серверный маршрут `server/routes/robots.txt.ts`. Адрес сайта — `NUXT_PUBLIC_SITE_URL` (по умолчанию `https://alt.infomania.ru`). Не добавлять `nitro.devProxy` с ключом `/site`: он матчит по префиксу и перехватывает `/sitemap.xml`.
+- SEO: `sitemap.xml` генерирует `@nuxtjs/sitemap` (динамические URL — `server/api/__sitemap__/urls.ts`), `robots.txt` — серверный маршрут `server/routes/robots.txt.ts`. Адрес сайта — `NUXT_PUBLIC_SITE_URL` (по умолчанию `https://infomania.ru`; `alt.infomania.ru` редиректит туда). Не добавлять `nitro.devProxy` с ключом `/site`: он матчит по префиксу и перехватывает `/sitemap.xml`.
 - `app/layouts/ContentLayout.vue` содержит устаревшую ссылку `/entry` вместо `/post` — можно исправить при случае.
 - Внешние скрипты НЕ подключаются глобально: Яндекс.Формы — через `useYandexFormsEmbed()` только на страницах, где в CMS-контенте есть форма; скрипт Госуслуг грузит сам `FeedbackGos.vue`.
 - Стили: Tailwind и Nuxt UI импортируются один раз в `main.css`, остальные CSS-файлы подключаются внутри него через `@import`. Не добавлять `@import 'tailwindcss'` в другие файлы и не перечислять их в `css` в `nuxt.config` — весь Tailwind сгенерируется повторно.

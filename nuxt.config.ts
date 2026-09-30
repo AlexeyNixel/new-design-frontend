@@ -17,7 +17,7 @@ const publicFileCacheRules = Object.fromEntries(
     ]),
 );
 
-const SITE_URL = process.env.NUXT_PUBLIC_SITE_URL || 'https://alt.infomania.ru';
+const SITE_URL = process.env.NUXT_PUBLIC_SITE_URL || 'https://infomania.ru';
 
 export default defineNuxtConfig({
   modules: ['@nuxt/ui', 'nuxt-swiper', 'dayjs-nuxt', '@nuxtjs/sitemap'],

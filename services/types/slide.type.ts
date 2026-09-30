@@ -1,23 +1,16 @@
-export interface SlideImage {
-  path: string;
-  preview?: string;
-  width?: number | null;
-  variants?: Record<string, string> | null;
-}
+import type { File } from './file.type';
 
+/** Слайд главной в формате новой админки (admin.infomania.ru → /slide/admin/<id>) */
 export interface Slide {
-  createdAt: string;
-  desc: string;
-  entry: unknown;
-  entryId: string;
-  fileId: string;
   id: string;
-  image: SlideImage;
-  imageMobile?: SlideImage;
+  createdAt: string;
   isDeleted: boolean;
-  oldId: number;
-  position: number;
-  title: string;
+  /** Порядок из админки, по возрастанию */
+  slideOrder: number;
+  postId: string | null;
+  imageFileId: string;
+  /** Внешняя ссылка, если слайд не привязан к новости (может быть пустой строкой) */
   url: string;
-  post: { slug: string } | null;
+  image: File;
+  post: { id: string; slug: string; title?: string } | null;
 }

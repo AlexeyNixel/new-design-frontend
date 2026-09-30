@@ -1,16 +1,22 @@
 <template>
+  <!-- Зону наведения держит только корень: панель и подменю — его потомки,
+       поэтому переход курсора между кнопкой, панелью и подменю не считается уходом. -->
   <div
     class="relative inline-block"
     @mouseenter="openDropdown"
-    @mouseleave="closeDropdown"
+    @mouseleave="scheduleClose"
+    @keydown.esc="closeAll"
   >
-    <!-- Триггер -->
+    <!-- Триггер. Клик меню не закрывает: при наведении оно уже открыто,
+         а с клавиатуры (Enter/Space) клик только открывает его. -->
+
     <button
       type="button"
-      class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-white/90 transition-colors duration-200 hover:bg-white/10 hover:text-white"
-      :class="{ 'bg-white/10 text-white': isOpen }"
+      class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-white/90 transition-colors duration-200 hover:bg-white/15 hover:text-white"
+      :class="{ 'bg-white/15 text-white': isOpen }"
       aria-haspopup="menu"
       :aria-expanded="isOpen"
+      @click="openDropdown"
     >
       <Icon
         v-if="navigation.icon"
@@ -25,10 +31,7 @@
       />
     </button>
 
-    <!-- Выпадающий список.
-         Наружная обёртка добавляет невидимый паддинг-мостик (pt-2) между кнопкой и панелью:
-         без него курсор, двигаясь вниз, ненадолго покидает зону наведения и меню закрывается
-         раньше, чем пользователь успевает попасть на панель. -->
+    <!-- Выпадающий список. Паддинг-мостик (pt-2) закрывает щель между кнопкой и панелью. -->
     <Transition
       enter-active-class="transition duration-150 ease-out"
       enter-from-class="opacity-0 -translate-y-1"
@@ -39,14 +42,13 @@
     >
       <div
         v-if="isOpen"
-        ref="dropdownRef"
         class="absolute top-full left-0 z-50 w-max pt-2"
-        @mouseenter="openDropdown"
-        @mouseleave="closeDropdown"
       >
         <div
+          ref="panelRef"
           role="menu"
           class="flex flex-col min-w-[240px] rounded-2xl border border-gray-100 bg-white p-2 shadow-xl"
+          @mousemove="trackPointer"
         >
           <template
             v-for="(item, index) in navigation.children"
@@ -58,12 +60,12 @@
               class="mx-2 my-1.5 h-px bg-gray-100"
             />
 
-            <!-- Пункт меню -->
+            <!-- Пункт меню. Подменю лежит внутри пункта, поэтому, пока курсор
+                 на подменю, пункт остаётся «наведённым». -->
             <div
               v-else
               class="relative"
-              @mouseenter="(e) => handleItemHover(e, item)"
-              @mouseleave="closeChildDropdown"
+              @mouseenter="hoverItem(item)"
             >
               <!-- Обычная ссылка -->
               <NuxtLink
@@ -71,12 +73,12 @@
                 :to="item.to"
                 :target="item.target"
                 role="menuitem"
-                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-primary/5 hover:text-primary"
+                class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-primary-700/5 hover:text-primary-700"
                 @click="closeAll"
               >
                 <span
                   v-if="item.icon"
-                  class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-150 group-hover:bg-primary/10 group-hover:text-primary"
+                  class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-150 group-hover:bg-primary-700/10 group-hover:text-primary-700"
                 >
                   <Icon
                     :name="item.icon"
@@ -87,24 +89,27 @@
               </NuxtLink>
 
               <!-- Пункт с вложенным списком -->
-              <div
+              <button
                 v-else
+                type="button"
                 role="menuitem"
+                aria-haspopup="menu"
                 :aria-expanded="activeChildItem === item.id"
-                class="group flex cursor-default items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors duration-150"
+                class="group flex w-full cursor-default items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150"
                 :class="
                   activeChildItem === item.id
-                    ? 'bg-primary/5 text-primary'
-                    : 'text-gray-700 hover:bg-primary/5 hover:text-primary'
+                    ? 'bg-primary-700/5 text-primary-700'
+                    : 'text-gray-700 hover:bg-primary-700/5 hover:text-primary-700'
                 "
+                @click="showChild(item.id)"
               >
                 <span
                   v-if="item.icon"
                   class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg transition-colors duration-150"
                   :class="
                     activeChildItem === item.id
-                      ? 'bg-primary/10 text-primary'
-                      : 'bg-gray-100 text-gray-500 group-hover:bg-primary/10 group-hover:text-primary'
+                      ? 'bg-primary-700/10 text-primary-700'
+                      : 'bg-gray-100 text-gray-500 group-hover:bg-primary-700/10 group-hover:text-primary-700'
                   "
                 >
                   <Icon
@@ -117,10 +122,10 @@
                   name="i-lucide-chevron-right"
                   class="w-4 h-4 text-gray-400"
                 />
-              </div>
+              </button>
 
-              <!-- Второй уровень вложенности: та же логика паддинга-мостика,
-                   но по горизонтали (влево или вправо — см. calculateChildDropdownPosition) -->
+              <!-- Второй уровень: паддинг-мостик по горизонтали
+                   (влево или вправо — см. positionChild) -->
               <Transition
                 enter-active-class="transition duration-150 ease-out"
                 enter-from-class="opacity-0 scale-95"
@@ -131,13 +136,11 @@
               >
                 <div
                   v-if="activeChildItem === item.id"
-                  ref="childDropdownRef"
-                  class="absolute z-50"
-                  :style="childDropdownStyle"
-                  @mouseenter="keepChildOpen"
-                  @mouseleave="closeChildDropdown"
+                  class="absolute top-0 z-50"
+                  :style="childStyle"
                 >
                   <div
+                    :ref="setChildPanel"
                     role="menu"
                     class="flex flex-col min-w-[240px] rounded-2xl border border-gray-100 bg-white p-2 shadow-xl"
                   >
@@ -147,12 +150,12 @@
                       :to="child.to"
                       :target="child.target"
                       role="menuitem"
-                      class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-primary/5 hover:text-primary"
+                      class="group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors duration-150 hover:bg-primary-700/5 hover:text-primary-700"
                       @click="closeAll"
                     >
                       <span
                         v-if="child.icon"
-                        class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-150 group-hover:bg-primary/10 group-hover:text-primary"
+                        class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-150 group-hover:bg-primary-700/10 group-hover:text-primary-700"
                       >
                         <Icon
                           :name="child.icon"
@@ -173,178 +176,192 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentPublicInstance } from 'vue';
 import type { NavigationMenuItem } from '~~/services/api/main-navigation.api';
 
 interface Props {
   navigation: NavigationMenuItem;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 
-// Насколько дольше меню остаётся открытым после того, как курсор покинул его зону:
-// даёт время перевести мышь на панель/вложенный список, не закрывая их случайно.
-const CLOSE_DELAY = 350;
-const CHILD_CLOSE_DELAY = 300;
-// Невидимый "мостик" между уровнями меню (px), см. комментарии в template.
+type ItemId = NavigationMenuItem['id'];
+interface Point { x: number; y: number }
+
+// Сколько меню остаётся открытым после ухода курсора — прощает случайный промах.
+const CLOSE_DELAY = 300;
+// Сколько ждём, прежде чем сменить подменю, пока курсор движется к открытому.
+const AIM_DELAY = 350;
+// Невидимый "мостик" между панелью и подменю (px).
 const CHILD_GAP = 8;
+// Запас треугольника "прицеливания" по вертикали (px).
+const AIM_TOLERANCE = 40;
 
-const isOpen = ref(false);
-const activeChildItem = ref<string | number | null>(null);
-const dropdownRef = ref<HTMLElement | null>(null);
-const childDropdownRef = ref<HTMLElement | null>(null);
-const childDropdownStyle = ref({});
+// Открытым может быть только одно меню панели: при наведении на соседний
+// пункт верхнего уровня предыдущее закрывается сразу, без задержки.
+const openMenuId = useState<ItemId | null>('main-nav-open', () => null);
+const isOpen = computed(() => openMenuId.value === props.navigation.id);
+
+const activeChildItem = ref<ItemId | null>(null);
+const panelRef = ref<HTMLElement | null>(null);
+const childPanel = ref<HTMLElement | null>(null);
+const childStyle = ref<Record<string, string>>({
+  left: '100%',
+  paddingLeft: `${CHILD_GAP}px`,
+});
 
 let closeTimeout: ReturnType<typeof setTimeout> | null = null;
-let childCloseTimeout: ReturnType<typeof setTimeout> | null = null;
-let resizeObserver: ResizeObserver | null = null;
+let aimTimeout: ReturnType<typeof setTimeout> | null = null;
+let pendingChild: ItemId | null | undefined;
+const pointer: Point[] = [];
 
 const hasChildren = (item: NavigationMenuItem) =>
   !!item.children && item.children.length > 0;
 
-const openDropdown = () => {
-  if (closeTimeout) {
-    clearTimeout(closeTimeout);
-    closeTimeout = null;
-  }
-  isOpen.value = true;
+const setChildPanel = (el: Element | ComponentPublicInstance | null) => {
+  childPanel.value = el as HTMLElement | null;
 };
 
-const closeDropdown = () => {
-  closeTimeout = setTimeout(() => {
-    isOpen.value = false;
-    activeChildItem.value = null;
-  }, CLOSE_DELAY);
+const clearTimer = (timer: ReturnType<typeof setTimeout> | null) => {
+  if (timer) clearTimeout(timer);
+  return null;
+};
+
+const cancelPending = () => {
+  aimTimeout = clearTimer(aimTimeout);
+  pendingChild = undefined;
+};
+
+const openDropdown = () => {
+  closeTimeout = clearTimer(closeTimeout);
+  openMenuId.value = props.navigation.id;
 };
 
 const closeAll = () => {
-  if (closeTimeout) {
-    clearTimeout(closeTimeout);
-    closeTimeout = null;
-  }
-  if (childCloseTimeout) {
-    clearTimeout(childCloseTimeout);
-    childCloseTimeout = null;
-  }
-  isOpen.value = false;
+  closeTimeout = clearTimer(closeTimeout);
+  cancelPending();
   activeChildItem.value = null;
+  if (isOpen.value) openMenuId.value = null;
 };
 
-const handleItemHover = async (event: MouseEvent, item: NavigationMenuItem) => {
-  if (closeTimeout) {
-    clearTimeout(closeTimeout);
-    closeTimeout = null;
-  }
+const scheduleClose = () => {
+  closeTimeout = clearTimer(closeTimeout);
+  closeTimeout = setTimeout(closeAll, CLOSE_DELAY);
+};
 
-  if (childCloseTimeout) {
-    clearTimeout(childCloseTimeout);
-    childCloseTimeout = null;
-  }
-
-  if (hasChildren(item)) {
-    activeChildItem.value = item.id;
-
-    // Ждем следующего тика для отрисовки DOM
-    await nextTick();
-
-    // Вычисляем позицию после отрисовки
-    calculateChildDropdownPosition();
-  }
-  else {
+// Меню закрыли снаружи (открыли соседнее) — сбрасываем подменю
+watch(isOpen, (open) => {
+  if (!open) {
+    cancelPending();
     activeChildItem.value = null;
-  }
-};
-
-const keepChildOpen = () => {
-  if (childCloseTimeout) {
-    clearTimeout(childCloseTimeout);
-    childCloseTimeout = null;
-  }
-};
-
-const closeChildDropdown = () => {
-  childCloseTimeout = setTimeout(() => {
-    activeChildItem.value = null;
-  }, CHILD_CLOSE_DELAY);
-};
-
-const calculateChildDropdownPosition = () => {
-  if (!dropdownRef.value || !childDropdownRef.value) return;
-
-  const dropdownRect = dropdownRef.value.getBoundingClientRect();
-  const childDropdownWidth = childDropdownRef.value.offsetWidth || 240;
-
-  // Доступное место справа
-  const availableSpaceRight = window.innerWidth - dropdownRect.right - 330;
-  // Доступное место слева
-  const availableSpaceLeft = dropdownRect.left;
-
-  // Определяем позицию
-  if (availableSpaceRight >= childDropdownWidth) {
-    // Места справа достаточно - открываем вправо
-    childDropdownStyle.value = {
-      left: '100%',
-      top: '0',
-      paddingLeft: `${CHILD_GAP}px`,
-    };
-  }
-  else if (availableSpaceLeft >= childDropdownWidth) {
-    // Места слева достаточно - открываем влево
-    childDropdownStyle.value = {
-      right: '100%',
-      top: '0',
-      paddingRight: `${CHILD_GAP}px`,
-    };
-  }
-  else {
-    // Если нет места ни слева, ни справа - открываем вправо, но сдвигаем внутрь
-    const offset = Math.max(0, childDropdownWidth - availableSpaceRight);
-    childDropdownStyle.value = {
-      left: '100%',
-      top: '0',
-      paddingLeft: `${CHILD_GAP}px`,
-      transform: `translateX(-${offset}px)`,
-    };
-  }
-};
-
-// Наблюдаем за изменениями размеров
-const setupResizeObserver = () => {
-  if (!dropdownRef.value) return;
-
-  resizeObserver = new ResizeObserver(() => {
-    if (activeChildItem.value) {
-      calculateChildDropdownPosition();
-    }
-  });
-
-  resizeObserver.observe(dropdownRef.value);
-};
-
-const handleResize = () => {
-  if (activeChildItem.value) {
-    calculateChildDropdownPosition();
-  }
-};
-
-onMounted(() => {
-  if (import.meta.client) {
-    window.addEventListener('resize', handleResize);
-    setupResizeObserver();
   }
 });
 
+const positionChild = () => {
+  if (!panelRef.value || !childPanel.value) return;
+
+  const panelRect = panelRef.value.getBoundingClientRect();
+  const width = childPanel.value.offsetWidth + CHILD_GAP;
+  const spaceRight = window.innerWidth - panelRect.right;
+
+  if (spaceRight >= width) {
+    childStyle.value = { left: '100%', paddingLeft: `${CHILD_GAP}px` };
+  }
+  else if (panelRect.left >= width) {
+    childStyle.value = { right: '100%', paddingRight: `${CHILD_GAP}px` };
+  }
+  else {
+    // Места нет ни с одной стороны — открываем вправо со сдвигом внутрь экрана
+    childStyle.value = {
+      left: '100%',
+      paddingLeft: `${CHILD_GAP}px`,
+      transform: `translateX(-${Math.ceil(width - spaceRight)}px)`,
+    };
+  }
+};
+
+const showChild = async (id: ItemId | null) => {
+  cancelPending();
+  if (activeChildItem.value === id) return;
+
+  activeChildItem.value = id;
+  if (id === null) return;
+
+  await nextTick();
+  positionChild();
+};
+
+const isInTriangle = (p: Point, a: Point, b: Point, c: Point) => {
+  const sign = (p1: Point, p2: Point, p3: Point) =>
+    (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);
+  const d1 = sign(p, a, b);
+  const d2 = sign(p, b, c);
+  const d3 = sign(p, c, a);
+  const hasNeg = d1 < 0 || d2 < 0 || d3 < 0;
+  const hasPos = d1 > 0 || d2 > 0 || d3 > 0;
+  return !(hasNeg && hasPos);
+};
+
+/**
+ * Курсор движется к открытому подменю? Строим треугольник от предыдущей точки
+ * курсора к ближнему краю подменю: пока курсор внутри — пользователь «целится»
+ * в подменю, и задетые по пути пункты не должны его переключать.
+ */
+const isAimingAtChild = () => {
+  if (!childPanel.value || pointer.length < 2) return false;
+
+  const prev = pointer[0]!;
+  const cur = pointer[pointer.length - 1]!;
+  const rect = childPanel.value.getBoundingClientRect();
+  const edgeX = rect.left >= prev.x ? rect.left : rect.right;
+
+  return isInTriangle(
+    cur,
+    prev,
+    { x: edgeX, y: rect.top - AIM_TOLERANCE },
+    { x: edgeX, y: rect.bottom + AIM_TOLERANCE },
+  );
+};
+
+const trackPointer = (event: MouseEvent) => {
+  pointer.push({ x: event.clientX, y: event.clientY });
+  if (pointer.length > 4) pointer.shift();
+
+  // Курсор перестал идти к подменю — переключаем сразу, не дожидаясь таймера
+  if (pendingChild !== undefined && !isAimingAtChild()) {
+    showChild(pendingChild);
+  }
+};
+
+const hoverItem = (item: NavigationMenuItem) => {
+  closeTimeout = clearTimer(closeTimeout);
+  const target = hasChildren(item) ? item.id : null;
+
+  if (target === activeChildItem.value) {
+    // Вернулись на пункт открытого подменю (или вошли в само подменю)
+    cancelPending();
+    return;
+  }
+
+  if (activeChildItem.value !== null && isAimingAtChild()) {
+    pendingChild = target;
+    aimTimeout = clearTimer(aimTimeout);
+    aimTimeout = setTimeout(() => showChild(target), AIM_DELAY);
+    return;
+  }
+
+  showChild(target);
+};
+
+const handleResize = () => {
+  if (activeChildItem.value !== null) positionChild();
+};
+
+onMounted(() => window.addEventListener('resize', handleResize));
+
 onUnmounted(() => {
-  if (closeTimeout) {
-    clearTimeout(closeTimeout);
-  }
-  if (childCloseTimeout) {
-    clearTimeout(childCloseTimeout);
-  }
-  if (import.meta.client) {
-    window.removeEventListener('resize', handleResize);
-    if (resizeObserver) {
-      resizeObserver.disconnect();
-    }
-  }
+  clearTimer(closeTimeout);
+  clearTimer(aimTimeout);
+  window.removeEventListener('resize', handleResize);
 });
 </script>

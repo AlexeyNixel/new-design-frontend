@@ -3,7 +3,7 @@ import type { Tag } from '~~/services/types/tag.type';
 
 export interface Post {
   id: string;
-  fileId: string;
+  previewFileId: string | null;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -11,10 +11,10 @@ export interface Post {
   description: string;
   content: string;
   slug: string;
-  published: boolean;
+  isPublished: boolean;
   isDeleted: boolean;
   departmentId: string;
-  pinned: boolean;
+  isPinned: boolean;
   preview: File;
   tags: [{ tag: Tag }];
   department: {

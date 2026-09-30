@@ -3,7 +3,7 @@ import { API_ENDPOINTS } from './endpoints';
 import type { Slide } from '~~/services/types/slide.type';
 
 interface Params {
-  pageSize: number;
+  limit: number;
   orderBy: string;
   include: string;
 }

@@ -13,11 +13,7 @@
         :key="item.id"
       >
         <NuxtLink
-          :to="
-            item.post
-              ? { name: 'post-slug', params: { slug: item.post.slug } }
-              : item.url
-          "
+          :to="slideLink(item)"
           class="block w-full h-full"
         >
           <picture class="relative block w-full h-full">
@@ -28,19 +24,14 @@
               color="error"
               size="xl"
               class="absolute top-5 right-5 z-50"
-              @click="goToAdmin('/slide?editId=' + item.id)"
+              aria-label="Редактировать слайд"
+              @click.prevent.stop="goToAdmin('/slide/admin/' + item.id)"
             />
-            <source
-              v-if="item.imageMobile?.path"
-              media="(max-width: 639px)"
-              :srcset="imageSrcset(item.imageMobile) || item.imageMobile.path"
-              sizes="100vw"
-            >
             <img
               :src="item.image.path"
               :srcset="imageSrcset(item.image)"
               sizes="(max-width: 1024px) 100vw, 75vw"
-              :alt="item.title || 'Слайд'"
+              :alt="item.post?.title || 'Слайд'"
               class="w-full h-full object-cover"
               :style="{ objectPosition: 'center center' }"
               width="1200"
@@ -100,6 +91,7 @@
 
 <script setup lang="ts">
 import { useSlides } from '~~/services/api/slidesService';
+import type { Slide } from '~~/services/types/slide.type';
 
 // Нативный веб-компонент из nuxt-swiper (swiper/element): в шаблоне регистрируется
 // как <swiper-container>/<swiper-slide> (см. isCustomElement в nuxt.config).
@@ -114,9 +106,20 @@ interface SwiperInstance {
 const slideService = useSlides();
 const { hasSession, goToAdmin } = useAuth();
 
-const { data: slides } = await slideService.getAllSlides({
+const { data } = await slideService.getAllSlides({
   limit: 10,
 });
+
+// Порядок задаётся в админке полем slideOrder; при равных значениях
+// сохраняется порядок API (новые сверху)
+const slides = [...(data ?? [])].sort(
+  (a, b) => (a.slideOrder ?? 0) - (b.slideOrder ?? 0),
+);
+
+const slideLink = (slide: Slide) =>
+  slide.post?.slug
+    ? { name: 'post-slug', params: { slug: slide.post.slug } }
+    : slide.url;
 
 const swiperElRef = ref<SwiperContainerEl | null>(null);
 const activeIndex = ref(0);

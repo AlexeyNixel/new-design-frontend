@@ -49,7 +49,10 @@
               rel="noopener"
               class="footer-link inline-flex items-center gap-1.5"
             >
-              <UIcon name="i-heroicons-map-pin" class="size-4" />
+              <UIcon
+                name="i-heroicons-map-pin"
+                class="size-4"
+              />
               Как добраться
             </a>
           </div>
@@ -88,7 +91,10 @@
                 <!-- На узких экранах «выходной» не помещается в ячейку: показываем прочерк,
                      а слово оставляем для скринридеров -->
                 <template v-else>
-                  <span class="sm:hidden" aria-hidden="true">—</span>
+                  <span
+                    class="sm:hidden"
+                    aria-hidden="true"
+                  >—</span>
                   <span class="sr-only sm:not-sr-only">выходной</span>
                 </template>
               </span>
@@ -114,7 +120,10 @@
           {{ group.title }}
         </h2>
         <ul class="mt-4 space-y-2.5">
-          <li v-for="link in group.links" :key="link.label">
+          <li
+            v-for="link in group.links"
+            :key="link.label"
+          >
             <NuxtLink
               :to="link.to"
               :target="link.external ? '_blank' : undefined"
@@ -128,14 +137,19 @@
       </nav>
 
       <div>
-        <h2 class="text-base! font-bold mb-0!">Связаться с нами</h2>
+        <h2 class="text-base! font-bold mb-0!">
+          Связаться с нами
+        </h2>
         <ul class="mt-4 space-y-2.5 text-sm">
           <li>
             <a
               :href="`tel:${PHONE_HREF}`"
               class="footer-link inline-flex items-center gap-2"
             >
-              <UIcon name="i-heroicons-phone" class="size-4 text-primary-200" />
+              <UIcon
+                name="i-heroicons-phone"
+                class="size-4 text-primary-200"
+              />
               {{ LIBRARY_INFO.telephone }}
             </a>
           </li>
@@ -161,8 +175,14 @@
           Задать вопрос
         </UButton>
 
-        <ul class="mt-6 flex gap-2" aria-label="Мы в соцсетях">
-          <li v-for="social in socials" :key="social.label">
+        <ul
+          class="mt-6 flex gap-2"
+          aria-label="Мы в соцсетях"
+        >
+          <li
+            v-for="social in socials"
+            :key="social.label"
+          >
             <a
               :href="social.href"
               target="_blank"
@@ -171,8 +191,17 @@
               :title="social.label"
               class="grid place-items-center size-10 rounded-xl bg-white/[0.08] hover:bg-white/15 text-white transition-colors focus-visible:outline-2 focus-visible:outline-primary-200"
             >
-              <UIcon v-if="social.icon" :name="social.icon" class="size-5" />
-              <span v-else class="text-xs font-bold">{{ social.text }}</span>
+              <UIcon
+                v-if="social.icon"
+                :name="social.icon"
+                class="size-5"
+              />
+              <img
+                v-else
+                :src="social.image"
+                alt=""
+                class="size-5 brightness-0 invert"
+              >
             </a>
           </li>
         </ul>
@@ -188,8 +217,14 @@
           © {{ currentYear }} Новосибирская областная молодёжная библиотека
         </p>
         <ul class="flex flex-wrap gap-x-5 gap-y-2">
-          <li v-for="link in legalLinks" :key="link.label">
-            <NuxtLink :to="link.to" class="footer-link">
+          <li
+            v-for="link in legalLinks"
+            :key="link.label"
+          >
+            <NuxtLink
+              :to="link.to"
+              class="footer-link"
+            >
               {{ link.label }}
             </NuxtLink>
           </li>
@@ -208,8 +243,8 @@ interface FooterLink {
   external?: boolean;
 }
 
-const MAP_URL =
-  'https://yandex.ru/map-widget/v1/?um=constructor%3A952a94a4b33a6930b5ce54184df44d9a8f630cc4697ed47374222011683b6ded&amp;source=constructor';
+const MAP_URL
+  = 'https://yandex.ru/map-widget/v1/?um=constructor%3A952a94a4b33a6930b5ce54184df44d9a8f630cc4697ed47374222011683b6ded&amp;source=constructor';
 const PHONE_HREF = LIBRARY_INFO.telephone.replace(/[^\d+]/g, '');
 const currentYear = new Date().getFullYear();
 
@@ -236,7 +271,7 @@ const linkGroups: { title: string; links: FooterLink[] }[] = [
       { label: 'Клубы и объединения', to: '/page/clubs' },
       {
         label: 'Электронный каталог',
-        to: 'http://search.infomania.ru/jirbis2/',
+        to: 'https://search.infomania.ru/jirbis2/',
         external: true,
       },
     ],
@@ -278,7 +313,11 @@ const socials = [
     href: 'https://ok.ru/profile/569370655985',
     icon: 'bxl:ok-ru',
   },
-  { label: 'MAX', href: 'https://max.ru/id5406132173_gos', text: 'MAX' },
+  {
+    label: 'MAX',
+    href: 'https://max.ru/id5406132173_gos',
+    image: '/max-dark.svg',
+  },
 ];
 
 const week = WEEK_ORDER.map((index) => {

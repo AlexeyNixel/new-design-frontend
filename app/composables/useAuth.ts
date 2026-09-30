@@ -8,7 +8,7 @@ export interface AuthUser {
  * Базовый URL админки.
  * ВНИМАНИЕ: используем https. Если админка реально по http — поменяй здесь.
  */
-const ADMIN_URL = 'http://adminnew.infomania.ru';
+const ADMIN_URL = 'https://admin.infomania.ru';
 
 /**
  * Авторизация на основе HttpOnly-куки `access_token` (домен `.infomania.ru`),

@@ -53,7 +53,7 @@ interface CorsTest {
 const tests = ref<CorsTest[]>([
   {
     name: 'Test 1: Direct fetch to API',
-    url: 'http://api2.infomania.ru/api/main-slider/?limit=5',
+    url: 'https://api.infomania.ru/api/main-slider/?limit=5',
     method: 'direct',
     status: '',
     result: '',

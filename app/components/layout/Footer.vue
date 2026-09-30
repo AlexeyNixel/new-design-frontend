@@ -196,10 +196,12 @@
                 :name="social.icon"
                 class="size-5"
               />
-              <span
+              <img
                 v-else
-                class="text-xs font-bold"
-              >{{ social.text }}</span>
+                :src="social.image"
+                alt=""
+                class="size-5 brightness-0 invert"
+              >
             </a>
           </li>
         </ul>
@@ -241,7 +243,8 @@ interface FooterLink {
   external?: boolean;
 }
 
-const MAP_URL = 'https://yandex.ru/maps/-/CDvBPw~A';
+const MAP_URL
+  = 'https://yandex.ru/map-widget/v1/?um=constructor%3A952a94a4b33a6930b5ce54184df44d9a8f630cc4697ed47374222011683b6ded&amp;source=constructor';
 const PHONE_HREF = LIBRARY_INFO.telephone.replace(/[^\d+]/g, '');
 const currentYear = new Date().getFullYear();
 
@@ -268,7 +271,7 @@ const linkGroups: { title: string; links: FooterLink[] }[] = [
       { label: 'Клубы и объединения', to: '/page/clubs' },
       {
         label: 'Электронный каталог',
-        to: 'http://search.infomania.ru/jirbis2/',
+        to: 'https://search.infomania.ru/jirbis2/',
         external: true,
       },
     ],
@@ -310,7 +313,11 @@ const socials = [
     href: 'https://ok.ru/profile/569370655985',
     icon: 'bxl:ok-ru',
   },
-  { label: 'MAX', href: 'https://max.ru/id5406132173_gos', text: 'MAX' },
+  {
+    label: 'MAX',
+    href: 'https://max.ru/id5406132173_gos',
+    image: '/max-dark.svg',
+  },
 ];
 
 const week = WEEK_ORDER.map((index) => {

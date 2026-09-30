@@ -21,7 +21,7 @@ const searchText = ref<string>('');
 
 const handleSearchBook = () => {
   navigateTo(
-    `http://opac.infomania.ru/cgi-bin/koha/opac-search.pl?idx=&q=${searchText.value}&weight_search=1`,
+    `https://opac.infomania.ru/cgi-bin/koha/opac-search.pl?idx=&q=${searchText.value}&weight_search=1`,
     { external: true, open: { target: '_blank' } },
   );
 };

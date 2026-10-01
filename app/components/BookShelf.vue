@@ -1,5 +1,6 @@
 <template>
   <UTabs
+    v-model="tab"
     color="primary"
     :items="items"
   >
@@ -13,10 +14,14 @@
 import type { TabsItem } from '#ui/components/Tabs.vue';
 import { BookList, ComicList } from '#components';
 
+/** Активная вкладка — снаружи по ней меняется ссылка «Полный список» */
+const tab = defineModel<'books' | 'comics'>({ default: 'books' });
+
 const items: TabsItem[] = [
   {
     label: 'Книги',
     icon: 'i-heroicons-book-open',
+    value: 'books',
     component: BookList,
   },
   // {
@@ -27,6 +32,7 @@ const items: TabsItem[] = [
   {
     label: 'Комиксы / Манга',
     icon: 'i-heroicons-paint-brush',
+    value: 'comics',
     component: ComicList,
   },
   // {

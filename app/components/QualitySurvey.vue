@@ -11,14 +11,15 @@
 
     <div class="relative flex flex-col flex-1 min-w-0">
       <div class="flex items-center gap-3 mb-5">
-        <span class="flex items-center justify-center size-10 rounded-xl bg-primary/10 text-primary">
-          <Icon
-            name="i-heroicons-star"
-            class="size-5"
-          />
+        <span
+          class="flex items-center justify-center size-10 rounded-xl bg-primary/10 text-primary"
+        >
+          <Icon name="i-heroicons-star" class="size-5" />
         </span>
-        <span class="text-xs font-semibold text-gray-500 bg-gray-100 rounded-full px-2.5 py-1">
-          Для посетителей 18+
+        <span
+          class="text-xs font-semibold text-gray-500 bg-gray-100 rounded-full px-2.5 py-1"
+        >
+          Для посетителей
         </span>
       </div>
 
@@ -44,7 +45,9 @@
     </div>
 
     <!-- QR — удобно, если сайт открыт на компьютере, а опрос хочется пройти с телефона -->
-    <div class="relative hidden sm:flex flex-col items-center justify-center shrink-0">
+    <div
+      class="relative hidden sm:flex flex-col items-center justify-center shrink-0"
+    >
       <div class="rounded-2xl border border-gray-100 bg-white p-2 shadow-sm">
         <img
           src="/qr-ocenka-kachestva.png"
@@ -53,7 +56,7 @@
           height="132"
           class="size-32 [image-rendering:pixelated]"
           loading="lazy"
-        >
+        />
       </div>
       <span class="mt-2 text-xs text-gray-500 text-center max-w-36">
         или наведите камеру телефона

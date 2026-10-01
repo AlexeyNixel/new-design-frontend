@@ -10,9 +10,28 @@ const GOSUSLUGI_LOGO
 const GOSUSLUGI_OPA_ID = 348893;
 const RUSTORE_URL = 'https://apps.rustore.ru/app/ru.gosuslugi.pos';
 
+// Оригинальные иллюстрации баннера Госуслуг: широкая — для телефона (панель сверху),
+// вертикальная — для планшета и десктопа (панель справа)
+const GOSUSLUGI_ART_WIDE
+  = 'https://pos.gosuslugi.ru/bin/banner-fluid/83/banner-fluid-bg-83-2.svg';
+const GOSUSLUGI_ART_TALL
+  = 'https://pos.gosuslugi.ru/bin/banner-fluid/83/banner-fluid-bg-83.svg';
+
 const ready = ref(false);
 /** Если логотип с сервера Госуслуг не загрузился — показываем текстовый вариант */
 const logoFailed = ref(false);
+/** Если иллюстрация Госуслуг недоступна — показываем свою SVG-иллюстрацию */
+const artFailed = ref(false);
+
+const checkArt = () => {
+  const img = new Image();
+  img.onerror = () => {
+    artFailed.value = true;
+  };
+  img.src = window.matchMedia('(min-width: 640px)').matches
+    ? GOSUSLUGI_ART_TALL
+    : GOSUSLUGI_ART_WIDE;
+};
 
 const loadGosuslugiScript = () =>
   new Promise<void>((resolve, reject) => {
@@ -45,6 +64,7 @@ const onKeydown = (event: KeyboardEvent) => {
 onMounted(async () => {
   document.addEventListener('click', onDocumentClick);
   document.addEventListener('keydown', onKeydown);
+  checkArt();
 
   try {
     await loadGosuslugiScript();
@@ -111,7 +131,12 @@ onBeforeUnmount(() => {
 
     <!-- Иллюстрация и логотип на светлой панели, как в оригинальном баннере -->
     <div
-      class="gos-banner__decor relative order-1 sm:order-2 min-h-40 sm:min-h-full"
+      class="gos-banner__decor relative order-1 sm:order-2 min-h-44 sm:min-h-full"
+      :class="{ 'gos-banner__decor--art': !artFailed }"
+      :style="{
+        '--gos-art-wide': `url('${GOSUSLUGI_ART_WIDE}')`,
+        '--gos-art-tall': `url('${GOSUSLUGI_ART_TALL}')`,
+      }"
     >
       <div
         class="absolute left-0 top-0 z-10 rounded-br-xl bg-white px-3.5 pt-3 pb-2.5 shadow-sm"
@@ -135,8 +160,9 @@ onBeforeUnmount(() => {
         >Решаем вместе</span>
       </div>
 
-      <!-- Обращения-«пузыри» в цветах Госуслуг -->
+      <!-- Запасная иллюстрация, если картинка Госуслуг не загрузилась -->
       <svg
+        v-if="artFailed"
         class="absolute inset-0 m-auto h-[78%] w-[86%] translate-y-[6%]"
         viewBox="0 0 240 180"
         fill="none"
@@ -204,5 +230,16 @@ onBeforeUnmount(() => {
 
 .gos-banner__decor {
   background: #f8efec;
+}
+
+/* Как в официальном баннере: иллюстрация на всю панель, прижата к верху */
+.gos-banner__decor--art {
+  background: #f8efec var(--gos-art-wide) center top / cover no-repeat;
+}
+
+@media (min-width: 640px) {
+  .gos-banner__decor--art {
+    background-image: var(--gos-art-tall);
+  }
 }
 </style>

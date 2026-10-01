@@ -1,8 +1,6 @@
 <template>
   <CommonContentContainer>
-    <h1 class="sr-only">
-      Комиксы
-    </h1>
+    <h1 class="sr-only">Комиксы</h1>
     <CommonCatalogFilters
       v-model:search="searchText"
       search-placeholder="Поиск комикса..."
@@ -12,73 +10,64 @@
     >
       <template #active>
         <button
-          v-for="genre in selectedGenres"
-          :key="genre.id"
+          v-if="selectedSeries"
           type="button"
           class="filter-chip"
-          :aria-label="`Убрать фильтр «${genre.title}»`"
-          @click="toggleGenre(genre)"
+          :aria-label="`Убрать фильтр «${selectedSeries.title}»`"
+          @click="toggleSeries(selectedSeries)"
         >
-          {{ genre.title }}
-          <Icon
-            name="i-heroicons-x-mark"
-            class="size-3.5"
-          />
+          {{ selectedSeries.title }}
+          <Icon name="i-heroicons-x-mark" class="size-3.5" />
         </button>
-        <span
-          v-if="ageMax"
-          class="filter-chip"
-        >До {{ ageMax }}+</span>
-        <span
-          v-if="yearFrom || yearTo"
-          class="filter-chip"
-        >Годы: {{ yearFrom || '…' }}–{{ yearTo || '…' }}</span>
+        <span v-if="ageMax" class="filter-chip">До {{ ageMax }}+</span>
+        <span v-if="yearFrom || yearTo" class="filter-chip"
+          >Годы: {{ yearFrom || '…' }}–{{ yearTo || '…' }}</span
+        >
       </template>
 
-      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
-        <section>
-          <header class="flex items-center justify-between mb-3">
-            <h2 class="flex items-center gap-2 text-sm font-semibold text-gray-900">
-              <Icon
-                name="i-heroicons-tag"
-                class="size-4 text-primary"
-              />
-              Жанры
-            </h2>
-            <span class="text-xs text-gray-500">
-              выбрано {{ selectedGenres.length }} из {{ genres.length }}
-            </span>
-          </header>
+      <!-- Серий немного, поэтому всё в одну строку: серии тянутся, числовые поля — по контенту -->
+      <div class="flex flex-col gap-5 lg:flex-row lg:items-start lg:gap-8">
+        <section class="flex-1 min-w-0">
+          <h2
+            class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900"
+          >
+            <Icon
+              name="i-heroicons-rectangle-stack"
+              class="size-4 text-primary"
+            />
+            Серия
+          </h2>
 
           <div class="flex flex-wrap gap-2">
             <button
-              v-for="genre in genres"
-              :key="genre.id"
+              v-for="item in series"
+              :key="item.id"
               type="button"
               class="genre-pill"
-              :class="{ 'genre-pill--active': isGenreSelected(genre) }"
-              :aria-pressed="isGenreSelected(genre)"
-              @click="toggleGenre(genre)"
+              :class="{ 'genre-pill--active': item.id === activeSeriesId }"
+              :aria-pressed="item.id === activeSeriesId"
+              @click="toggleSeries(item)"
             >
-              {{ genre.title }}
+              {{ item.title }}
             </button>
           </div>
         </section>
 
-        <div class="order-first lg:order-none grid gap-5 grid-cols-2 lg:grid-cols-1 content-start">
+        <div
+          class="grid grid-cols-[minmax(0,7rem)_minmax(0,1fr)] gap-4 sm:gap-6 lg:w-[380px] lg:shrink-0"
+        >
           <section>
-            <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
-              <Icon
-                name="i-heroicons-cake"
-                class="size-4 text-primary"
-              />
+            <h2
+              class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900"
+            >
+              <Icon name="i-heroicons-cake" class="size-4 text-primary" />
               Возраст, до
             </h2>
             <UInput
               v-model.number="ageMax"
               type="number"
               inputmode="numeric"
-              placeholder="Например, 16"
+              placeholder="16"
               min="0"
               class="w-full"
               @change="applyFilters"
@@ -86,7 +75,9 @@
           </section>
 
           <section>
-            <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
+            <h2
+              class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900"
+            >
               <Icon
                 name="i-heroicons-calendar-days"
                 class="size-4 text-primary"
@@ -130,10 +121,7 @@
           :comic="comic"
         />
       </div>
-      <p
-        v-else
-        class="py-16 text-center text-gray-500"
-      >
+      <p v-else class="py-16 text-center text-gray-500">
         Ничего не найдено. Попробуйте изменить запрос или фильтры.
       </p>
       <div
@@ -155,7 +143,7 @@
 
 <script lang="ts" setup>
 import { useComicApi } from '~~/services/api/comic.api';
-import type { Comic, ComicGenre } from '~~/services/types/comic.type';
+import type { Comic, ComicSeries } from '~~/services/types/comic.type';
 import type { ApiResponse } from '~~/services/api/base';
 
 const comicApi = useComicApi();
@@ -181,21 +169,22 @@ const ageMax = ref<number | undefined>(toNumber(route.query.ageMax));
 const yearFrom = ref<number | undefined>(toNumber(route.query.yearFrom));
 const yearTo = ref<number | undefined>(toNumber(route.query.yearTo));
 
-const genres = await comicApi.getAllGenres();
+const series = (await comicApi.getAllSeries()) ?? [];
 
-const activeGenreIds = ref<string[]>(
-  (route.query.genres as string)?.split(',').filter(Boolean) || [],
+// API фильтрует только по одной серии (seriesId), поэтому выбор одиночный
+const activeSeriesId = ref<string | undefined>(
+  (route.query.series as string) || undefined
 );
 
-const selectedGenres = computed(() => {
-  return genres.filter(genre => activeGenreIds.value.includes(genre.id));
-});
+const selectedSeries = computed(() =>
+  series.find((item) => item.id === activeSeriesId.value)
+);
 
 const updateUrl = () => {
   const query: Record<string, string | number> = {};
   if (page.value >= 1) query.page = page.value;
   if (searchText.value) query.search = searchText.value;
-  if (activeGenreIds.value.length) query.genres = activeGenreIds.value.join(',');
+  if (activeSeriesId.value) query.series = activeSeriesId.value;
   if (ageMax.value) query.ageMax = ageMax.value;
   if (yearFrom.value) query.yearFrom = yearFrom.value;
   if (yearTo.value) query.yearTo = yearTo.value;
@@ -205,10 +194,10 @@ const updateUrl = () => {
 
 const fetchData = async () => {
   comics.value = await comicApi.getAllComics({
-    limit: 12,
+    limit: 15,
     page: page.value,
     search: searchText.value,
-    genres: activeGenreIds.value,
+    seriesId: activeSeriesId.value,
     ageMax: ageMax.value,
     yearFrom: yearFrom.value,
     yearTo: yearTo.value,
@@ -237,32 +226,21 @@ const handleNavigate = async () => {
   }
 };
 
-const toggleGenre = async (genre: ComicGenre) => {
-  const index = activeGenreIds.value.indexOf(genre.id);
-
-  if (index > -1) {
-    activeGenreIds.value.splice(index, 1);
-  }
-  else {
-    activeGenreIds.value.push(genre.id);
-  }
+const toggleSeries = async (item: ComicSeries) => {
+  activeSeriesId.value = activeSeriesId.value === item.id ? undefined : item.id;
 
   await applyFilters();
 };
 
 const activeFiltersCount = computed(
   () =>
-    selectedGenres.value.length
-    + (ageMax.value ? 1 : 0)
-    + (yearFrom.value || yearTo.value ? 1 : 0),
+    (selectedSeries.value ? 1 : 0) +
+    (ageMax.value ? 1 : 0) +
+    (yearFrom.value || yearTo.value ? 1 : 0)
 );
 
-const isGenreSelected = (genre: ComicGenre) => {
-  return activeGenreIds.value.includes(genre.id);
-};
-
 const resetFilters = async () => {
-  activeGenreIds.value = [];
+  activeSeriesId.value = undefined;
   ageMax.value = undefined;
   yearFrom.value = undefined;
   yearTo.value = undefined;

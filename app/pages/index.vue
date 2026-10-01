@@ -4,6 +4,14 @@ usePageSeo({
   description:
     'Новосибирская областная молодёжная библиотека (НОМБ): новости и события, книги, настольные игры и комиксы, клубы, выставки и услуги для читателей.',
 });
+
+// Ссылка «Полный список» в блоке «Книги» ведёт в каталог открытой вкладки
+const shelfTab = ref<'books' | 'comics'>('books');
+const shelfLink = computed(() =>
+  shelfTab.value === 'comics'
+    ? { to: '/comics', label: 'Полный список комиксов и манги' }
+    : { to: '/books', label: 'Полный список книг' },
+);
 </script>
 
 <!-- pages/index.vue -->
@@ -54,10 +62,10 @@ usePageSeo({
     <CommonSectionWrapper
       bg-gray
       title="Книги"
-      link="/books"
-      link-label="Полный список книг"
+      :link="shelfLink.to"
+      :link-label="shelfLink.label"
     >
-      <BookShelf />
+      <BookShelf v-model="shelfTab" />
     </CommonSectionWrapper>
 
     <CommonSectionWrapper
@@ -88,11 +96,12 @@ usePageSeo({
       </div>
     </CommonSectionWrapper>
 
-    <CommonSectionWrapper>
-      <EntryCarousel
-        title="Новости партнеров"
-        :by-tag="POST_TAG.partner"
-      />
+    <CommonSectionWrapper
+      title="Новости партнеров"
+      :link="`/post?tags=${POST_TAG.partner}`"
+      link-label="Все новости партнеров"
+    >
+      <PartnerNews />
     </CommonSectionWrapper>
   </div>
 </template>

@@ -38,34 +38,12 @@
       </div>
 
       <div class="flex flex-col gap-2 flex-1">
-        <NuxtLink
+        <EntryCompactCard
           v-for="post in announcements"
           :key="post.id"
-          :to="{ name: 'post-slug', params: { slug: post.slug } }"
-          class="group flex flex-1 items-stretch bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-        >
-          <!-- 5:4 — формат большинства превью с бэкенда -->
-          <div class="shrink-0 w-32 sm:w-40 min-h-28 overflow-hidden">
-            <EntryPreviewImage
-              :file="post.preview"
-              :alt="post.title"
-              sizes="160px"
-              :width="160"
-              :height="128"
-              img-class="duration-300 group-hover:scale-105"
-            />
-          </div>
-          <div class="flex-1 min-w-0 px-3 py-2 flex flex-col justify-center">
-            <span class="text-xs text-gray-500 mb-0.5">
-              {{ dayjs(post.publishedAt).format('D MMMM YYYY') }}
-            </span>
-            <span
-              class="font-semibold text-sm text-gray-900 line-clamp-3 group-hover:text-primary transition-colors"
-            >
-              {{ post.title }}
-            </span>
-          </div>
-        </NuxtLink>
+          :post="post"
+          class="flex-1"
+        />
       </div>
     </div>
 

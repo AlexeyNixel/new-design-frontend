@@ -1,70 +1,87 @@
-<!-- Карточка «Оцените работу библиотеки» — независимая оценка качества услуг (Минкультуры).
-     Раньше была картинкой-баннером; теперь кнопка + QR-код для телефона. -->
+<!-- Баннер «Уважаемые посетители!» — опрос Минкультуры о качестве услуг.
+     Тот же плакат (красный заголовок, книги, QR), но собран вёрсткой: текст чёткий,
+     а весь баннер — ссылка на опрос, как и раньше. -->
 <template>
-  <article
-    class="relative flex flex-col sm:flex-row gap-6 h-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm p-6 sm:p-8"
+  <NuxtLink
+    :to="SURVEY_URL"
+    target="_blank"
+    class="survey group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white p-6 shadow-sm sm:p-8"
+    aria-label="Оценить работу библиотеки — опрос Министерства культуры (откроется в новой вкладке)"
   >
-    <div
-      class="pointer-events-none absolute -bottom-20 -left-16 size-56 rounded-full bg-primary/10 blur-2xl"
-      aria-hidden="true"
-    />
+    <span class="absolute right-5 top-4 text-xl sm:text-2xl text-gray-900">18+</span>
 
-    <div class="relative flex flex-col flex-1 min-w-0">
-      <div class="flex items-center gap-3 mb-5">
-        <span
-          class="flex items-center justify-center size-10 rounded-xl bg-primary/10 text-primary"
-        >
-          <Icon name="i-heroicons-star" class="size-5" />
-        </span>
-        <span
-          class="text-xs font-semibold text-gray-500 bg-gray-100 rounded-full px-2.5 py-1"
-        >
-          Для посетителей
-        </span>
-      </div>
-
-      <h3 class="text-xl sm:text-2xl font-bold text-gray-900 leading-tight">
-        Оцените работу библиотеки
-      </h3>
-      <p class="mt-2 text-sm sm:text-base text-gray-600 max-w-md">
-        Ваше мнение важно не только для нас, но и для Министерства культуры РФ:
-        оно учитывается при независимой оценке качества услуг.
-      </p>
-
-      <div class="mt-6 sm:mt-auto sm:pt-6">
-        <UButton
-          :to="SURVEY_URL"
-          target="_blank"
-          size="lg"
-          class="rounded-xl px-5"
-          icon="i-heroicons-arrow-top-right-on-square"
-          trailing
-          label="Пройти опрос"
-        />
-      </div>
-    </div>
-
-    <!-- QR — удобно, если сайт открыт на компьютере, а опрос хочется пройти с телефона -->
-    <div
-      class="relative hidden sm:flex flex-col items-center justify-center shrink-0"
+    <h3
+      class="survey__title pr-12 text-[26px] sm:text-[34px] font-extrabold uppercase leading-[1.05]"
     >
-      <div class="rounded-2xl border border-gray-100 bg-white p-2 shadow-sm">
+      Уважаемые<br>посетители!
+    </h3>
+
+    <div class="mt-4 flex flex-1 gap-5">
+      <div class="flex min-w-0 flex-1 flex-col">
+        <p class="text-sm sm:text-base text-gray-800 max-w-sm">
+          Просим вас оценить работу нашей организации, пройдя по QR-коду
+          или по ссылке.
+        </p>
+
+        <span
+          class="survey__button mt-4 inline-flex w-max items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-colors"
+        >
+          Пройти опрос
+          <Icon
+            name="i-heroicons-arrow-right-20-solid"
+            class="size-4 transition-transform group-hover:translate-x-0.5"
+          />
+        </span>
+
         <img
-          src="/qr-ocenka-kachestva.png"
-          alt="QR-код опроса о качестве услуг"
-          width="132"
-          height="132"
-          class="size-32 [image-rendering:pixelated]"
+          src="/books-illustration.png"
+          alt=""
+          width="531"
+          height="113"
+          class="mt-auto pt-5 w-full max-w-[340px]"
           loading="lazy"
-        />
+        >
       </div>
-      <span class="mt-2 text-xs text-gray-500 text-center max-w-36">
-        или наведите камеру телефона
-      </span>
+
+      <!-- QR — удобно, если сайт открыт на компьютере -->
+      <img
+        src="/qr-ocenka-kachestva.png"
+        alt="QR-код опроса о качестве услуг"
+        width="226"
+        height="225"
+        class="hidden self-end sm:block size-32 lg:size-36 shrink-0 [image-rendering:pixelated]"
+        loading="lazy"
+      >
     </div>
-  </article>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">
 const SURVEY_URL = 'https://forms.mkrf.ru/e/2579/xTPLeBU7/?ap_orgcode=225601';
 </script>
+
+<style scoped>
+/* Красный — из оригинального плаката */
+.survey {
+  --survey-red: #e43425;
+  border: 1px solid var(--color-gray-100);
+  transition: box-shadow 0.2s ease;
+}
+
+.survey:hover {
+  box-shadow: 0 10px 30px -12px rgb(228 52 37 / 0.35);
+}
+
+.survey__title {
+  color: var(--survey-red);
+  letter-spacing: 0.01em;
+}
+
+.survey__button {
+  background: var(--survey-red);
+}
+
+.survey:hover .survey__button {
+  background: #c9281b;
+}
+</style>

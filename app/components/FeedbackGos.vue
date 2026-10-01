@@ -1,14 +1,18 @@
-<!-- Карточка «Есть вопрос?» — платформа обратной связи Госуслуг («Решаем вместе»).
-     Скрипт Госуслуг вешает открытие формы на элемент с id="js-show-iframe-wrapper",
-     поэтому этот id стоит на кнопке «Написать», а оформление — своё, в стиле сайта. -->
+<!-- Баннер «Госуслуги. Решаем вместе» — в фирменных цветах баннера платформы обратной связи,
+     но своей вёрсткой (официальный виджет-баннер ломался и тянул ~250 строк стилей).
+     Скрипт Госуслуг вешает открытие формы на элемент с id="js-show-iframe-wrapper" — он на кнопке. -->
 <script lang="ts" setup>
-/** Скрипт виджета Госуслуг нужен только этой карточке — грузим его асинхронно здесь, а не глобально */
+/** Скрипт виджета Госуслуг нужен только этому баннеру — грузим его асинхронно здесь, а не глобально */
 const GOSUSLUGI_SCRIPT = 'https://pos.gosuslugi.ru/bin/script.min.js';
 const GOSUSLUGI_FORM = 'https://pos.gosuslugi.ru/form';
+const GOSUSLUGI_LOGO
+  = 'https://pos.gosuslugi.ru/bin/banner-fluid/gosuslugi-logo-blue.svg';
 const GOSUSLUGI_OPA_ID = 348893;
 const RUSTORE_URL = 'https://apps.rustore.ru/app/ru.gosuslugi.pos';
 
 const ready = ref(false);
+/** Если логотип с сервера Госуслуг не загрузился — показываем текстовый вариант */
+const logoFailed = ref(false);
 
 const loadGosuslugiScript = () =>
   new Promise<void>((resolve, reject) => {
@@ -62,62 +66,143 @@ onBeforeUnmount(() => {
 
 <template>
   <article
-    class="relative flex flex-col h-full overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm p-6 sm:p-8"
+    class="gos-banner grid h-full overflow-hidden rounded-2xl shadow-sm sm:grid-cols-[minmax(0,1fr)_minmax(0,0.9fr)]"
   >
-    <!-- Декор в цветах Госуслуг -->
+    <!-- Текст и кнопки на фирменном голубом -->
     <div
-      class="pointer-events-none absolute -top-16 -right-16 size-56 rounded-full bg-[#38bafe]/15 blur-2xl"
-      aria-hidden="true"
-    />
+      class="order-2 sm:order-1 flex flex-col justify-center gap-5 p-6 sm:p-8"
+    >
+      <div>
+        <p class="text-2xl sm:text-3xl font-bold leading-tight text-[#0b1f33]">
+          Есть вопрос?
+        </p>
+        <p class="mt-1 text-base sm:text-lg text-[#0b1f33]">
+          Напишите нам — ответим через Госуслуги
+        </p>
+      </div>
 
-    <div class="relative flex items-center gap-3 mb-5">
-      <img
-        src="https://pos.gosuslugi.ru/bin/banner-fluid/gosuslugi-logo-blue.svg"
-        alt="Госуслуги"
-        width="96"
-        height="24"
-        class="h-6 w-auto"
-        loading="lazy"
-      >
-      <span class="text-xs font-semibold text-[#0d4cd3] bg-[#0d4cd3]/10 rounded-full px-2.5 py-1">
-        Решаем вместе
-      </span>
+      <div class="flex flex-col gap-2.5 w-full max-w-60">
+        <button
+          id="js-show-iframe-wrapper"
+          type="button"
+          class="h-12 rounded-lg bg-white text-[#0b1f33] text-base font-medium shadow-sm transition-colors hover:bg-[#e4ecfd] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:opacity-70"
+          :disabled="!ready"
+        >
+          Написать
+        </button>
+        <a
+          :href="RUSTORE_URL"
+          target="_blank"
+          rel="noopener"
+          class="block overflow-hidden rounded-lg bg-white shadow-sm transition-opacity hover:opacity-90"
+          aria-label="Скачать приложение «Госуслуги. Решаем вместе» в RuStore"
+        >
+          <img
+            src="/rustore.png"
+            alt=""
+            width="240"
+            height="48"
+            class="h-12 w-full object-contain p-1.5"
+            loading="lazy"
+          >
+        </a>
+      </div>
     </div>
 
-    <h3 class="relative text-xl sm:text-2xl font-bold text-gray-900 leading-tight">
-      Есть вопрос или предложение?
-    </h3>
-    <p class="relative mt-2 text-sm sm:text-base text-gray-600 max-w-md">
-      Напишите нам через платформу обратной связи Госуслуг — обращение
-      зарегистрируют и ответят в установленный срок.
-    </p>
-
-    <div class="relative mt-6 sm:mt-auto sm:pt-6 flex flex-wrap items-center gap-3">
-      <button
-        id="js-show-iframe-wrapper"
-        type="button"
-        class="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-[#0d4cd3] text-white font-semibold text-sm shadow-sm hover:bg-[#1d5deb] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4cd3] transition-colors disabled:opacity-60"
-        :disabled="!ready"
+    <!-- Иллюстрация и логотип на светлой панели, как в оригинальном баннере -->
+    <div
+      class="gos-banner__decor relative order-1 sm:order-2 min-h-40 sm:min-h-full"
+    >
+      <div
+        class="absolute left-0 top-0 z-10 rounded-br-xl bg-white px-3.5 pt-3 pb-2.5 shadow-sm"
       >
-        <Icon
-          name="i-heroicons-chat-bubble-left-right"
-          class="size-5"
-        />
-        Написать обращение
-      </button>
+        <img
+          v-if="!logoFailed"
+          :src="GOSUSLUGI_LOGO"
+          alt="Госуслуги"
+          width="78"
+          height="20"
+          class="block w-[72px] sm:w-[78px]"
+          loading="lazy"
+          @error="logoFailed = true"
+        >
+        <span
+          v-else
+          class="block text-lg font-bold leading-none tracking-tight"
+        ><span class="text-[#0d4cd3]">гос</span><span class="text-[#ee3f58]">услуги</span></span>
+        <span
+          class="mt-1 block text-[13px] font-bold leading-none text-[#005ca9]"
+        >Решаем вместе</span>
+      </div>
 
-      <a
-        :href="RUSTORE_URL"
-        target="_blank"
-        rel="noopener"
-        class="inline-flex items-center gap-2 h-11 px-4 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 hover:border-[#0d4cd3] hover:text-[#0d4cd3] transition-colors"
+      <!-- Обращения-«пузыри» в цветах Госуслуг -->
+      <svg
+        class="absolute inset-0 m-auto h-[78%] w-[86%] translate-y-[6%]"
+        viewBox="0 0 240 180"
+        fill="none"
+        aria-hidden="true"
       >
-        <Icon
-          name="i-heroicons-device-phone-mobile"
-          class="size-5"
+        <circle
+          cx="196"
+          cy="42"
+          r="30"
+          fill="#50b3ff"
+          opacity=".18"
         />
-        Приложение в RuStore
-      </a>
+        <circle
+          cx="34"
+          cy="150"
+          r="20"
+          fill="#ee3f58"
+          opacity=".12"
+        />
+        <!-- Большой пузырь -->
+        <path
+          d="M40 48a16 16 0 0 1 16-16h96a16 16 0 0 1 16 16v52a16 16 0 0 1-16 16H86l-24 20v-20h-6a16 16 0 0 1-16-16V48Z"
+          fill="#0d4cd3"
+        />
+        <circle
+          cx="78"
+          cy="74"
+          r="7"
+          fill="#fff"
+        />
+        <circle
+          cx="104"
+          cy="74"
+          r="7"
+          fill="#fff"
+        />
+        <circle
+          cx="130"
+          cy="74"
+          r="7"
+          fill="#fff"
+        />
+        <!-- Ответ -->
+        <path
+          d="M132 108a14 14 0 0 1 14-14h58a14 14 0 0 1 14 14v34a14 14 0 0 1-14 14h-4v16l-20-16h-34a14 14 0 0 1-14-14v-34Z"
+          fill="#fff"
+        />
+        <path
+          d="m160 126 10 10 20-20"
+          stroke="#ee3f58"
+          stroke-width="7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
     </div>
   </article>
 </template>
+
+<style scoped>
+/* Фирменные цвета баннера платформы обратной связи Госуслуг */
+.gos-banner {
+  background: linear-gradient(135deg, #50b3ff 0%, #38bafe 45%, #4aa3f0 100%);
+}
+
+.gos-banner__decor {
+  background: #f8efec;
+}
+</style>

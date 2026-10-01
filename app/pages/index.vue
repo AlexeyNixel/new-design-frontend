@@ -78,10 +78,7 @@ const shelfLink = computed(() =>
 
     <ExhibitionShowcase />
 
-    <CommonSectionWrapper
-      title="Обратная связь"
-      content-class="grid gap-4 md:gap-6 lg:grid-cols-2"
-    >
+    <CommonSectionWrapper content-class="grid gap-4 md:gap-6 lg:grid-cols-2">
       <FeedbackGos />
       <QualitySurvey />
     </CommonSectionWrapper>

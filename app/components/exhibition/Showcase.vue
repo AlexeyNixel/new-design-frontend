@@ -3,7 +3,7 @@
        на главной не останется пустого блока с заголовком -->
   <CommonSectionWrapper
     v-if="exhibitions.length"
-    title="Виртуальные выставки"
+    title="Викторины и выставки"
     link="/page/exhibition"
     link-label="Все выставки"
   >

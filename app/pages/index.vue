@@ -10,7 +10,7 @@ const shelfTab = ref<'books' | 'comics'>('books');
 const shelfLink = computed(() =>
   shelfTab.value === 'comics'
     ? { to: '/comics', label: 'Полный список комиксов и манги' }
-    : { to: '/books', label: 'Полный список книг' },
+    : { to: '/books', label: 'Полный список книг' }
 );
 </script>
 
@@ -84,7 +84,7 @@ const shelfLink = computed(() =>
     </CommonSectionWrapper>
 
     <CommonSectionWrapper
-      title="Новости партнеров"
+      title="Информация партнеров"
       :link="`/post?tags=${POST_TAG.partner}`"
       link-label="Все новости партнеров"
     >

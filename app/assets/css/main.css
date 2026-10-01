@@ -7,7 +7,6 @@
 @import './fonts.css';
 @import './editor.css';
 @import './theme.css';
-@import './feedback-gos.css';
 
 html {
   scroll-behavior: smooth;

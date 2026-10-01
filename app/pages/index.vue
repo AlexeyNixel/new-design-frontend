@@ -60,7 +60,6 @@ const shelfLink = computed(() =>
     </CommonSectionWrapper>
 
     <CommonSectionWrapper
-      bg-gray
       title="Книги"
       :link="shelfLink.to"
       :link-label="shelfLink.label"
@@ -72,28 +71,19 @@ const shelfLink = computed(() =>
       title="Игровая библиотека"
       link="/games"
       link-label="Полный список игр"
+      bg-gray
     >
       <GameCarousel />
     </CommonSectionWrapper>
 
     <ExhibitionShowcase />
 
-    <CommonSectionWrapper>
-      <div class="block justify-between md:flex">
-        <FeedbackGos />
-        <NuxtLink
-          to="https://forms.mkrf.ru/e/2579/xTPLeBU7/?ap_orgcode=225601"
-          class="rounded-xl overflow-hidden"
-        >
-          <img
-            src="/banner-uvazhaemye-posetiteli.png"
-            alt=""
-            width="974"
-            height="526"
-            loading="lazy"
-          >
-        </NuxtLink>
-      </div>
+    <CommonSectionWrapper
+      title="Обратная связь"
+      content-class="grid gap-4 md:gap-6 lg:grid-cols-2"
+    >
+      <FeedbackGos />
+      <QualitySurvey />
     </CommonSectionWrapper>
 
     <CommonSectionWrapper

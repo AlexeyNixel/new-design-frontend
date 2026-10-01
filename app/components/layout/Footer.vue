@@ -11,7 +11,10 @@
             class="inline-block w-36 fill-white rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-200"
             aria-label="НОМБ — на главную"
           >
-            <Logo class="w-full h-auto" />
+            <Logo
+              variant="mono"
+              class="w-full h-auto"
+            />
           </NuxtLink>
 
           <p class="mt-8 text-sm text-white/60">
@@ -310,7 +313,7 @@ const socials = [
   { label: 'ВКонтакте', href: 'https://vk.ru/oub_nsk', icon: 'i-bxl-vk' },
   {
     label: 'Одноклассники',
-    href: 'https://ok.ru/profile/569370655985',
+    href: 'https://ok.ru/group/70000001168881',
     icon: 'bxl:ok-ru',
   },
   {

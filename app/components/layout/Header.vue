@@ -11,9 +11,9 @@
           >
             <div class="relative">
               <div
-                class="relative w-28 sm:w-36 lg:w-44 fill-primary group-hover:fill-primary/80 transition-all duration-300"
+                class="relative w-24 sm:w-32 lg:w-40 transition-opacity duration-300 group-hover:opacity-85"
               >
-                <Logo class="w-full h-auto drop-shadow-sm" />
+                <Logo class="block w-full h-auto" />
               </div>
             </div>
           </NuxtLink>

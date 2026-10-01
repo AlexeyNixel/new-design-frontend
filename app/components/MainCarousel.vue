@@ -1,6 +1,6 @@
 <!-- components/MainCarousel.vue -->
 <template>
-  <div class="relative w-full h-full">
+  <div class="main-slider relative w-full h-full">
     <swiper-container
       ref="swiperElRef"
       class="block w-full h-full rounded-xl shadow overflow-hidden"
@@ -44,11 +44,11 @@
       </swiper-slide>
     </swiper-container>
 
-    <!-- Стрелки -->
+    <!-- Стрелки: прижаты к краям, невидимы до наведения на баннер; на телефоне — только свайп -->
     <button
       type="button"
       aria-label="Предыдущий слайд"
-      class="absolute z-10 top-1/2 -translate-y-1/2 left-2 sm:left-4 md:left-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      class="slider-arrow left-3 lg:left-4"
       @click="goPrev"
     >
       <Icon
@@ -59,7 +59,7 @@
     <button
       type="button"
       aria-label="Следующий слайд"
-      class="absolute z-10 top-1/2 -translate-y-1/2 right-2 sm:right-4 md:right-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      class="slider-arrow right-3 lg:right-4"
       @click="goNext"
     >
       <Icon
@@ -134,6 +134,51 @@ const goTo = (index: number) => swiperElRef.value?.swiper?.slideToLoop(index);
 </script>
 
 <style scoped>
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.7);
+  color: var(--color-gray-800);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.12);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(-50%) scale(0.92);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.15s ease;
+  cursor: pointer;
+}
+
+@media (min-width: 768px) {
+  .slider-arrow {
+    display: flex;
+  }
+}
+
+/* Появляются при наведении на баннер или при фокусе с клавиатуры */
+.main-slider:hover .slider-arrow,
+.slider-arrow:focus-visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.slider-arrow:hover {
+  background: rgb(255 255 255 / 0.95);
+}
+
+.slider-arrow:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: 2px;
+}
+
 /* До гидратации swiper-slide ещё не апгрейжен в кастомный элемент и по умолчанию
    рендерится как inline — из-за этого слайды могут "поплыть" до инициализации Swiper. */
 swiper-slide {

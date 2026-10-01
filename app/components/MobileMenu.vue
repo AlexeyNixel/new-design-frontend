@@ -81,6 +81,7 @@
                       @click="close"
                     >
                       <Icon
+                        v-if="link.icon"
                         :name="link.icon"
                         class="size-5 shrink-0 text-primary"
                       />
@@ -217,9 +218,17 @@
                 :aria-label="link.label"
               >
                 <Icon
+                  v-if="link.icon"
                   :name="link.icon"
                   class="size-5"
                 />
+                <!-- У MAX нет иконки в наборах — используем его логотип, как в шапке -->
+                <img
+                  v-else
+                  src="/max-dark.svg"
+                  alt=""
+                  class="size-5 brightness-0 opacity-70"
+                >
               </a>
             </div>
           </div>
@@ -234,7 +243,7 @@ import type { NavigationMenuItem } from '~~/services/api/main-navigation.api';
 import type { LibraryStatus } from '~/utils/librarySchedule';
 
 interface MenuLink {
-  icon: string;
+  icon?: string;
   label: string;
   link: string;
 }

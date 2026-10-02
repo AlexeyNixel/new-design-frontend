@@ -17,10 +17,10 @@
           width="640"
           height="320"
           @error="notFoundImage"
-        >
+        />
 
         <!-- Дата -->
-        <div class="absolute top-4 left-4">
+        <!-- <div class="absolute top-4 left-4">
           <div
             class="flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
           >
@@ -34,13 +34,10 @@
               dayjs(post.publishedAt).format('YYYY')
             }}</span>
           </div>
-        </div>
+        </div> -->
 
         <!-- Бейдж отдела -->
-        <div
-          v-if="post.department"
-          class="absolute bottom-4 left-4"
-        >
+        <div v-if="post.department" class="absolute bottom-4 left-4">
           <span
             class="bg-primary text-white px-3 py-1 rounded-full text-xs font-medium"
           >
@@ -88,7 +85,7 @@ const DEFAULT_IMAGE = '/placeholder.jpg';
 const imgSrc = ref(props.post?.preview?.path || DEFAULT_IMAGE);
 // После подмены на заглушку srcset убираем — иначе браузер продолжит брать картинку из него
 const imgSrcset = computed(() =>
-  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview),
+  imgSrc.value === DEFAULT_IMAGE ? undefined : imageSrcset(props.post?.preview)
 );
 
 const notFoundImage = () => {

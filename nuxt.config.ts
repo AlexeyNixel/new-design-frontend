@@ -71,11 +71,11 @@ export default defineNuxtConfig({
             });
           `,
         },
-        // Счётчик culturaltracking.ru (pixelId 25706)
+        // Счётчик culturaltracking.ru (pixelId 3163)
         {
           async: 'true',
-          src: 'https://culturaltracking.ru/static/js/spxl.js?pixelId=25706',
-          'data-pixel-id': 25706,
+          src: 'https://culturaltracking.ru/static/js/spxl.js?pixelId=3163',
+          'data-pixel-id': 3163,
         },
       ],
       noscript: [

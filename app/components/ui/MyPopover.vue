@@ -18,9 +18,10 @@
       :aria-expanded="isOpen"
       @click="openDropdown"
     >
-      <Icon
-        v-if="navigation.icon"
-        :name="navigation.icon"
+      <UiNavIcon
+        v-if="hasNavIcon(navigation)"
+        :icon="navigation.icon"
+        :to="navigation.to"
         class="w-4 h-4"
       />
       {{ navigation.title }}
@@ -77,11 +78,12 @@
                 @click="closeAll"
               >
                 <span
-                  v-if="item.icon"
+                  v-if="hasNavIcon(item)"
                   class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-150 group-hover:bg-primary-700/10 group-hover:text-primary-700"
                 >
-                  <Icon
-                    :name="item.icon"
+                  <UiNavIcon
+                    :icon="item.icon"
+                    :to="item.to"
                     class="w-4 h-4"
                   />
                 </span>
@@ -104,7 +106,7 @@
                 @click="showChild(item.id)"
               >
                 <span
-                  v-if="item.icon"
+                  v-if="hasNavIcon(item)"
                   class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg transition-colors duration-150"
                   :class="
                     activeChildItem === item.id
@@ -112,8 +114,9 @@
                       : 'bg-gray-100 text-gray-500 group-hover:bg-primary-700/10 group-hover:text-primary-700'
                   "
                 >
-                  <Icon
-                    :name="item.icon"
+                  <UiNavIcon
+                    :icon="item.icon"
+                    :to="item.to"
                     class="w-4 h-4"
                   />
                 </span>
@@ -154,11 +157,12 @@
                       @click="closeAll"
                     >
                       <span
-                        v-if="child.icon"
+                        v-if="hasNavIcon(child)"
                         class="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500 transition-colors duration-150 group-hover:bg-primary-700/10 group-hover:text-primary-700"
                       >
-                        <Icon
-                          :name="child.icon"
+                        <UiNavIcon
+                          :icon="child.icon"
+                          :to="child.to"
                           class="w-4 h-4"
                         />
                       </span>

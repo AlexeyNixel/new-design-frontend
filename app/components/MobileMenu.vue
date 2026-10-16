@@ -132,8 +132,10 @@
                         v-if="!current"
                         class="flex items-center justify-center size-10 shrink-0 rounded-xl bg-primary/10 text-primary"
                       >
-                        <Icon
-                          :name="item.icon || 'i-lucide-folder'"
+                        <UiNavIcon
+                          :icon="item.icon"
+                          :to="item.to"
+                          fallback="i-lucide-folder"
                           class="size-5"
                         />
                       </span>
@@ -159,9 +161,10 @@
                       :class="{ 'menu-row--active': isActive(item) }"
                       @click="close"
                     >
-                      <Icon
-                        v-if="item.icon"
-                        :name="item.icon"
+                      <UiNavIcon
+                        v-if="hasNavIcon(item)"
+                        :icon="item.icon"
+                        :to="item.to"
                         class="size-5 shrink-0 text-gray-400"
                       />
                       <span class="flex-1 min-w-0 text-gray-800 leading-snug">{{ item.title }}</span>

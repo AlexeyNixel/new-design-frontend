@@ -73,9 +73,17 @@ export default defineNuxtConfig({
         },
         // Счётчик culturaltracking.ru (pixelId 3163)
         {
-          async: 'true',
-          src: 'https://culturaltracking.ru/static/js/spxl.js?pixelId=3163',
+          'async': 'true',
+          'src': 'https://culturaltracking.ru/static/js/spxl.js?pixelId=3163',
           'data-pixel-id': 3163,
+        },
+        // Umami (self-hosted, metric.infomania.ru)
+        {
+          'defer': true,
+          'src': 'https://metric.infomania.ru/script.js',
+          'data-website-id': 'a6fa42c2-7c25-48a9-ace6-53fead54dabf',
+          // считать только прод, без localhost
+          'data-domains': 'infomania.ru',
         },
       ],
       noscript: [

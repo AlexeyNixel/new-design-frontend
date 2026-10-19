@@ -535,8 +535,12 @@ const dateRange = computed(() => {
 
   if (period) {
     const days = PERIODS.find(item => item.value === period)?.days ?? 0;
+    // От начала новосибирского дня, а не от текущей миллисекунды: иначе параметр
+    // (и ключ useFetch) на сервере и в браузере разный и данные грузятся заново
+    const dayMs = 86_400_000;
+    const todayStart = Math.floor((Date.now() + NSK_OFFSET_MS) / dayMs) * dayMs - NSK_OFFSET_MS;
     return {
-      startDate: new Date(Date.now() - days * 86_400_000).toISOString(),
+      startDate: new Date(todayStart - days * dayMs).toISOString(),
     };
   }
 

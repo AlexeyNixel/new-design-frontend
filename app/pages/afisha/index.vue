@@ -195,6 +195,7 @@ import dayjs from 'dayjs';
 import type { Event } from '~~/services/types/event.type';
 import type { EventCategory } from '~/utils/eventCategory';
 import { useEventApi } from '~~/services/api/eventService';
+import { libraryNow, toEventApiDate } from '~/composables/useEventTime';
 
 /** Сколько дней вперёд показывает афиша */
 const DAYS_AHEAD = 60;
@@ -204,10 +205,11 @@ const parseEventTime = useParseEventTime();
 const toEventSchema = useEventSchema();
 const toAbsolute = useAbsoluteUrl();
 
-const today = dayjs().startOf('day');
+// Новосибирское «сегодня» — одинаковое на сервере (UTC) и в браузере, иначе гидратация падает
+const today = libraryNow().startOf('day');
 const { data } = await eventApi.getAllEvents({
-  startDate: today.format(),
-  endDate: today.add(DAYS_AHEAD, 'day').endOf('day').format(),
+  startDate: toEventApiDate(today),
+  endDate: toEventApiDate(today.add(DAYS_AHEAD, 'day').endOf('day')),
   limit: 200,
 });
 
@@ -288,7 +290,7 @@ const weeks = computed(() => {
 // ——— Ближайшее событие ———
 
 const nearest = computed(() =>
-  events.value.find(event => parseEventTime(event.eventTime).isAfter(dayjs())),
+  events.value.find(event => parseEventTime(event.eventTime).isAfter(libraryNow())),
 );
 
 const relativeDay = (date: Date | string) => {

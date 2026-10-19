@@ -98,8 +98,8 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs';
 import { useEventApi } from '~~/services/api/eventService';
+import { libraryNow } from '~/composables/useEventTime';
 
 const route = useRoute();
 const eventApi = useEventApi();
@@ -113,7 +113,7 @@ const start = parseEventTime(event.eventTime);
 const month = start.format('D MMMM').split(' ')[1];
 const category = eventCategory(event);
 const placeName = eventPlaceName(event);
-const isPast = start.isBefore(dayjs().startOf('day'));
+const isPast = start.isBefore(libraryNow().startOf('day'));
 
 const breadcrumbItems = [
   { label: 'Главная', icon: 'i-heroicons-home', to: '/' },

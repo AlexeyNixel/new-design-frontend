@@ -45,8 +45,7 @@
                   name="i-heroicons-clock"
                   class="w-4 h-4"
                 />
-                <span>{{ Math.round(entry.content.length / 1000) }} мин
-                  чтения</span>
+                <span>{{ readingTime }} мин чтения</span>
               </div>
               <NuxtLink
                 :to="{
@@ -100,8 +99,12 @@
           />
         </div>
         <EntrySeries :post="entry" />
+        <EventNearest />
         <USeparator class="my-6" />
-        <EntryMore />
+        <EntryMore
+          :key="entry.id"
+          :post="entry"
+        />
       </footer>
     </article>
   </CommonContentContainer>
@@ -165,6 +168,7 @@ useBreadcrumbSchema(breadcrumbItems);
 // Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
 const contentHtml = computed(() => fitTables(markImageTables(entry.content)));
 useYandexFormsEmbed(entry.content);
+const readingTime = readingMinutes(entry.contentText, entry.content);
 
 const toAbsolute = useAbsoluteUrl();
 useJsonLd('content', {

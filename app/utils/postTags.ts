@@ -8,6 +8,16 @@ export const POST_TAG = {
   partner: 'b7ffa631-8d88-4f10-8e79-cacac4cda04d', // «Партнёр»
 } as const;
 
+/**
+ * Слишком общие теги: ими помечена большая часть новостей, поэтому
+ * по ним нельзя подбирать похожие публикации
+ */
+export const BROAD_POST_TAGS: string[] = [
+  ...Object.values(POST_TAG),
+  'd15d2e42-d28b-4078-b516-d6ad4b6b3586', // «Служебные»
+  '90680dc7-f6a6-4d12-b14e-d12fff16eafd', // «Медиа-контент»
+];
+
 export const postHasTag = (post: Post, tagId: string) =>
   (post.tags ?? []).some(t => t.tag?.id === tagId);
 

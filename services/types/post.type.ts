@@ -10,6 +10,8 @@ export interface Post {
   title: string;
   description: string;
   content: string;
+  /** Текст поста без HTML-разметки */
+  contentText?: string;
   slug: string;
   isPublished: boolean;
   isDeleted: boolean;

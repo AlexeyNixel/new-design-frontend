@@ -19,3 +19,15 @@ export const toEventApiDate = (date: dayjs.Dayjs) => `${date.format('YYYY-MM-DDT
 export const useParseEventTime = () => {
   return (date: Date | string) => dayjs(date.toString().slice(0, 19));
 };
+
+/**
+ * «Сегодня» / «Завтра» по новосибирскому календарю, для остальных дней — null.
+ * Принимает время события в координатах API (как useParseEventTime).
+ */
+export const eventDayBadge = (date: Date | string) => {
+  const day = dayjs(date.toString().slice(0, 19)).startOf('day');
+  const today = libraryNow().startOf('day');
+  if (day.isSame(today, 'day')) return 'Сегодня';
+  if (day.isSame(today.add(1, 'day'), 'day')) return 'Завтра';
+  return null;
+};

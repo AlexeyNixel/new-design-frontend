@@ -131,7 +131,17 @@
                 </span>
                 <span class="pt-0.5 text-sm font-medium leading-tight">
                   {{ monthGenitive(event.eventTime) }}<br>
-                  <span class="opacity-75">{{ parseEventTime(event.eventTime).format('dddd') }}</span>
+                  <span
+                    v-if="eventDayBadge(event.eventTime)"
+                    class="mt-1 inline-block rounded-full px-2 py-0.5 text-xs font-bold uppercase tracking-wide"
+                    :class="EVENT_CATEGORIES[eventCategory(event)].badge"
+                  >
+                    {{ eventDayBadge(event.eventTime) }}
+                  </span>
+                  <span
+                    v-else
+                    class="opacity-75"
+                  >{{ parseEventTime(event.eventTime).format('dddd') }}</span>
                 </span>
                 <span class="ml-auto text-lg font-bold tabular-nums">
                   {{ formatTime(event.eventTime) }}
@@ -195,7 +205,11 @@ import dayjs from 'dayjs';
 import type { Event } from '~~/services/types/event.type';
 import type { EventCategory } from '~/utils/eventCategory';
 import { useEventApi } from '~~/services/api/eventService';
-import { libraryNow, toEventApiDate } from '~/composables/useEventTime';
+import {
+  eventDayBadge,
+  libraryNow,
+  toEventApiDate,
+} from '~/composables/useEventTime';
 
 /** Сколько дней вперёд показывает афиша */
 const DAYS_AHEAD = 60;
@@ -293,12 +307,8 @@ const nearest = computed(() =>
   events.value.find(event => parseEventTime(event.eventTime).isAfter(libraryNow())),
 );
 
-const relativeDay = (date: Date | string) => {
-  const day = parseEventTime(date).startOf('day');
-  if (day.isSame(today, 'day')) return 'сегодня';
-  if (day.isSame(today.add(1, 'day'), 'day')) return 'завтра';
-  return day.format('D MMMM');
-};
+const relativeDay = (date: Date | string) =>
+  eventDayBadge(date)?.toLowerCase() ?? parseEventTime(date).format('D MMMM');
 
 const formatTime = (date: Date | string) => parseEventTime(date).format('HH:mm');
 

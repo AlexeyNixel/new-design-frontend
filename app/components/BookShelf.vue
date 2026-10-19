@@ -12,10 +12,10 @@
 
 <script setup lang="ts">
 import type { TabsItem } from '#ui/components/Tabs.vue';
-import { BookList, ComicList } from '#components';
+import { BookCollections, BookList, ComicList } from '#components';
 
 /** Активная вкладка — снаружи по ней меняется ссылка «Полный список» */
-const tab = defineModel<'books' | 'comics'>({ default: 'books' });
+const tab = defineModel<'books' | 'collections' | 'comics'>({ default: 'books' });
 
 const items: TabsItem[] = [
   {
@@ -24,11 +24,12 @@ const items: TabsItem[] = [
     value: 'books',
     component: BookList,
   },
-  // {
-  //   label: 'Подборки',
-  //   icon: 'i-heroicons-rectangle-stack',
-  //   component: BookCollections,
-  // },
+  {
+    label: 'Подборки',
+    icon: 'i-heroicons-rectangle-stack',
+    value: 'collections',
+    component: BookCollections,
+  },
   {
     label: 'Комиксы / Манга',
     icon: 'i-heroicons-paint-brush',

@@ -6,6 +6,8 @@ export interface Event {
   age: number;
   place: string;
   eventTime: Date;
+  /** Тип события, который указал редактор; null — не указан (старые события) */
+  category?: 'MASTER' | 'MUSIC' | 'GAME' | 'TALK' | null;
   isDeleted: boolean;
   createdAt: Date;
 }

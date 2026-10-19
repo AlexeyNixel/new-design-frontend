@@ -124,7 +124,7 @@
 
           <!-- Подборки -->
           <div
-            v-if="book.collections?.length"
+            v-if="visibleCollections.length"
             class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700"
           >
             <h3
@@ -137,22 +137,18 @@
               В подборках
             </h3>
             <div class="space-y-2">
-              <UBadge
-                v-for="collection in book.collections"
+              <NuxtLink
+                v-for="collection in visibleCollections"
                 :key="collection.id"
-                :label="collection.label"
-                color="warning"
-                variant="outline"
-                class="w-full justify-start cursor-pointer hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
-                @click="navigateTo(`/collection/${collection.slug}`)"
+                :to="`/books/collections/${collection.slug || collection.id}`"
+                class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-gray-800 ring-1 ring-gray-200 transition-colors hover:bg-[#157486]/5 hover:text-[#157486] hover:ring-[#157486]/40"
               >
-                <template #leading>
-                  <Icon
-                    name="i-heroicons-bookmark"
-                    class="w-4 h-4"
-                  />
-                </template>
-              </UBadge>
+                <Icon
+                  name="i-heroicons-rectangle-stack"
+                  class="size-4 shrink-0 text-[#157486]"
+                />
+                {{ collection.label }}
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -311,6 +307,11 @@ const modal = overlay.create(ModalsCommon);
 const { data: book } = await bookApi.getOneBook(route.params.slug as string, {
   include: 'preview, collections',
 });
+
+// Скрытые подборки не показываем — их страница ответит 404
+const visibleCollections = computed(() =>
+  (book.collections ?? []).filter(collection => !collection.isDeleted),
+);
 
 // Вспомогательные функции
 const formatDate = (dateString: string) => {

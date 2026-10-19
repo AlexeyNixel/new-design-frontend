@@ -106,5 +106,16 @@ const formatTime = (date: Date | string) => {
         v-html="fitTables(selectedEvent.content)"
       />
     </div>
+
+    <NuxtLink
+      :to="`/afisha/${selectedEvent.id}`"
+      class="inline-flex items-center gap-1 text-sm font-semibold text-info hover:underline"
+    >
+      Страница мероприятия
+      <UIcon
+        name="i-heroicons-arrow-right-20-solid"
+        class="size-4"
+      />
+    </NuxtLink>
   </div>
 </template>

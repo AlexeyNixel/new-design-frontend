@@ -3,6 +3,7 @@ import type { DateValue } from '@internationalized/date';
 import type { Event } from '~~/services/types/event.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
+import { NuxtLink } from '#components';
 
 const config = useRuntimeConfig();
 const parseEventTime = useParseEventTime();
@@ -351,7 +352,13 @@ onMounted(async () => {
         class="w-9 shrink-0"
       />
 
-      <div class="flex items-center gap-2 flex-1 justify-center min-w-0">
+      <!-- В режиме календаря заголовок ведёт на полную афишу -->
+      <component
+        :is="view === 'calendar' ? NuxtLink : 'div'"
+        v-bind="view === 'calendar' ? { to: '/afisha', title: 'Вся афиша' } : {}"
+        class="flex items-center gap-2 flex-1 justify-center min-w-0"
+        :class="{ 'hover:underline underline-offset-4': view === 'calendar' }"
+      >
         <Icon
           class="text-lg sm:text-xl shrink-0"
           name="i-heroicons-calendar-days"
@@ -359,7 +366,7 @@ onMounted(async () => {
         <div class="font-bold text-sm sm:text-base truncate">
           {{ headerTitle }}
         </div>
-      </div>
+      </component>
 
       <UButton
         v-if="view === 'calendar'"

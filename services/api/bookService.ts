@@ -17,5 +17,9 @@ export const useBookApi = () => {
 
     getAllCollections: (params?: ApiQueryParams) =>
       api.get<BookCollections[]>(API_ENDPOINTS.bookCollection, { params }),
+
+    /** Подборка по адресу (slug) или id — вместе с книгами по порядку */
+    getOneCollection: (slug: string) =>
+      api.getOne<BookCollections>(API_ENDPOINTS.bookCollection, slug),
   };
 };

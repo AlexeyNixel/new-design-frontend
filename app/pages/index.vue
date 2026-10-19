@@ -6,12 +6,13 @@ usePageSeo({
 });
 
 // Ссылка «Полный список» в блоке «Книги» ведёт в каталог открытой вкладки
-const shelfTab = ref<'books' | 'comics'>('books');
-const shelfLink = computed(() =>
-  shelfTab.value === 'comics'
-    ? { to: '/comics', label: 'Полный список комиксов и манги' }
-    : { to: '/books', label: 'Полный список книг' }
-);
+const shelfTab = ref<'books' | 'collections' | 'comics'>('books');
+const SHELF_LINKS = {
+  books: { to: '/books', label: 'Полный список книг' },
+  collections: { to: '/books/collections', label: 'Все подборки' },
+  comics: { to: '/comics', label: 'Полный список комиксов и манги' },
+};
+const shelfLink = computed(() => SHELF_LINKS[shelfTab.value]);
 </script>
 
 <!-- pages/index.vue -->

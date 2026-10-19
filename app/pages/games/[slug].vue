@@ -113,10 +113,35 @@ onMounted(() => {
 });
 
 if (game) {
-  const title = game.title;
-  const description
-    = game.shortDescription
-      || `Настольная игра «${title}» в игротеке — параметры, описание и правила.`;
+  // Заголовок под поисковые запросы «настольная игра … Новосибирск».
+  // Длинное название не дополняем городом, чтобы title не обрезался в выдаче.
+  const title
+    = game.title.length > 30
+      ? `${game.title} — настольная игра`
+      : `${game.title} — настольная игра в Новосибирске`;
+
+  const players
+    = game.playerMin && game.playerMax && game.playerMin !== game.playerMax
+      ? `${game.playerMin}–${game.playerMax} игроков`
+      : game.playerMin || game.playerMax
+        ? `от ${game.playerMin || game.playerMax} игроков`
+        : '';
+  const facts = [players, game.playerAge ? `от ${game.playerAge} лет` : '']
+    .filter(Boolean)
+    .join(', ');
+  const where = 'Поиграть можно в игротеке молодёжной библиотеки, Новосибирск, Красный проспект, 26.';
+  const lead = game.shortDescription?.trim();
+  const description = truncateText(
+    [
+      lead
+        ? /[.!?…]$/.test(lead) ? lead : `${lead}.`
+        : `Настольная игра «${game.title}».`,
+      facts ? `${facts[0]!.toUpperCase()}${facts.slice(1)}.` : '',
+      where,
+    ]
+      .filter(Boolean)
+      .join(' '),
+  );
 
   usePageSeo({
     title,

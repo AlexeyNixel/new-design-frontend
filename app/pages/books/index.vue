@@ -6,6 +6,38 @@
       </h1>
     </div>
 
+    <!-- Подборки: с них проще начать, чем с фильтров по всему каталогу -->
+    <section
+      v-if="collections.length"
+      class="mb-12"
+      aria-labelledby="collections-title"
+    >
+      <div class="mb-5 flex flex-wrap items-baseline justify-between gap-3">
+        <h2
+          id="collections-title"
+          class="text-2xl font-bold tracking-tight text-gray-900"
+        >
+          Подборки от библиотекарей
+        </h2>
+        <NuxtLink
+          v-if="collections.length > 3"
+          to="/books/collections"
+          class="font-medium text-[#157486] hover:underline"
+        >
+          Все подборки
+        </NuxtLink>
+      </div>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <BookCollectionCard
+          v-for="(collection, index) in collections.slice(0, 3)"
+          :key="collection.id"
+          :collection="collection"
+          :index="index"
+          eager
+        />
+      </div>
+    </section>
+
     <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
       <!-- Блок фильтров -->
       <div class="lg:w-1/4">
@@ -254,10 +286,18 @@ usePageSeo({
     'Книжные подборки и видеообзоры Новосибирской областной молодёжной библиотеки: что почитать и где взять книгу.',
 });
 
-const { data: allBooks } = await bookApi.getAllBooks({
-  include: 'preview',
-  limit: 500,
-});
+const [{ data: allBooks }, { data: collectionsData }] = await Promise.all([
+  bookApi.getAllBooks({
+    include: 'preview',
+    limit: 500,
+  }),
+  bookApi.getAllCollections({ limit: 4 }),
+]);
+
+// Пустые подборки посетителю не показываем
+const collections = computed(() =>
+  nonEmptyCollections(collectionsData),
+);
 
 const page = ref(Number(route.query.page) || 1);
 const searchText = ref<string>((route.query.search as string) || '');

@@ -33,6 +33,11 @@
               библиотеке на {{ LIBRARY_INFO.address.streetAddress }} — где именно
               стоит книга, написано в карточке.
             </p>
+            <CommonShareButtons
+              :title="`Подборка книг «${collection.label}»`"
+              dark
+              class="mt-6"
+            />
           </div>
 
           <BookCoverFan

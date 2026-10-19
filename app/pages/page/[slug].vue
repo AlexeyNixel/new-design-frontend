@@ -81,6 +81,7 @@
 <script setup lang="ts">
 import { usePageApi } from '~~/services/api/page.api';
 import { ModalsCommon } from '#components';
+import { extractFaq } from '~/utils/faq';
 import type {
   PageContentBlock,
   PageHeroBlock,
@@ -145,4 +146,20 @@ useYandexFormsEmbed(() => page?.content + JSON.stringify(page?.blocks ?? []));
 
 // Крошки показываются только в старом формате страницы
 useBreadcrumbSchema(computed(() => (hasBlocks.value ? [] : breadcrumbItems.value)));
+
+// Страница с вопросами и ответами («Ответы на вопросы») — разметка FAQPage:
+// её читают поисковики и ИИ-ассистенты. Меньше трёх пар — не FAQ, а случайный жирный текст.
+const faq = extractFaq(page?.content);
+useJsonLd('faq', () =>
+  faq.length >= 3
+    ? {
+        '@type': 'FAQPage',
+        'mainEntity': faq.map(item => ({
+          '@type': 'Question',
+          'name': item.question,
+          'acceptedAnswer': { '@type': 'Answer', 'text': item.answer },
+        })),
+      }
+    : undefined,
+);
 </script>

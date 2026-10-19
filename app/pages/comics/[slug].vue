@@ -63,10 +63,24 @@ const { data: otherComics } = await comicApi.getAllComics(
 const modal = overlay.create(ModalsCommon);
 
 if (comic) {
-  const title = comic.title;
-  const description
-    = comic.description
-      || `Комикс «${title}» — параметры, описание и где почитать.`;
+  // Заголовок под запросы «комикс … Новосибирск», как у игр.
+  // Длинное название не дополняем городом, чтобы title не обрезался в выдаче.
+  const title
+    = comic.title.length > 30
+      ? `${comic.title} — комикс`
+      : `${comic.title} — комикс в Новосибирске`;
+
+  // Описание из CMS — первые фразы, сразу за ними где почитать (важнее автора
+  // для запроса «где почитать»), затем возраст и автор — что влезет в 160 символов
+  const lead = comic.description ? truncateText(stripHtml(comic.description), 90) : `Комикс «${comic.title}».`;
+  const description = truncateText(
+    [
+      /[.!?…]$/.test(lead) ? lead : `${lead}.`,
+      'Читать в молодёжной библиотеке Новосибирска.',
+      comic.ageRating ? `${comic.ageRating}+.` : '',
+      comic.author ? `Автор: ${comic.author}.` : '',
+    ].filter(Boolean).join(' '),
+  );
 
   usePageSeo({
     title,

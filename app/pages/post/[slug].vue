@@ -76,6 +76,10 @@
       </main>
 
       <footer class="mt-8">
+        <CommonShareButtons
+          :title="entry.title"
+          class="mb-6"
+        />
         <div class="flex justify-between items-center">
           <UButton
             to="/post"
@@ -95,6 +99,7 @@
             "
           />
         </div>
+        <EntrySeries :post="entry" />
         <USeparator class="my-6" />
         <EntryMore />
       </footer>

@@ -47,8 +47,15 @@
 
       <!-- Место хранения: строка всегда занимает место -->
       <div class="mt-1.5 min-h-[1.125rem]">
+        <!-- Автор из библиографической записи; если не распознан — место хранения -->
+        <p
+          v-if="author"
+          class="truncate text-xs text-gray-500"
+        >
+          {{ author }}
+        </p>
         <div
-          v-if="book.place"
+          v-else-if="book.place"
           class="flex items-center gap-1 text-[11px] text-gray-500"
         >
           <Icon
@@ -75,10 +82,13 @@
 
 <script setup lang="ts">
 import type { Book } from '~~/services/types/book.type';
+import { parseBookRecord } from '~/utils/bibliography';
 
-defineProps<{
+const props = defineProps<{
   book: Book;
 }>();
+
+const author = computed(() => parseBookRecord(props.book.description).author);
 
 // Обработка ошибок изображения
 const handleImageError = (e: Event) => {

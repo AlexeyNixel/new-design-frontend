@@ -78,7 +78,12 @@
           v-html="fitTables(event.content)"
         />
 
-        <footer class="mt-6">
+        <footer class="mt-6 flex flex-wrap items-center justify-between gap-4">
+          <!-- Прошедшим событием делиться незачем -->
+          <CommonShareButtons
+            v-if="!isPast"
+            :title="`${event.title} — ${start.format('D MMMM, HH:mm')}`"
+          />
           <UButton
             to="/afisha"
             icon="i-heroicons-arrow-left"

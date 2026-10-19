@@ -287,7 +287,7 @@ const linkGroups: { title: string; links: FooterLink[] }[] = [
       { label: 'Структура библиотеки', to: '/page/struktura-biblioteki' },
       { label: 'История', to: '/page/istoricheskaya-spravka' },
       { label: 'Партнёры', to: '/page/partnery' },
-      { label: 'Сведения об организации', to: '/Information' },
+      { label: 'Сведения об организации', to: '/information' },
     ],
   },
 ];

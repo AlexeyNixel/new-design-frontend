@@ -19,13 +19,13 @@
           class="flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
         >
           <span class="text-sm font-semibold text-gray-500">
-            {{ dayjs(post.publishedAt).format('MMM') }}
+            {{ dayjs(postDisplayDate(post)).format('MMM') }}
           </span>
           <span class="text-2xl font-bold text-gray-800">
-            {{ dayjs(post.publishedAt).format('DD') }}
+            {{ dayjs(postDisplayDate(post)).format('DD') }}
           </span>
           <span class="text-xs text-gray-500">
-            {{ dayjs(post.publishedAt).format('YYYY') }}
+            {{ dayjs(postDisplayDate(post)).format('YYYY') }}
           </span>
         </div>
       </div>
@@ -63,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { postDisplayDate } from '~/utils/postDate';
 import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 

@@ -33,7 +33,21 @@
             <div
               class="flex items-center gap-4 text-gray-600 dark:text-gray-400"
             >
-              <div class="flex items-center gap-1">
+              <!-- У анонса — дата мероприятия вместо даты публикации -->
+              <div
+                v-if="isEventAnnouncement(entry)"
+                class="flex items-center gap-1 font-medium text-[#157486] dark:text-[#5fc4d6]"
+              >
+                <UIcon
+                  name="i-heroicons-calendar-days"
+                  class="w-4 h-4"
+                />
+                <span>Мероприятие: {{ formattedDate(postDisplayDate(entry)) }}</span>
+              </div>
+              <div
+                v-else
+                class="flex items-center gap-1"
+              >
                 <UIcon
                   name="i-heroicons-calendar"
                   class="w-4 h-4"
@@ -111,6 +125,7 @@
 </template>
 
 <script setup lang="ts">
+import { isEventAnnouncement, postDisplayDate } from '~/utils/postDate';
 import { ModalsCommon } from '#components';
 import { useEntryApi } from '~~/services/api/entryService';
 

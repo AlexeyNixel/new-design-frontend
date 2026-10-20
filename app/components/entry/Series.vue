@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { postDisplayDate } from '~/utils/postDate';
 import { useEntryApi } from '~~/services/api/entryService';
 import type { Post } from '~~/services/types/post.type';
 import { isInSeries, seriesFromTitle } from '~/utils/postSeries';
@@ -72,7 +73,7 @@ const formatDate = (value?: string) =>
               <span class="font-medium leading-snug group-hover:underline group-hover:underline-offset-4">
                 {{ item.title }}
               </span>
-              <span class="text-sm text-white/60">{{ formatDate(item.publishedAt) }}</span>
+              <span class="text-sm text-white/60">{{ formatDate(postDisplayDate(item)) }}</span>
             </NuxtLink>
           </li>
         </ul>

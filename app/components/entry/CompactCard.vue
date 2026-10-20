@@ -28,7 +28,7 @@
       :class="{ 'xl:justify-start xl:py-3': stackOnXl }"
     >
       <span class="text-xs text-gray-500 mb-0.5">
-        {{ dayjs(post.publishedAt).format('D MMMM YYYY') }}
+        {{ dayjs(postDisplayDate(post)).format('D MMMM YYYY') }}
       </span>
       <span
         class="font-semibold text-sm text-gray-900 line-clamp-3 group-hover:text-primary transition-colors"
@@ -40,6 +40,7 @@
 </template>
 
 <script setup lang="ts">
+import { postDisplayDate } from '~/utils/postDate';
 import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 

@@ -7,6 +7,8 @@ export interface Post {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
+  /** Дата мероприятия у новости-анонса (только дата); показывается вместо publishedAt */
+  eventDate?: string | null;
   title: string;
   description: string;
   content: string;

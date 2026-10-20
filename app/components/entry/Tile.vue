@@ -23,13 +23,13 @@
       >
         <div class="flex flex-col items-center">
           <span class="text-sm font-semibold text-gray-500">
-            {{ formateDate(post.publishedAt, 'MMM') }}
+            {{ formateDate(postDisplayDate(post), 'MMM') }}
           </span>
           <span class="text-2xl font-bold text-gray-800">
-            {{ formateDate(post.publishedAt, 'DD') }}
+            {{ formateDate(postDisplayDate(post), 'DD') }}
           </span>
           <span class="text-xs text-gray-500">
-            {{ formateDate(post.publishedAt, 'YYYY') }}
+            {{ formateDate(postDisplayDate(post), 'YYYY') }}
           </span>
         </div>
       </div>
@@ -82,7 +82,7 @@
                 name="i-heroicons-calendar-20-solid"
                 class="w-4 h-4 mr-2"
               />
-              <span>{{ formateDate(post.publishedAt, 'DD MMMM YYYY') }}</span>
+              <span>{{ formateDate(postDisplayDate(post), 'DD MMMM YYYY') }}</span>
             </div>
 
             <!-- Кнопка читать -->
@@ -101,6 +101,7 @@
 </template>
 
 <script setup lang="ts">
+import { postDisplayDate } from '~/utils/postDate';
 import type { Post } from '~~/services/types/post.type';
 
 defineProps<{

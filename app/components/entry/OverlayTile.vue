@@ -19,7 +19,7 @@
 
     <div class="absolute inset-x-0 bottom-0 p-3">
       <div class="mb-1 text-xs text-white/80">
-        {{ dayjs(post.publishedAt).format('D MMMM YYYY') }}
+        {{ dayjs(postDisplayDate(post)).format('D MMMM YYYY') }}
       </div>
       <h3
         class="text-sm font-bold text-white line-clamp-3 group-hover:text-primary-100 transition-colors"
@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { postDisplayDate } from '~/utils/postDate';
 import type { Post } from '~~/services/types/post.type';
 import dayjs from 'dayjs';
 

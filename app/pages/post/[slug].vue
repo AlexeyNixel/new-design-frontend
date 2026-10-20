@@ -80,12 +80,26 @@
       </header>
 
       <main class="news-content">
+        <!-- Таблицы мероприятий показываем карточками (см. app/utils/eventTable.ts) -->
         <div
           ref="content"
           v-image-gallery="{ modal }"
-          class="tiptap"
-          v-html="contentHtml"
-        />
+        >
+          <template
+            v-for="(segment, index) in contentSegments"
+            :key="index"
+          >
+            <div
+              v-if="segment.type === 'html'"
+              class="tiptap"
+              v-html="segment.html"
+            />
+            <EntryEventTable
+              v-else
+              :events="segment.events"
+            />
+          </template>
+        </div>
       </main>
 
       <footer class="mt-8">
@@ -182,6 +196,10 @@ useBreadcrumbSchema(breadcrumbItems);
 
 // Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
 const contentHtml = computed(() => fitTables(markImageTables(entry.content)));
+// Год по умолчанию — год публикации: для таблиц без строки «2026 год»
+const contentSegments = computed(() =>
+  splitEventTables(contentHtml.value, new Date(entry.publishedAt).getFullYear()),
+);
 useYandexFormsEmbed(entry.content);
 const readingTime = readingMinutes(entry.contentText, entry.content);
 

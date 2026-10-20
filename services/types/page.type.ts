@@ -98,7 +98,12 @@ export interface PageArchiveBlock {
   type: 'archive';
   title: string;
   note?: string;
+  /** Ссылки, добавленные вручную */
   items: PageArchiveBlockItem[];
+  /** Теги, по которым API подбирает новости в `tagItems` */
+  tagIds?: string[];
+  /** Новости по тегам — подставляет API при получении страницы */
+  tagItems?: PageArchiveBlockItem[];
 }
 
 export type PageContentBlock

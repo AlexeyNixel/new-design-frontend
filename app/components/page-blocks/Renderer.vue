@@ -54,6 +54,7 @@ defineProps<{
       :title="block.title"
       :note="block.note"
       :items="block.items"
+      :tag-items="block.tagItems"
     />
   </template>
 </template>

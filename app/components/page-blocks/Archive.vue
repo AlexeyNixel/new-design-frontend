@@ -1,11 +1,43 @@
 <script setup lang="ts">
 import type { PageArchiveBlockItem } from '~~/services/types/page.type';
 
-defineProps<{
+const props = defineProps<{
   title: string;
   note?: string;
   items: PageArchiveBlockItem[];
+  /** Новости по тегам блока (подставляет API) — добавляются к ручным ссылкам */
+  tagItems?: PageArchiveBlockItem[];
 }>();
+
+/** Ссылка без домена сайта, кодирования и слеша в конце — чтобы находить дубли */
+const linkKey = (url: string) => {
+  let path = url.trim().replace(/^https?:\/\/(www\.)?infomania\.ru/i, '');
+  try {
+    path = decodeURI(path);
+  }
+  catch {
+    // битое кодирование — сравниваем как есть
+  }
+  return path.replace(/\/+$/, '');
+};
+
+/** «dd.mm.yyyy» → число для сортировки; без даты — в конец списка */
+const dateValue = (date?: string) => {
+  const [day, month, year] = (date ?? '').split('.').map(Number);
+  return year && month && day ? year * 10000 + month * 100 + day : 0;
+};
+
+// Ручная ссылка важнее новости по тегу с тем же адресом: у неё может быть свой текст.
+// Без новостей по тегам порядок остаётся ручным, как его задали в админке.
+const allItems = computed(() => {
+  if (!props.tagItems?.length) return props.items;
+
+  const manual = new Set(props.items.map(item => linkKey(item.url)));
+  return [
+    ...props.items,
+    ...props.tagItems.filter(item => !manual.has(linkKey(item.url))),
+  ].sort((a, b) => dateValue(b.date) - dateValue(a.date));
+});
 </script>
 
 <template>
@@ -35,7 +67,7 @@ defineProps<{
       <span
         class="shrink-0 text-xs font-bold text-primary bg-primary/10 rounded-full px-2.5 py-1"
       >
-        {{ items.length }}
+        {{ allItems.length }}
       </span>
       <UIcon
         name="i-heroicons-chevron-down"
@@ -47,7 +79,7 @@ defineProps<{
       class="max-h-96 overflow-y-auto px-5 pb-5 pt-1 space-y-1 border-t border-gray-100"
     >
       <li
-        v-for="(item, index) in items"
+        v-for="(item, index) in allItems"
         :key="index"
       >
         <a

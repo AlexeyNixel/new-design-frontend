@@ -11,7 +11,7 @@
       Правила игры
     </h3>
     <p class="mt-1.5 text-sm text-gray-600">
-      Скачайте PDF с правилами, чтобы разобраться до первой партии.
+      Откройте PDF с правилами, чтобы разобраться до первой партии.
     </p>
     <NuxtLink
       :to="game.rulesFile.path"
@@ -19,10 +19,10 @@
       class="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-700 px-5 py-3 font-semibold text-white transition-colors hover:bg-primary-800"
     >
       <Icon
-        name="i-heroicons-arrow-down-tray"
+        name="i-heroicons-document-text"
         class="h-5 w-5"
       />
-      Скачать правила
+      Открыть правила
     </NuxtLink>
   </div>
 </template>

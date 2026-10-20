@@ -1,4 +1,5 @@
 import { readdirSync } from 'node:fs';
+import { resolve } from 'node:path';
 import tailwindcss from '@tailwindcss/vite';
 
 // Публичный адрес сайта — для sitemap, robots.txt и canonical
@@ -114,6 +115,14 @@ export default defineNuxtConfig({
   nitro: {
     // Заранее сжатые .gz/.br-версии статики (_nuxt, public) — Nitro отдаёт их по Accept-Encoding
     compressPublicAssets: { gzip: true, brotli: true },
+
+    // Файлы pdf.js для мобильного просмотра PDF (app/components/common/PdfViewer.vue):
+    // декодеры сканов (wasm), кодировки и стандартные шрифты
+    publicAssets: ['wasm', 'cmaps', 'standard_fonts', 'iccs'].map(dir => ({
+      dir: resolve(`node_modules/pdfjs-dist/${dir}`),
+      baseURL: `/pdfjs/${dir}`,
+      maxAge: 604800,
+    })),
 
     // Проксирование медиа работает и в dev, и в production.
     // devProxy с ключом '/site' не используем: он матчит по префиксу и перехватывает /sitemap.xml

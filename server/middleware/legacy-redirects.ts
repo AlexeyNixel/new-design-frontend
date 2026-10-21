@@ -53,6 +53,10 @@ export default defineEventHandler(async (event) => {
     if (match) return sendRedirect(event, rule.to(match), 301);
   }
 
+  // Двойники служебных страниц — раньше поиска по API, иначе /document/kluby найдёт удалённую страницу
+  const canonical = canonicalPath(path);
+  if (canonical !== path) return sendRedirect(event, canonical, 301);
+
   const documentSlug = path.match(/^\/document\/([^/]+)\/?$/)?.[1];
   if (documentSlug) {
     const baseApi = useRuntimeConfig(event).public.apiBaseUrl;

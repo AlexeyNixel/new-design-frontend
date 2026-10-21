@@ -408,12 +408,12 @@ const navigateLinks = [
   {
     icon: 'i-heroicons-magnifying-glass',
     label: 'Поиск',
-    link: '/entry',
+    link: '/post',
   },
   {
     icon: 'i-heroicons-wheelchair',
     label: 'Доступная среда',
-    link: '/entry/dostupnaya-sreda-03-32-22-10-22',
+    link: '/page/dostupnaya-sreda',
   },
   {
     icon: 'i-heroicons-academic-cap',

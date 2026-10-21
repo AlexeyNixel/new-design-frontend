@@ -8,7 +8,7 @@ const items = ref([
   {
     label: 'Новости',
     icon: 'i-heroicons-newspaper',
-    to: '/entry',
+    to: '/post',
   },
 ]);
 </script>

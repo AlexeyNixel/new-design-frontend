@@ -78,7 +78,8 @@ export default defineSitemapEventHandler(async () => {
         .filter(item => !item.isDeleted)
         .map((item): SitemapUrlInput | undefined => {
           const loc = path(item);
-          if (!loc) return undefined;
+          // Двойники служебных страниц в sitemap не нужны: они перенаправляют на страницу
+          if (!loc || canonicalPath(loc) !== loc) return undefined;
           return {
             loc,
             lastmod: item.updatedAt || item.publishedAt,

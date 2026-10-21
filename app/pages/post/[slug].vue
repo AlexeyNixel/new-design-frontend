@@ -195,7 +195,9 @@ usePageSeo({
 useBreadcrumbSchema(breadcrumbItems);
 
 // Таблицы, в которых только фото, выводим без рамок (см. app/utils/contentTables.ts)
-const contentHtml = computed(() => fitTables(markImageTables(entry.content)));
+const contentHtml = computed(() =>
+  fitTables(markImageTables(canonicalizeLinks(entry.content))),
+);
 // Год по умолчанию — год публикации: для таблиц без строки «2026 год»
 const contentSegments = computed(() =>
   splitEventTables(contentHtml.value, new Date(entry.publishedAt).getFullYear()),

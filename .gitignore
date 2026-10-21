@@ -23,3 +23,6 @@ temp
 .env
 .env.*
 !.env.example
+
+# Макеты визуального брейншторма
+.superpowers/

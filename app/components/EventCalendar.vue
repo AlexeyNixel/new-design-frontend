@@ -4,6 +4,12 @@ import type { Event } from '~~/services/types/event.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
 import { NuxtLink } from '#components';
+import { useEventApi } from '~~/services/api/eventService';
+import { libraryNow, toEventApiDate } from '~/composables/useEventTime';
+
+/** Кнопки шапки: на телефоне — на зелёной полосе, с sm — круглые на белой шапке */
+const HEADER_BTN_CLASS
+  = 'shrink-0 text-white hover:bg-white/20 sm:rounded-full sm:text-primary-800 sm:bg-[#eef5f6] sm:hover:bg-[#e0ecee]';
 
 const config = useRuntimeConfig();
 const parseEventTime = useParseEventTime();
@@ -22,6 +28,38 @@ const navDirection = ref<'forward' | 'back'>('forward');
 const openedFromStrip = ref(false);
 /** Выбранный в шапке календаря день недели (0 — воскресенье): все его события за месяц */
 const weekdayFilter = ref<number | null>(null);
+
+// ——— Ближайшие события ———
+// Календарь открывается сразу на ближайшем событии; стрелки листают следующие,
+// а кнопка «Календарь» поднимает на уровень выше — к сетке месяца.
+
+/** Насколько вперёд искать — те же параметры, что у EventNearest (один запрос на двоих) */
+const NEAREST_DAYS = 14;
+/** Сколько ближайших событий можно пролистать — дальше удобнее календарь */
+const NEAREST_MAX = 7;
+
+const eventApi = useEventApi();
+const today = libraryNow().startOf('day');
+const { data: upcomingData } = await eventApi.getAllEvents({
+  startDate: toEventApiDate(today),
+  endDate: toEventApiDate(today.add(NEAREST_DAYS, 'day').endOf('day')),
+  limit: 100,
+});
+
+const upcoming = [...(upcomingData ?? [])]
+  // isDeleted приходит то булевым, то строкой 'False'
+  .filter(event => String(event.isDeleted).toLowerCase() !== 'true')
+  .filter(event => parseEventTime(event.eventTime).isAfter(libraryNow()))
+  .sort(
+    (a, b) =>
+      parseEventTime(a.eventTime).valueOf()
+      - parseEventTime(b.eventTime).valueOf(),
+  )
+  .slice(0, NEAREST_MAX);
+
+/** Открыты подробности ближайшего события (а не события из календаря) */
+const nearestMode = ref(upcoming.length > 0);
+if (upcoming[0]) selectedEvent.value = upcoming[0];
 
 const view = computed<'calendar' | 'list' | 'detail'>(() => {
   if (selectedEvent.value) return 'detail';
@@ -54,8 +92,11 @@ const weekdayIndex = (label: string) =>
   WEEKDAY_KEYS.indexOf(label.toLowerCase().replace('.', '').trim());
 
 const headerTitle = computed(() => {
-  if (view.value === 'detail' && selectedEvent.value)
-    return selectedEvent.value.title;
+  if (view.value === 'detail' && selectedEvent.value) {
+    return nearestMode.value
+      ? 'Ближайшее событие'
+      : parseEventTime(selectedEvent.value.eventTime).format('D MMMM');
+  }
   if (view.value === 'list' && weekdayFilter.value !== null) {
     const month = dayjs(calendarDate.value.toString()).format('MMMM');
     return `${WEEKDAY_PLURAL[weekdayFilter.value]}, ${month}`;
@@ -124,12 +165,16 @@ const dayState = (date: DateValue): DayState => {
   return 'normal';
 };
 
+// Сетка месяца показывается только с sm — в фирменных бирюзовых цветах
 const DAY_CIRCLE_CLASS: Record<DayState, string> = {
-  event: 'bg-info/20 text-info cursor-pointer hover:bg-info/30',
-  monday: 'bg-warning/20 text-warning',
-  outside: 'text-gray-300',
-  normal: 'text-gray-700',
+  event: 'bg-[#eef5f6] text-primary-800 font-bold cursor-pointer hover:bg-primary-800 hover:text-white',
+  monday: 'text-gray-300',
+  outside: 'text-gray-200',
+  normal: 'text-gray-600',
 };
+
+const isTodayDate = (date: DateValue) =>
+  dayjs(date.toString()).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD');
 
 const changeMonth = async (direction: 'prev' | 'next') => {
   if (direction === 'prev') {
@@ -157,7 +202,7 @@ const openEvent = (event: Event) => {
 };
 
 const backToList = () => {
-  if (openedFromStrip.value) {
+  if (openedFromStrip.value || nearestMode.value) {
     closeToCalendar();
     return;
   }
@@ -166,6 +211,7 @@ const backToList = () => {
 };
 
 const closeToCalendar = () => {
+  nearestMode.value = false;
   openedFromStrip.value = false;
   weekdayFilter.value = null;
   navDirection.value = 'back';
@@ -198,6 +244,48 @@ const weekdayGroups = computed(() => {
       ),
     }));
 });
+
+// ——— Листание подробностей ———
+
+/** События, между которыми листают стрелки: ближайшие, события дня недели или дня */
+const detailList = computed<Event[]>(() => {
+  if (nearestMode.value) return upcoming;
+  if (weekdayFilter.value !== null) return weekdayGroups.value.flatMap(group => group.events);
+  return dayEvents.value ?? [];
+});
+
+const detailIndex = computed(() =>
+  detailList.value.findIndex(event => event.id === selectedEvent.value?.id),
+);
+
+// Подробности листаются свайпером (мышью, пальцем или стрелками, как в главной карусели).
+// Нативный веб-компонент из nuxt-swiper — см. MainCarousel.
+type SwiperContainerEl = HTMLElement & {
+  swiper?: { activeIndex: number; slidePrev: () => void; slideNext: () => void };
+};
+const detailSwiperRef = ref<SwiperContainerEl | null>(null);
+
+/** Слайд, с которого открылись подробности; дальше индекс меняет сам свайпер */
+const detailStartIndex = ref(0);
+watch(view, (value) => {
+  if (value === 'detail') detailStartIndex.value = Math.max(detailIndex.value, 0);
+}, { immediate: true });
+
+const onDetailSlideChange = () => {
+  const next = detailList.value[detailSwiperRef.value?.swiper?.activeIndex ?? 0];
+  if (next) selectedEvent.value = next;
+};
+
+const showSibling = (step: 1 | -1) => {
+  const swiper = detailSwiperRef.value?.swiper;
+  if (step > 0) swiper?.slideNext();
+  else swiper?.slidePrev();
+};
+
+/** «Подняться» из подробностей: к календарю или к списку дня, откуда открыли */
+const upLabel = computed(() =>
+  nearestMode.value || openedFromStrip.value ? 'Календарь' : 'К списку',
+);
 
 const weekdayCount = (label: string) => {
   const index = weekdayIndex(label);
@@ -327,29 +415,22 @@ onMounted(async () => {
 
 <template>
   <div
-    class="bg-white shadow rounded-xl relative overflow-hidden flex flex-col h-full"
+    class="relative overflow-hidden flex flex-col h-full bg-white shadow rounded-xl sm:rounded-2xl sm:shadow-xl"
   >
     <!-- Единая шапка для календаря и панели событий -->
     <header
-      class="flex items-center shrink-0 bg-gradient-to-r from-success to-success/70 px-1 sm:px-2 py-2 sm:py-3 text-white rounded-t-xl"
+      class="flex items-center gap-1 shrink-0 px-1 sm:px-3 py-2 sm:py-3 text-white bg-gradient-to-r from-success to-success/70 rounded-t-xl sm:bg-none sm:bg-white sm:text-primary-800 sm:rounded-none sm:border-b sm:border-gray-100"
     >
       <UButton
         v-if="view === 'calendar'"
         variant="ghost"
         icon="i-iconoir-nav-arrow-left"
-        class="text-white hover:bg-white/20 shrink-0"
+        :class="HEADER_BTN_CLASS"
         @click="changeMonth('prev')"
-      />
-      <UButton
-        v-else-if="view === 'detail'"
-        variant="ghost"
-        icon="i-heroicons-arrow-left-20-solid"
-        class="text-white hover:bg-white/20 shrink-0"
-        @click="backToList"
       />
       <div
         v-else
-        class="w-9 shrink-0"
+        class="w-9 h-8 shrink-0"
       />
 
       <!-- В режиме календаря заголовок ведёт на полную афишу -->
@@ -372,14 +453,18 @@ onMounted(async () => {
         v-if="view === 'calendar'"
         variant="ghost"
         icon="i-iconoir-nav-arrow-right"
-        class="text-white hover:bg-white/20 shrink-0"
+        :class="HEADER_BTN_CLASS"
         @click="changeMonth('next')"
+      />
+      <div
+        v-else-if="view === 'detail'"
+        class="w-9 h-8 shrink-0"
       />
       <UButton
         v-else
         variant="ghost"
         icon="heroicons:x-mark-20-solid"
-        class="text-white hover:bg-white/20 shrink-0"
+        :class="HEADER_BTN_CLASS"
         @click="closeToCalendar"
       />
     </header>
@@ -522,7 +607,7 @@ onMounted(async () => {
 
         <!-- Desktop версия - сетка календаря -->
         <div class="hidden sm:flex sm:flex-col flex-1 min-h-0">
-          <div class="px-1 pt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
+          <div class="px-2.5 pt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
             <!-- Без v-model: календарь только показывает месяц (placeholder),
                  поэтому ни сегодняшний, ни какой-либо другой день не «выбран» и не подсвечивается -->
             <UCalendar
@@ -534,11 +619,11 @@ onMounted(async () => {
               class="w-full"
               :ui="{
                 root: 'w-full',
-                heading: 'font-semibold text-sm',
+                heading: 'font-semibold text-sm capitalize text-primary-800',
                 headCell: 'p-0',
                 cell: 'p-0',
                 cellTrigger:
-                  'data-today:font-normal hover:not-data-[selected]:bg-transparent',
+                  'size-auto p-0 my-px data-today:font-normal hover:not-data-[selected]:bg-transparent',
               }"
             >
               <!-- Заголовок дня недели: показывает все события этого дня недели за месяц -->
@@ -560,32 +645,27 @@ onMounted(async () => {
               </template>
 
               <template #day="{ day }">
-                <!-- День с событиями: бейдж-уведомление в правом верхнем углу, поверх дня -->
-                <UChip
-                  v-if="dayState(day) === 'event'"
-                  :text="String(isEvent(day)?.length)"
-                  color="info"
-                  position="top-right"
-                  :ui="{
-                    base: 'h-3.5 min-w-3.5 px-0.5 text-[9px] leading-none font-semibold ring-[1.5px] ring-white',
-                  }"
-                >
-                  <div
-                    class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium transition-colors"
-                    :class="DAY_CIRCLE_CLASS.event"
-                    @click.stop="openDay(isEvent(day) ?? [])"
-                  >
-                    {{ day.day }}
-                  </div>
-                </UChip>
-
+                <!-- Точки под числом — сколько событий в этот день (не больше трёх) -->
                 <div
-                  v-else
-                  class="flex items-center justify-center rounded-full w-8 h-8 text-xs font-medium"
-                  :class="DAY_CIRCLE_CLASS[dayState(day)]"
-                  @click.stop
+                  class="group relative flex flex-col items-center justify-center rounded-xl w-9 h-8 text-xs font-medium transition-colors"
+                  :class="[
+                    DAY_CIRCLE_CLASS[dayState(day)],
+                    dayState(day) !== 'outside' && isTodayDate(day) ? 'ring-2 ring-primary-50 ring-inset' : '',
+                  ]"
+                  :title="dayState(day) === 'monday' ? 'Выходной' : undefined"
+                  @click.stop="dayState(day) === 'event' && openDay(isEvent(day) ?? [])"
                 >
-                  {{ day.day }}
+                  <span class="leading-none">{{ day.day }}</span>
+                  <span
+                    v-if="dayState(day) === 'event'"
+                    class="absolute bottom-1 flex gap-0.5"
+                  >
+                    <span
+                      v-for="i in Math.min(isEvent(day)?.length ?? 0, 3)"
+                      :key="i"
+                      class="size-1 rounded-full bg-primary-50 group-hover:bg-white"
+                    />
+                  </span>
                 </div>
               </template>
             </UCalendar>
@@ -593,7 +673,81 @@ onMounted(async () => {
         </div>
       </div>
 
-      <!-- Список событий дня / детали события -->
+      <!-- Подробности события: плакат + описание, кнопки закреплены снизу -->
+      <div
+        v-else-if="view === 'detail' && selectedEvent"
+        key="detail"
+        class="flex flex-col max-h-[460px] lg:max-h-none lg:flex-1 lg:min-h-0"
+      >
+        <!-- Каждое событие — слайд; листается мышью, пальцем и стрелками -->
+        <div class="event-slider relative overflow-hidden flex-1 min-h-0 h-[460px] lg:h-auto">
+          <swiper-container
+            ref="detailSwiperRef"
+            class="block w-full h-full"
+            :initial-slide="detailStartIndex"
+            space-between="12"
+            @swiperslidechange="onDetailSlideChange"
+          >
+            <swiper-slide
+              v-for="(item, index) in detailList"
+              :key="item.id"
+              class="overflow-y-auto"
+            >
+              <EventDetail
+                :events="[]"
+                :selected-event="item"
+                :position="{ index, total: detailList.length }"
+              />
+            </swiper-slide>
+          </swiper-container>
+
+          <!-- Стрелки как в главной карусели: появляются при наведении -->
+          <template v-if="detailList.length > 1">
+            <button
+              v-show="detailIndex > 0"
+              type="button"
+              aria-label="Предыдущее событие"
+              class="event-arrow left-1"
+              @click="showSibling(-1)"
+            >
+              <Icon
+                name="i-heroicons-chevron-left-20-solid"
+                class="w-5 h-5"
+              />
+            </button>
+            <button
+              v-show="detailIndex < detailList.length - 1"
+              type="button"
+              aria-label="Следующее событие"
+              class="event-arrow right-1"
+              @click="showSibling(1)"
+            >
+              <Icon
+                name="i-heroicons-chevron-right-20-solid"
+                class="w-5 h-5"
+              />
+            </button>
+          </template>
+        </div>
+        <div class="flex gap-2 p-2.5 shrink-0 border-t border-gray-100">
+          <UButton
+            :to="`/afisha/${selectedEvent.id}`"
+            label="Подробнее"
+            trailing-icon="i-heroicons-arrow-right-20-solid"
+            class="flex-1 justify-center bg-[#0d4954] hover:bg-[#0d4954]/90 font-bold"
+          />
+          <UButton
+            :label="upLabel"
+            :icon="upLabel === 'Календарь' ? 'i-heroicons-calendar-days' : 'i-heroicons-list-bullet'"
+            color="neutral"
+            variant="soft"
+            class="flex-1 justify-center bg-[#eef5f6] text-[#0d4954] hover:bg-[#e0ecee] font-bold"
+            @click="backToList"
+          />
+        </div>
+      </div>
+
+      <!-- Список событий дня -->
       <div
         v-else
         key="events"
@@ -622,7 +776,7 @@ onMounted(async () => {
         <EventDetail
           v-else
           :events="dayEvents ?? []"
-          :selected-event="selectedEvent"
+          :selected-event="null"
           @select="openEvent"
         />
       </div>
@@ -631,20 +785,23 @@ onMounted(async () => {
 </template>
 
 <style scoped>
+/* Дни недели в сетке месяца (только с sm) */
 .weekday-btn {
   width: 100%;
   padding: 0;
-  line-height: 1rem;
+  line-height: 1.5rem;
   border-radius: 0.375rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
-  color: var(--ui-info);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-primary-800);
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
 
 .weekday-btn:hover {
-  background: color-mix(in oklab, var(--ui-info) 12%, transparent);
+  background: #eef5f6;
 }
 
 .weekday-btn--empty {
@@ -654,6 +811,58 @@ onMounted(async () => {
 
 .weekday-btn--empty:hover {
   background: transparent;
+}
+
+/* Стрелки подробностей — как .slider-arrow в MainCarousel; на телефоне только свайп */
+.event-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.7);
+  color: var(--color-gray-800);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.12);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(-50%) scale(0.92);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease,
+    background-color 0.15s ease;
+  cursor: pointer;
+}
+
+@media (min-width: 640px) {
+  .event-arrow {
+    display: flex;
+  }
+}
+
+.event-slider:hover .event-arrow,
+.event-arrow:focus-visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.event-arrow:hover {
+  background: rgb(255 255 255 / 0.95);
+}
+
+.event-arrow:focus-visible {
+  outline: 2px solid var(--ui-primary);
+  outline-offset: 2px;
+}
+
+/* До гидратации swiper-slide рендерится как inline — задаём размеры заранее */
+.event-slider swiper-slide {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 /* Лента дней листается пальцем — полоса прокрутки не нужна */

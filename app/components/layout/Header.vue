@@ -328,7 +328,7 @@ const navigateLinks = [
   {
     icon: 'mynaui:wheelchair-solid',
     label: 'Доступная среда',
-    link: '/post/dostupnaya-sreda-03-32-22-10-22',
+    link: '/page/dostupnaya-sreda',
   },
   {
     icon: 'i-heroicons-academic-cap',

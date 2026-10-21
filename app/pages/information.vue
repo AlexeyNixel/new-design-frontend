@@ -97,7 +97,7 @@ const links = reactive([
   },
   {
     title: 'Структура библиотеки',
-    slug: '/document/struktura-biblioteki',
+    slug: '/page/struktura-biblioteki',
     icon: 'i-fa-solid-sitemap',
     color: 'bg-green-500',
   },

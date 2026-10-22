@@ -4,6 +4,8 @@
   <CommonSectionWrapper
     v-if="exhibitions.length"
     title="Викторины и выставки"
+    eyebrow="Проверь себя"
+    icon="i-heroicons-trophy"
     link="/page/exhibition"
     link-label="Все выставки"
   >

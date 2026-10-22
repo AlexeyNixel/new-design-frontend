@@ -18,16 +18,16 @@
       class="flex flex-col xl:col-span-4"
     >
       <div class="flex items-center justify-between gap-3 mb-3">
-        <h3 class="flex items-center gap-2 text-lg font-bold text-gray-900">
+        <h3 class="flex items-center gap-2 text-lg font-bold text-[#0d4954]">
           <Icon
             name="i-heroicons-megaphone-20-solid"
-            class="w-5 h-5 text-secondary"
+            class="w-5 h-5 text-[#157486]"
           />
           Анонсы
         </h3>
         <NuxtLink
           :to="{ path: '/post', query: { tags: POST_TAG.announcement } }"
-          class="group flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+          class="group flex items-center gap-1 text-sm text-[#157486] hover:text-[#0d4954] font-bold"
         >
           Все анонсы
           <Icon
@@ -53,16 +53,16 @@
       class="flex flex-col xl:col-span-4"
     >
       <div class="flex items-center justify-between gap-3 mb-3">
-        <h3 class="flex items-center gap-2 text-lg font-bold text-gray-900">
+        <h3 class="flex items-center gap-2 text-lg font-bold text-[#0d4954]">
           <Icon
             name="i-heroicons-sparkles-20-solid"
-            class="w-5 h-5 text-primary"
+            class="w-5 h-5 text-[#157486]"
           />
           События
         </h3>
         <NuxtLink
           :to="{ path: '/post', query: { tags: POST_TAG.event } }"
-          class="group flex items-center gap-1 text-sm text-primary-600 hover:text-primary-700 font-medium"
+          class="group flex items-center gap-1 text-sm text-[#157486] hover:text-[#0d4954] font-bold"
         >
           Все события
           <Icon

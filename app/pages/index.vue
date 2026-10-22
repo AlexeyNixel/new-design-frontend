@@ -4,15 +4,6 @@ usePageSeo({
   description:
     'Новосибирская областная молодёжная библиотека (НОМБ): новости и события, книги, настольные игры и комиксы, клубы, выставки и услуги для читателей.',
 });
-
-// Ссылка «Полный список» в блоке «Книги» ведёт в каталог открытой вкладки
-const shelfTab = ref<'books' | 'collections' | 'comics'>('books');
-const SHELF_LINKS = {
-  books: { to: '/books', label: 'Полный список книг' },
-  collections: { to: '/books/collections', label: 'Все подборки' },
-  comics: { to: '/comics', label: 'Полный список комиксов и манги' },
-};
-const shelfLink = computed(() => SHELF_LINKS[shelfTab.value]);
 </script>
 
 <!-- pages/index.vue -->
@@ -53,6 +44,8 @@ const shelfLink = computed(() => SHELF_LINKS[shelfTab.value]);
     <!-- Остальные секции -->
     <CommonSectionWrapper
       title="Анонсы и события"
+      eyebrow="Что происходит в библиотеке"
+      icon="i-heroicons-newspaper"
       link="/post"
       link-label="Все новости"
       bg-gray
@@ -60,18 +53,17 @@ const shelfLink = computed(() => SHELF_LINKS[shelfTab.value]);
       <NewsCarousel />
     </CommonSectionWrapper>
 
-    <CommonSectionWrapper
-      title="Книги"
-      :link="shelfLink.to"
-      :link-label="shelfLink.label"
-    >
-      <BookShelf v-model="shelfTab" />
+    <!-- Заголовок и ссылку на каталог блок «Книги» рисует сам — рядом с вкладками -->
+    <CommonSectionWrapper>
+      <BookShelf />
     </CommonSectionWrapper>
 
     <CommonSectionWrapper
       title="Игровая библиотека"
+      eyebrow="Настольные игры"
+      icon="i-heroicons-puzzle-piece"
       link="/games"
-      link-label="Полный список игр"
+      link-label="Все игры"
       bg-gray
     >
       <GameCarousel />
@@ -85,9 +77,11 @@ const shelfLink = computed(() => SHELF_LINKS[shelfTab.value]);
     </CommonSectionWrapper>
 
     <CommonSectionWrapper
-      title="Информация партнеров"
+      title="Информация партнёров"
+      eyebrow="Новости друзей библиотеки"
+      icon="i-heroicons-hand-raised"
       :link="`/post?tags=${POST_TAG.partner}`"
-      link-label="Все новости партнеров"
+      link-label="Все новости партнёров"
     >
       <PartnerNews />
     </CommonSectionWrapper>

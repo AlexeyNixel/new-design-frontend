@@ -2,7 +2,7 @@
   <div class="relative w-full">
     <swiper-container
       ref="swiperElRef"
-      class="block w-full py-4"
+      class="block w-full"
       init="false"
     >
       <swiper-slide
@@ -17,11 +17,11 @@
       </swiper-slide>
     </swiper-container>
 
-    <!-- Стрелки -->
+    <!-- Стрелки; на телефоне карусель листают пальцем -->
     <button
       type="button"
       aria-label="Предыдущие комиксы"
-      class="absolute z-10 top-1/2 -translate-y-1/2 left-2 sm:left-4 md:left-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      class="absolute z-10 top-1/2 -translate-y-1/2 left-1 sm:left-2 hidden sm:flex items-center justify-center size-10 rounded-full bg-white/90 text-[#0d4954] shadow-[0_2px_10px_rgb(0_0_0/0.15)] backdrop-blur-sm hover:bg-white hover:cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-[#0d4954]"
       @click="goPrev"
     >
       <Icon
@@ -32,7 +32,7 @@
     <button
       type="button"
       aria-label="Следующие комиксы"
-      class="absolute z-10 top-1/2 -translate-y-1/2 right-2 sm:right-4 md:right-[60px] flex items-center justify-center w-9 h-9 rounded bg-primary text-white hover:bg-primary/60 hover:cursor-pointer transition-colors"
+      class="absolute z-10 top-1/2 -translate-y-1/2 right-1 sm:right-2 hidden sm:flex items-center justify-center size-10 rounded-full bg-white/90 text-[#0d4954] shadow-[0_2px_10px_rgb(0_0_0/0.15)] backdrop-blur-sm hover:bg-white hover:cursor-pointer transition-colors focus-visible:outline-2 focus-visible:outline-[#0d4954]"
       @click="goNext"
     >
       <Icon

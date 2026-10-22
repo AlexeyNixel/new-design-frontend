@@ -1,11 +1,11 @@
 <template>
   <NuxtLink
     :to="{ name: 'books-slug', params: { slug: book.id } }"
-    class="group h-full flex flex-col bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-md border border-gray-100"
+    class="group h-full flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm ring-1 ring-gray-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-[#0d4954]"
   >
-    <!-- Обертка для изображения: обложка всегда видна целиком -->
+    <!-- Обложка лежит на фирменном светло-бирюзовом поле, как книга на полке; видна целиком -->
     <div
-      class="relative aspect-[2/3] overflow-hidden bg-gray-100 flex items-center justify-center"
+      class="relative aspect-[2/3] overflow-hidden bg-[#eef5f6] flex items-center justify-center p-4 sm:p-5"
     >
       <img
         :src="book?.preview?.path"
@@ -14,33 +14,32 @@
         :alt="book.title"
         width="400"
         height="600"
-        class="max-w-full max-h-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
+        class="w-auto h-auto max-w-full max-h-full rounded-[3px] shadow-[0_6px_16px_rgb(0_0_0/0.25)] transition-transform duration-500 group-hover:scale-[1.04] group-hover:-rotate-1"
         loading="lazy"
         @error="handleImageError"
       >
 
       <!-- Иконка типа (видео/книга) -->
-      <div class="absolute top-2.5 right-2.5">
-        <div
-          class="w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow"
-        >
-          <Icon
-            :name="
-              book.isVideo
-                ? 'i-heroicons-video-camera'
-                : 'i-heroicons-book-open'
-            "
-            class="w-4 h-4 text-primary"
-          />
-        </div>
+      <div
+        class="absolute top-2 right-2 size-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm"
+        :title="book.isVideo ? 'Видеообзор' : 'Книга'"
+      >
+        <Icon
+          :name="
+            book.isVideo
+              ? 'i-heroicons-video-camera'
+              : 'i-heroicons-book-open'
+          "
+          class="size-4 text-[#0d4954]"
+        />
       </div>
     </div>
 
     <!-- Контент карточки: фиксированная структура, чтобы карточки были одной высоты -->
-    <div class="p-3 flex flex-1 flex-col">
+    <div class="p-3 sm:p-4 flex flex-1 flex-col">
       <!-- Заголовок книги: всегда резервирует 2 строки -->
       <h3
-        class="min-h-[2.5rem] text-sm font-semibold text-gray-900 leading-snug line-clamp-2 group-hover:text-primary transition-colors duration-300"
+        class="min-h-[2.5rem] text-sm font-bold text-gray-900 leading-snug line-clamp-2 group-hover:underline group-hover:underline-offset-4"
       >
         {{ book.title }}
       </h3>
@@ -68,7 +67,7 @@
 
       <!-- Ссылка/действие: прижата к низу -->
       <div
-        class="mt-auto pt-1.5 flex items-center text-primary font-semibold text-xs"
+        class="mt-auto pt-2 flex items-center text-[#157486] font-bold text-xs"
       >
         <span>{{ book.isVideo ? 'Смотреть' : 'Подробнее' }}</span>
         <Icon

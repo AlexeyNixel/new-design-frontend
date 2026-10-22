@@ -1,10 +1,5 @@
 <template>
   <div class="flex flex-col gap-4 sm:gap-5">
-    <!-- Видимого заголовка нет — его роль играют вкладки; для скринридеров и структуры страницы оставляем h2 -->
-    <h2 class="sr-only">
-      Книги
-    </h2>
-
     <!-- Вкладки слева, ссылка на полный каталог открытой вкладки — справа -->
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <UTabs

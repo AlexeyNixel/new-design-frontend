@@ -53,8 +53,12 @@ usePageSeo({
       <NewsCarousel />
     </CommonSectionWrapper>
 
-    <!-- Заголовок и ссылку на каталог блок «Книги» рисует сам — рядом с вкладками -->
-    <CommonSectionWrapper>
+    <!-- Ссылку на каталог блок рисует сам — рядом с вкладками, своя для каждой -->
+    <CommonSectionWrapper
+      title="Книжная полка"
+      eyebrow="Что почитать в библиотеке"
+      icon="i-heroicons-book-open"
+    >
       <BookShelf />
     </CommonSectionWrapper>
 

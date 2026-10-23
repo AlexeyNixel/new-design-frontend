@@ -73,12 +73,15 @@
                     v-if="quickLinks.length"
                     class="grid grid-cols-2 gap-2 mb-5"
                   >
-                    <NuxtLink
+                    <!-- Пункт с action (например, версия для слабовидящих) — кнопка, остальные — ссылки -->
+                    <component
+                      :is="link.action ? 'button' : NuxtLink"
                       v-for="link in quickLinks"
                       :key="link.label"
-                      :to="link.link"
-                      class="flex items-center gap-2.5 min-h-14 px-3 py-2 rounded-2xl bg-neutral-100 active:bg-neutral-200 transition-colors"
-                      @click="close"
+                      :to="link.action ? undefined : link.link"
+                      :type="link.action ? 'button' : undefined"
+                      class="flex items-center gap-2.5 min-h-14 px-3 py-2 rounded-2xl bg-neutral-100 active:bg-neutral-200 transition-colors text-left"
+                      @click="onQuickLink(link)"
                     >
                       <Icon
                         v-if="link.icon"
@@ -86,7 +89,7 @@
                         class="size-5 shrink-0 text-primary"
                       />
                       <span class="text-[13px] font-medium leading-tight text-gray-800">{{ link.label }}</span>
-                    </NuxtLink>
+                    </component>
                   </div>
 
                   <p class="px-3 mb-1 text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -248,8 +251,12 @@ import type { LibraryStatus } from '~/utils/librarySchedule';
 interface MenuLink {
   icon?: string;
   label: string;
-  link: string;
+  link?: string;
+  /** Действие вместо перехода по ссылке */
+  action?: () => void;
 }
+
+const NuxtLink = resolveComponent('NuxtLink');
 
 const props = withDefaults(
   defineProps<{
@@ -285,6 +292,11 @@ const backLabel = computed(() => path.value.at(-2)?.title ?? 'Главное м�
 
 const close = () => {
   open.value = false;
+};
+
+const onQuickLink = (link: MenuLink) => {
+  link.action?.();
+  close();
 };
 
 const goTo = (item: NavigationMenuItem) => {

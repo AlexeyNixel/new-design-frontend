@@ -1,8 +1,9 @@
-/** Часы работы библиотеки по дням недели (0 — воскресенье, как в Date.getDay) */
-export const LIBRARY_HOURS: Record<
-  number,
-  { open: number; close: number } | null
-> = {
+type DayHours = { open: number; close: number } | null;
+
+/** Часы работы по дням недели (0 — воскресенье, как в Date.getDay) */
+type WeekHours = Record<number, DayHours>;
+
+const REGULAR_HOURS: WeekHours = {
   0: { open: 10, close: 19 },
   1: null,
   2: { open: 10, close: 20 },
@@ -11,6 +12,27 @@ export const LIBRARY_HOURS: Record<
   5: { open: 10, close: 20 },
   6: { open: 10, close: 19 },
 };
+
+const SUMMER_HOURS: WeekHours = {
+  0: null,
+  1: { open: 10, close: 19 },
+  2: { open: 10, close: 19 },
+  3: { open: 10, close: 19 },
+  4: { open: 10, close: 19 },
+  5: { open: 10, close: 19 },
+  6: { open: 10, close: 19 },
+};
+
+/** Летнее расписание действует с 1 июня по 31 августа, остальное время — обычное */
+export const LIBRARY_SCHEDULES = {
+  regular: { label: 'С 1 сентября по 31 мая', hours: REGULAR_HOURS },
+  summer: { label: 'С 1 июня по 31 августа', hours: SUMMER_HOURS },
+} as const;
+
+export type LibrarySeason = keyof typeof LIBRARY_SCHEDULES;
+
+/** Месяцы летнего расписания (0 — январь): июнь, июль, август */
+const SUMMER_MONTHS = [5, 6, 7];
 
 /** Порядок дней в неделе для отображения: с понедельника */
 export const WEEK_ORDER = [1, 2, 3, 4, 5, 6, 0];
@@ -59,8 +81,24 @@ const isTechnicalDay = (day: Date) => {
   return tomorrow.getUTCMonth() !== day.getUTCMonth();
 };
 
+const seasonOf = (day: Date): LibrarySeason =>
+  SUMMER_MONTHS.includes(day.getUTCMonth()) ? 'summer' : 'regular';
+
 const hoursFor = (day: Date) =>
-  isTechnicalDay(day) ? null : LIBRARY_HOURS[day.getUTCDay()];
+  isTechnicalDay(day)
+    ? null
+    : LIBRARY_SCHEDULES[seasonOf(day)].hours[day.getUTCDay()];
+
+/** Какое расписание действует сейчас (по дате в Новосибирске) */
+export const getLibrarySeason = (date = new Date()): LibrarySeason =>
+  seasonOf(nowInNovosibirsk(date).day);
+
+/** Неделя с понедельника для показа; hours = null — выходной */
+export const getWeekSchedule = (season: LibrarySeason) =>
+  WEEK_ORDER.map(index => ({
+    index,
+    hours: LIBRARY_SCHEDULES[season].hours[index] ?? null,
+  }));
 
 export interface LibraryStatus {
   isOpen: boolean;
@@ -68,6 +106,8 @@ export interface LibraryStatus {
   text: string;
   /** День недели сегодня (0 — воскресенье) */
   today: number;
+  /** Расписание, которое действует сегодня */
+  season: LibrarySeason;
   isTechnicalToday: boolean;
 }
 
@@ -77,12 +117,14 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
   const today = day.getUTCDay();
   const isTechnicalToday = isTechnicalDay(day);
   const hours = hoursFor(day);
+  const season = seasonOf(day);
 
   if (hours && minutes >= hours.open * 60 && minutes < hours.close * 60) {
     return {
       isOpen: true,
       text: `Открыто до ${hours.close}:00`,
       today,
+      season,
       isTechnicalToday,
     };
   }
@@ -92,6 +134,7 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
       isOpen: false,
       text: `Закрыто, откроемся сегодня в ${hours.open}:00`,
       today,
+      season,
       isTechnicalToday,
     };
   }
@@ -109,9 +152,10 @@ export const getLibraryStatus = (date = new Date()): LibraryStatus => {
       isOpen: false,
       text: `${reason}, откроемся ${when} в ${nextHours.open}:00`,
       today,
+      season,
       isTechnicalToday,
     };
   }
 
-  return { isOpen: false, text: 'Закрыто', today, isTechnicalToday };
+  return { isOpen: false, text: 'Закрыто', today, season, isTechnicalToday };
 };

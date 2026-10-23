@@ -3,7 +3,7 @@
        чтобы полоса читалась отдельным слоем и не спорила со слайдером -->
   <!-- relative — мега-панели разделов (MyPopover) раскрываются на всю ширину полосы -->
   <div class="relative w-full bg-gradient-to-r from-primary-700 to-primary-800 shadow-sm">
-    <div class="max-w-[1710px] mx-auto flex items-center justify-between gap-1 px-4 sm:px-6 lg:px-8 py-1.5">
+    <div class="site-nav max-w-[1710px] mx-auto flex items-center justify-between gap-1 px-4 sm:px-6 lg:px-8 py-1.5">
       <div
         v-for="item in items"
         :key="item.id"

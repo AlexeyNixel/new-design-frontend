@@ -19,7 +19,7 @@ export const useDevTheme = () => {
     'dev:theme:defaults',
     () => ({}),
   );
-  const base = useState<string>('dev:theme:base', () => '#7592dc');
+  const base = useState<string>('dev:theme:base', () => '#157f92');
   const loaded = useState<boolean>('dev:theme:loaded', () => false);
 
   const allVars = [...PRIMARY_STEPS.map(s => primaryVar(s)), LINK_VAR];

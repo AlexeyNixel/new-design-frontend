@@ -1,5 +1,8 @@
 <template>
   <div class="flex flex-col min-h-screen bg-neutral-100">
+    <!-- Панель версии для слабовидящих (видна, только когда режим включён) -->
+    <A11yPanel />
+
     <!-- ХЕДЕР -->
     <LayoutHeader />
 

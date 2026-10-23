@@ -104,6 +104,9 @@
             </li>
           </ol>
           <p class="mt-3 text-xs text-white/50">
+            <template v-if="season === 'summer'">
+              Летнее расписание до 31 августа.
+            </template>
             Последний день месяца — технический день
           </p>
         </div>
@@ -173,7 +176,7 @@
         <UButton
           to="/page/obratnaya-svyaz"
           size="lg"
-          class="mt-6 rounded-xl bg-primary-500 hover:bg-primary-500/85 text-white font-semibold"
+          class="mt-6 rounded-xl bg-white hover:bg-primary-200 text-primary-800 font-semibold"
         >
           Задать вопрос
         </UButton>
@@ -323,18 +326,20 @@ const socials = [
   },
 ];
 
-const week = WEEK_ORDER.map((index) => {
-  const hours = LIBRARY_HOURS[index];
-  return {
-    index,
-    label: WEEKDAY_SHORT[index],
-    hours: hours ? `${hours.open}–${hours.close}` : null,
-  };
-});
-
 // Статус зависит от текущего времени — считаем только в браузере,
 // иначе серверный и клиентский рендер разойдутся
 const status = ref<LibraryStatus | null>(null);
+
+// Сезон меняется раз в несколько месяцев — его можно считать и на сервере
+const season = computed(() => status.value?.season ?? getLibrarySeason());
+
+const week = computed(() =>
+  getWeekSchedule(season.value).map(({ index, hours }) => ({
+    index,
+    label: WEEKDAY_SHORT[index],
+    hours: hours ? `${hours.open}–${hours.close}` : null,
+  })),
+);
 let timer: ReturnType<typeof setInterval> | undefined;
 
 onMounted(() => {

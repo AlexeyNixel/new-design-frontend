@@ -141,7 +141,8 @@ modal.open({ imgLinks: [...], startIndex: 0 });
 ## Важные замечания
 
 - SEO: `sitemap.xml` генерирует `@nuxtjs/sitemap` (динамические URL — `server/api/__sitemap__/urls.ts`), `robots.txt` — серверный маршрут `server/routes/robots.txt.ts`. Адрес сайта — `NUXT_PUBLIC_SITE_URL` (по умолчанию `https://infomania.ru`; `alt.infomania.ru` редиректит туда). Не добавлять `nitro.devProxy` с ключом `/site`: он матчит по префиксу и перехватывает `/sitemap.xml`.
-- `app/layouts/ContentLayout.vue` содержит устаревшую ссылку `/entry` вместо `/post` — можно исправить при случае.
+- Версия для слабовидящих (ГОСТ Р 52872): настройки — `useAccessibility()` (cookie `a11y` + `useState`), атрибуты `data-a11y-*` на `<html>` ставит `useAccessibilityHead()` в `app.vue` и `error.vue`, стили — `assets/css/a11y.css`, панель — `A11yPanel.vue`. Стили схемы перекрашивают фон всех элементов: элемент, который должен сохранить свои цвета, помечать классом `a11y-keep`.
+- Режим работы библиотеки (обычный и летний 1 июня – 31 августа) — только в `app/utils/librarySchedule.ts`; шапка, футер, мобильное меню и schema.org берут часы оттуда.
 - Внешние скрипты НЕ подключаются глобально: Яндекс.Формы — через `useYandexFormsEmbed()` только на страницах, где в CMS-контенте есть форма; скрипт Госуслуг грузит сам `FeedbackGos.vue`.
 - Стили: Tailwind и Nuxt UI импортируются один раз в `main.css`, остальные CSS-файлы подключаются внутри него через `@import`. Не добавлять `@import 'tailwindcss'` в другие файлы и не перечислять их в `css` в `nuxt.config` — весь Tailwind сгенерируется повторно.
 - Картинки из CMS: у `File` есть `variants` (WebP-копии 400–1600px, создаёт бэкенд). В `<img>` добавлять `:srcset="imageSrcset(file)"` (`app/utils/image.ts`) и `sizes` по реальной ширине блока. Если есть `@error`-заглушка — снимать `srcset`, иначе браузер продолжит брать картинку из него.

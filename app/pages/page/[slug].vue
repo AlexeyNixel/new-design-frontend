@@ -120,7 +120,7 @@ const contentBlocks = computed<PageContentBlock[]>(() =>
 );
 
 const breadcrumbUI = {
-  link: 'text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400',
+  link: 'text-gray-600 hover:text-primary-600 dark:text-gray-400 dark:hover:text-primary-400',
   active: 'text-gray-900 dark:text-white font-medium',
 };
 

@@ -50,7 +50,7 @@ const { data: clubs } = await clubApi.getAllClubs({
         </div>
         <a
           href="tel:210-11-08"
-          class="text-indigo-600 hover:text-indigo-700 text-sm md:text-base transition-colors"
+          class="text-primary-600 hover:text-primary-800 text-sm md:text-base transition-colors"
         >
           Центр поддержки культурных инициатив молодежи: 210-11-08
         </a>

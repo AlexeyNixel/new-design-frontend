@@ -1,0 +1,127 @@
+/* Версия для слабовидящих (ГОСТ Р 52872-2019).
+   Включается атрибутами data-a11y-* на <html> — их ставит useAccessibilityHead().
+   Стили намеренно грубые (!important на всех элементах): режим должен работать
+   на любой странице, включая HTML-контент из CMS, без доработки компонентов. */
+
+/* --- Размер шрифта: Tailwind считает всё в rem, поэтому масштабируется и вёрстка --- */
+html[data-a11y-font='large'] {
+  font-size: 125%;
+}
+
+html[data-a11y-font='xlarge'] {
+  font-size: 150%;
+}
+
+/* --- Общее для режима: без анимаций, ссылки подчёркнуты, заметный фокус --- */
+html[data-a11y] *,
+html[data-a11y] *::before,
+html[data-a11y] *::after {
+  animation: none !important;
+  transition: none !important;
+  text-shadow: none !important;
+}
+
+html[data-a11y] a {
+  text-decoration: underline !important;
+  text-underline-offset: 0.2em;
+}
+
+html[data-a11y] :focus-visible {
+  outline: 3px solid var(--a11y-fg) !important;
+  outline-offset: 3px !important;
+}
+
+/* --- Цветовые схемы: фон и текст всех элементов, рамки — цветом текста --- */
+html[data-a11y-scheme='bw'] {
+  --a11y-bg: #fff;
+  --a11y-fg: #000;
+}
+
+html[data-a11y-scheme='wb'] {
+  --a11y-bg: #000;
+  --a11y-fg: #fff;
+}
+
+html[data-a11y-scheme='blue'] {
+  --a11y-bg: #9dd1ff;
+  --a11y-fg: #063462;
+}
+
+html[data-a11y-scheme='beige'] {
+  --a11y-bg: #f7f3d6;
+  --a11y-fg: #4d4b43;
+}
+
+html[data-a11y-scheme='green'] {
+  --a11y-bg: #3b2716;
+  --a11y-fg: #a9e44d;
+}
+
+html[data-a11y-scheme],
+html[data-a11y-scheme] body,
+html[data-a11y-scheme] *:not(img, video, iframe, svg, svg *, .a11y-keep, .a11y-keep *) {
+  background-color: var(--a11y-bg) !important;
+  background-image: none !important;
+  color: var(--a11y-fg) !important;
+  border-color: var(--a11y-fg) !important;
+  box-shadow: none !important;
+  --tw-ring-color: var(--a11y-fg) !important;
+}
+
+/* Иконки: svg — через currentColor, Iconify (UIcon) — маской с background-color.
+   Правило выше красит фон всех элементов, поэтому маскам возвращаем цвет текста */
+html[data-a11y-scheme] svg {
+  color: var(--a11y-fg) !important;
+}
+
+html[data-a11y-scheme] :is(.iconify, .iconify *) {
+  background-color: var(--a11y-fg) !important;
+}
+
+/* Кнопки и поля без рамки в обычной версии иначе сливаются с фоном */
+html[data-a11y-scheme] :is(button, input, select, textarea, [role='button']) {
+  outline: 1px solid var(--a11y-fg);
+}
+
+/* --- Крупный шрифт: брейкпоинты Tailwind считаются от шрифта браузера, а не от <html>,
+   поэтому десктопная шапка и меню на 125–150% не помещаются — разрешаем им переноситься --- */
+html[data-a11y] .site-header {
+  flex-wrap: wrap;
+  height: auto;
+  padding-block: 0.75rem;
+}
+
+html[data-a11y] .site-header > *,
+html[data-a11y] .site-nav {
+  flex-wrap: wrap;
+}
+
+html[data-a11y] .site-nav {
+  justify-content: flex-start;
+}
+
+/* --- Изображения: выключены — прячем картинки, видео и встраиваемые плееры --- */
+html[data-a11y-images='off'] :is(img, picture, video, iframe, swiper-container) {
+  display: none !important;
+}
+
+html[data-a11y-images='off'] * {
+  background-image: none !important;
+}
+
+/* --- Интервалы --- */
+html[data-a11y-letter='wide'] body * {
+  letter-spacing: 0.08em !important;
+}
+
+html[data-a11y-letter='wider'] body * {
+  letter-spacing: 0.16em !important;
+}
+
+html[data-a11y-line='wide'] body * {
+  line-height: 1.75 !important;
+}
+
+html[data-a11y-line='wider'] body * {
+  line-height: 2.1 !important;
+}

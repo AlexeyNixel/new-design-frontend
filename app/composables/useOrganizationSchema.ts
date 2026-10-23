@@ -17,6 +17,17 @@ export const LIBRARY_INFO = {
   ],
 };
 
+/** Дни недели schema.org в порядке Date.getDay (0 — воскресенье) */
+const SCHEMA_WEEKDAYS = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+];
+
 /**
  * Разметка организации (`Library`) и сайта (`WebSite`) — выводится на всех страницах.
  * На неё ссылаются материалы через `publisher: { '@id': .../#organization }`.
@@ -38,20 +49,15 @@ export const useOrganizationSchema = () => {
         'telephone': LIBRARY_INFO.telephone,
         'email': LIBRARY_INFO.email,
         'address': { '@type': 'PostalAddress', ...LIBRARY_INFO.address },
-        'openingHoursSpecification': [
-          {
+        // Часы того расписания, что действует сейчас (обычное или летнее)
+        'openingHoursSpecification': getWeekSchedule(getLibrarySeason())
+          .filter(day => day.hours)
+          .map(({ index, hours }) => ({
             '@type': 'OpeningHoursSpecification',
-            'dayOfWeek': ['Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-            'opens': '10:00',
-            'closes': '20:00',
-          },
-          {
-            '@type': 'OpeningHoursSpecification',
-            'dayOfWeek': ['Saturday', 'Sunday'],
-            'opens': '10:00',
-            'closes': '19:00',
-          },
-        ],
+            'dayOfWeek': SCHEMA_WEEKDAYS[index],
+            'opens': `${hours!.open}:00`,
+            'closes': `${hours!.close}:00`,
+          })),
         'sameAs': LIBRARY_INFO.sameAs,
       },
       {

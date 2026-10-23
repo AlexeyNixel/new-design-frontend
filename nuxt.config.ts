@@ -179,6 +179,6 @@ export default defineNuxtConfig({
     // Динамические URL (посты, книги, игры, комиксы, страницы) — server/api/__sitemap__/urls.ts
     sources: ['/api/__sitemap__/urls'],
     // /document — пустая заглушка без контента
-    exclude: ['/test', '/debug-cors', '/games/test', '/document'],
+    exclude: ['/test', '/document'],
   },
 });

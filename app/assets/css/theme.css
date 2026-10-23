@@ -11,14 +11,16 @@
 }
 
 :root {
-    --color-link-500: #7592dc;
+    /* Акцент (кнопки, ссылки, Nuxt UI color="primary") — бирюзовый, как навигация и футер.
+       Подобран под контраст с белым ≥ 4.5:1 (WCAG AA): прежний #7592dc давал 3.0:1 */
+    --color-link-500: #157f92;
     --color-primary-50: #1d9fb7;
     --color-primary-100: #06434f;
     --color-primary-200: #9be7f5;
     --color-primary-300: #73ddf1;
     --color-primary-400: #4cd4ed;
-    --color-primary-500: #7592dc;
-    --color-primary-600: #7592dc;
+    --color-primary-500: #157f92;
+    --color-primary-600: #126b7c;
     --color-primary-700: #157486;
     --color-primary-800: #0d4954;
     --color-primary-900: #061e23;

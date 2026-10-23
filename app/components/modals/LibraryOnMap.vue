@@ -8,20 +8,19 @@
         {{ LIBRARY_INFO.address.streetAddress }}
       </p>
       <p class="text-sm text-white/70">
-        {{ LIBRARY_INFO.address.addressLocality }}
+        {{ LIBRARY_INFO.address.addressLocality }}, угол Октябрьской улицы
       </p>
     </div>
 
     <div class="p-3">
-      <!-- Карта грузится только при открытии панели (панель монтируется по клику) -->
-      <div class="aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100">
-        <iframe
-          :src="MAP_EMBED_URL"
-          title="Библиотека на Яндекс Картах"
-          loading="lazy"
-          class="size-full border-0"
-        />
-      </div>
+      <!-- Карта OpenStreetMap: без рекламы и API-ключей (виджет Яндекса показывал рекламный блок).
+           Leaflet грузится только при открытии панели — панель монтируется по клику. -->
+      <div
+        ref="mapEl"
+        class="library-map aspect-[4/3] overflow-hidden rounded-xl bg-neutral-100"
+        role="region"
+        aria-label="Карта: библиотека на Красном проспекте, 26"
+      />
 
       <a
         :href="ROUTE_URL"
@@ -40,9 +39,93 @@
 </template>
 
 <script setup lang="ts">
-const MAP_EMBED_URL
-  = 'https://yandex.ru/map-widget/v1/?um=constructor%3A952a94a4b33a6930b5ce54184df44d9a8f630cc4697ed47374222011683b6ded&source=constructor';
-const ROUTE_URL = `https://yandex.ru/maps/?text=${encodeURIComponent(
-  `${LIBRARY_INFO.address.addressLocality}, ${LIBRARY_INFO.address.streetAddress}`,
-)}`;
+import type { Map as LeafletMap } from 'leaflet';
+
+/** Здание библиотеки (точка из OpenStreetMap) */
+const LIBRARY_COORDS: [number, number] = [55.024618, 82.922475];
+const ZOOM = 17;
+
+// Маршрут «от меня до библиотеки» строим в Яндекс Картах — способ передвижения посетитель выберет там
+const ROUTE_URL = `https://yandex.ru/maps/?rtext=~${LIBRARY_COORDS.join(',')}`;
+
+const mapEl = ref<HTMLElement | null>(null);
+let map: LeafletMap | null = null;
+
+onMounted(async () => {
+  // Стили и сама библиотека — отдельным чанком, только когда открыли карту:
+  // шапка есть на каждой странице, и общий CSS не должен расти из-за неё
+  const [L] = await Promise.all([import('leaflet'), import('leaflet/dist/leaflet.css')]);
+  if (!mapEl.value) return;
+
+  map = L.map(mapEl.value, {
+    center: LIBRARY_COORDS,
+    zoom: ZOOM,
+    scrollWheelZoom: false,
+  });
+  // Префикс Leaflet по умолчанию не нужен — оставляем только обязательную подпись OSM
+  map.attributionControl.setPrefix(false);
+
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
+  }).addTo(map);
+
+  // Свой маркер (divIcon): стандартные картинки Leaflet теряются при сборке Vite
+  const icon = L.divIcon({
+    className: 'library-map__pin',
+    html: '<span></span>',
+    iconSize: [32, 40],
+    iconAnchor: [16, 40],
+    tooltipAnchor: [0, -38],
+  });
+  L.marker(LIBRARY_COORDS, { icon, keyboard: false })
+    .addTo(map)
+    .bindTooltip('НОМБ', { permanent: true, direction: 'top', className: 'library-map__label' });
+
+  // Панель появляется с анимацией — пересчитываем размер, когда она встала на место
+  setTimeout(() => map?.invalidateSize(), 200);
+});
+
+onBeforeUnmount(() => {
+  map?.remove();
+  map = null;
+});
 </script>
+
+<style scoped>
+/* Маркер — капля бирюзового цвета сайта с белой точкой */
+.library-map :deep(.library-map__pin span) {
+  position: absolute;
+  inset: 0 4px 8px;
+  border-radius: 50% 50% 50% 0;
+  background: var(--color-primary-700);
+  box-shadow: 0 4px 10px rgb(13 73 84 / 0.4);
+  transform: rotate(-45deg);
+}
+
+.library-map :deep(.library-map__pin span::after) {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.library-map :deep(.library-map__label) {
+  padding: 2px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--color-primary-800);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+.library-map :deep(.library-map__label::before) {
+  display: none;
+}
+
+.library-map :deep(.leaflet-control-attribution) {
+  font-size: 10px;
+}
+</style>

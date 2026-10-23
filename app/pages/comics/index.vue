@@ -1,6 +1,8 @@
 <template>
   <CommonContentContainer>
-    <h1 class="sr-only">Комиксы</h1>
+    <h1 class="sr-only">
+      Комиксы
+    </h1>
     <CommonCatalogFilters
       v-model:search="searchText"
       search-placeholder="Поиск комикса..."
@@ -17,12 +19,19 @@
           @click="toggleSeries(selectedSeries)"
         >
           {{ selectedSeries.title }}
-          <Icon name="i-heroicons-x-mark" class="size-3.5" />
+          <Icon
+            name="i-heroicons-x-mark"
+            class="size-3.5"
+          />
         </button>
-        <span v-if="ageMax" class="filter-chip">До {{ ageMax }}+</span>
-        <span v-if="yearFrom || yearTo" class="filter-chip"
-          >Годы: {{ yearFrom || '…' }}–{{ yearTo || '…' }}</span
-        >
+        <span
+          v-if="ageMax"
+          class="filter-chip"
+        >До {{ ageMax }}+</span>
+        <span
+          v-if="yearFrom || yearTo"
+          class="filter-chip"
+        >Годы: {{ yearFrom || '…' }}–{{ yearTo || '…' }}</span>
       </template>
 
       <!-- Серий немного, поэтому всё в одну строку: серии тянутся, числовые поля — по контенту -->
@@ -60,7 +69,10 @@
             <h2
               class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900"
             >
-              <Icon name="i-heroicons-cake" class="size-4 text-primary" />
+              <Icon
+                name="i-heroicons-cake"
+                class="size-4 text-primary"
+              />
               Возраст, до
             </h2>
             <UInput
@@ -121,7 +133,10 @@
           :comic="comic"
         />
       </div>
-      <p v-else class="py-16 text-center text-gray-500">
+      <p
+        v-else
+        class="py-16 text-center text-gray-500"
+      >
         Ничего не найдено. Попробуйте изменить запрос или фильтры.
       </p>
       <div
@@ -173,11 +188,11 @@ const series = (await comicApi.getAllSeries()) ?? [];
 
 // API фильтрует только по одной серии (seriesId), поэтому выбор одиночный
 const activeSeriesId = ref<string | undefined>(
-  (route.query.series as string) || undefined
+  (route.query.series as string) || undefined,
 );
 
 const selectedSeries = computed(() =>
-  series.find((item) => item.id === activeSeriesId.value)
+  series.find(item => item.id === activeSeriesId.value),
 );
 
 const updateUrl = () => {
@@ -234,9 +249,9 @@ const toggleSeries = async (item: ComicSeries) => {
 
 const activeFiltersCount = computed(
   () =>
-    (selectedSeries.value ? 1 : 0) +
-    (ageMax.value ? 1 : 0) +
-    (yearFrom.value || yearTo.value ? 1 : 0)
+    (selectedSeries.value ? 1 : 0)
+    + (ageMax.value ? 1 : 0)
+    + (yearFrom.value || yearTo.value ? 1 : 0),
 );
 
 const resetFilters = async () => {

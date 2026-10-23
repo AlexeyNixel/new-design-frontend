@@ -29,7 +29,7 @@ const LIST_ACCENT: Record<EventCategory, string> = {
 };
 
 const category = computed(() =>
-  props.selectedEvent ? eventCategory(props.selectedEvent) : 'talk'
+  props.selectedEvent ? eventCategory(props.selectedEvent) : 'talk',
 );
 
 // Белый плакат встреч в календаре сливается с белой карточкой —
@@ -37,31 +37,34 @@ const category = computed(() =>
 const posterClass = computed(() =>
   category.value === 'talk'
     ? 'bg-[#eef5f6] text-[#0d2a30]'
-    : EVENT_CATEGORIES[category.value].poster
+    : EVENT_CATEGORIES[category.value].poster,
 );
 const circleClass = computed(() =>
   category.value === 'talk'
     ? 'bg-primary-50 opacity-10'
-    : 'bg-current opacity-[0.07]'
+    : 'bg-current opacity-[0.07]',
 );
 
 const ticket = computed(() =>
-  eventTicket({ content: props.selectedEvent?.content ?? '' })
+  eventTicket({ content: props.selectedEvent?.content ?? '' }),
 );
 
 /** «Сегодня, 15:00» или «Пт, 24 октября, 16:00» */
 const when = computed(() => {
   if (!props.selectedEvent) return '';
   const time = parseEventTime(props.selectedEvent.eventTime);
-  const day =
-    eventDayBadge(props.selectedEvent.eventTime) ?? time.format('dd, D MMMM');
+  const day
+    = eventDayBadge(props.selectedEvent.eventTime) ?? time.format('dd, D MMMM');
   return `${day.charAt(0).toUpperCase()}${day.slice(1)}, ${time.format('HH:mm')}`;
 });
 </script>
 
 <template>
   <!-- Список событий на день -->
-  <div v-if="!selectedEvent" class="space-y-2">
+  <div
+    v-if="!selectedEvent"
+    class="space-y-2"
+  >
     <!-- Название — целиком, в несколько строк; слева полоска цвета типа события -->
     <button
       v-for="item in events"
@@ -80,15 +83,17 @@ const when = computed(() => {
           <span class="font-bold tabular-nums text-primary-800">{{
             formatTime(item.eventTime)
           }}</span>
-          <span class="text-gray-300" aria-hidden="true">·</span>
+          <span
+            class="text-gray-300"
+            aria-hidden="true"
+          >·</span>
           <span class="text-gray-500 truncate">{{
             EVENT_CATEGORIES[eventCategory(item)].name
           }}</span>
           <span
             v-if="Number(item.age)"
             class="ml-auto shrink-0 rounded-md bg-gray-100 px-1.5 text-[10px] font-semibold leading-4 text-gray-500"
-            >{{ item.age }}+</span
-          >
+          >{{ item.age }}+</span>
         </span>
         <span
           class="mt-1 block text-sm font-semibold leading-snug text-gray-900 break-words"
@@ -99,7 +104,10 @@ const when = computed(() => {
           v-if="eventPlaceName(item)"
           class="mt-1 flex items-start gap-1 text-xs leading-snug text-gray-500"
         >
-          <UIcon name="i-heroicons-map-pin" class="mt-px size-3.5 shrink-0" />
+          <UIcon
+            name="i-heroicons-map-pin"
+            class="mt-px size-3.5 shrink-0"
+          />
           {{ eventPlaceName(item) }}
         </span>
       </span>
@@ -136,15 +144,19 @@ const when = computed(() => {
       />
 
       <div class="flex flex-wrap gap-1.5">
-        <span class="tag" :class="EVENT_CATEGORIES[category].badge">{{
+        <span
+          class="tag"
+          :class="EVENT_CATEGORIES[category].badge"
+        >{{
           when
         }}</span>
         <span class="tag bg-current/15">{{
           EVENT_CATEGORIES[category].name
         }}</span>
-        <span v-if="Number(selectedEvent.age)" class="tag bg-current/15"
-          >{{ selectedEvent.age }}+</span
-        >
+        <span
+          v-if="Number(selectedEvent.age)"
+          class="tag bg-current/15"
+        >{{ selectedEvent.age }}+</span>
       </div>
 
       <h3 class="text-lg sm:text-xl font-extrabold leading-tight">
@@ -153,24 +165,47 @@ const when = computed(() => {
 
       <!-- Место, телефон и стоимость — одинаковыми строками с иконками -->
       <ul class="space-y-1 text-xs">
-        <li v-if="eventPlaceName(selectedEvent)" class="info-row">
-          <UIcon name="i-heroicons-map-pin" class="info-icon" />
+        <li
+          v-if="eventPlaceName(selectedEvent)"
+          class="info-row"
+        >
+          <UIcon
+            name="i-heroicons-map-pin"
+            class="info-icon"
+          />
           {{ eventPlaceName(selectedEvent) }}
         </li>
-        <li v-if="selectedEvent.phone" class="info-row">
-          <UIcon name="i-heroicons-phone" class="info-icon" />
+        <li
+          v-if="selectedEvent.phone"
+          class="info-row"
+        >
+          <UIcon
+            name="i-heroicons-phone"
+            class="info-icon"
+          />
           <a
             :href="`tel:${selectedEvent.phone}`"
             class="hover:underline underline-offset-2"
-            >{{ selectedEvent.phone }}</a
-          >
+          >{{ selectedEvent.phone }}</a>
         </li>
-        <li v-if="eventPriceLabel(ticket)" class="info-row">
-          <UIcon name="i-heroicons-ticket" class="info-icon" />
+        <li
+          v-if="eventPriceLabel(ticket)"
+          class="info-row"
+        >
+          <UIcon
+            name="i-heroicons-ticket"
+            class="info-icon"
+          />
           {{ eventPriceLabel(ticket) }}
         </li>
-        <li v-if="ticket.pushkin" class="info-row">
-          <UIcon name="i-heroicons-credit-card" class="info-icon" />
+        <li
+          v-if="ticket.pushkin"
+          class="info-row"
+        >
+          <UIcon
+            name="i-heroicons-credit-card"
+            class="info-icon"
+          />
           {{
             ticket.price || ticket.url
               ? 'Можно по Пушкинской карте'
@@ -193,7 +228,10 @@ const when = computed(() => {
       </div>
     </div>
 
-    <div v-if="selectedEvent.content" class="px-3.5 pt-1 pb-3">
+    <div
+      v-if="selectedEvent.content"
+      class="px-3.5 pt-1 pb-3"
+    >
       <div
         class="tiptap max-w-none text-sm text-start"
         v-html="fitTables(selectedEvent.content)"

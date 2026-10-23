@@ -8,8 +8,14 @@
       :autoplay-delay="6000"
       @swiperslidechange="handleSlideChange"
     >
-      <swiper-slide v-for="(item, index) in slides" :key="item.id">
-        <NuxtLink :to="slideLink(item)" class="block w-full h-full">
+      <swiper-slide
+        v-for="(item, index) in slides"
+        :key="item.id"
+      >
+        <NuxtLink
+          :to="slideLink(item)"
+          class="block w-full h-full"
+        >
           <picture class="relative block w-full h-full">
             <UButton
               v-if="hasSession"
@@ -32,7 +38,7 @@
               height="480"
               :loading="index === 0 ? 'eager' : 'lazy'"
               :fetchpriority="index === 0 ? 'high' : 'auto'"
-            />
+            >
           </picture>
         </NuxtLink>
       </swiper-slide>
@@ -45,7 +51,10 @@
       class="slider-arrow left-3 lg:left-4"
       @click="goPrev"
     >
-      <Icon name="i-heroicons-chevron-left-20-solid" class="w-5 h-5" />
+      <Icon
+        name="i-heroicons-chevron-left-20-solid"
+        class="w-5 h-5"
+      />
     </button>
     <button
       type="button"
@@ -53,7 +62,10 @@
       class="slider-arrow right-3 lg:right-4"
       @click="goNext"
     >
-      <Icon name="i-heroicons-chevron-right-20-solid" class="w-5 h-5" />
+      <Icon
+        name="i-heroicons-chevron-right-20-solid"
+        class="w-5 h-5"
+      />
     </button>
 
     <!-- Точки -->
@@ -101,7 +113,7 @@ const { data } = await slideService.getAllSlides({
 // Порядок задаётся в админке полем slideOrder; при равных значениях
 // сохраняется порядок API (новые сверху)
 const slides = [...(data ?? [])].sort(
-  (a, b) => (a.slideOrder ?? 0) - (b.slideOrder ?? 0)
+  (a, b) => (a.slideOrder ?? 0) - (b.slideOrder ?? 0),
 );
 
 const slideLink = (slide: Slide) =>

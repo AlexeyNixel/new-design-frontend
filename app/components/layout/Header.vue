@@ -95,27 +95,45 @@
           </button>
 
           <template #content>
-            <LibraryOnMap @navigate="mapOpen = false" />
+            <LibraryOnMap />
           </template>
         </UPopover>
 
-        <a
-          :href="`tel:${PHONE_HREF}`"
-          class="info-chip hidden 2xl:flex"
+        <!-- Контакты: почта, телефоны, «Все контакты» и соцсети -->
+        <UPopover
+          v-model:open="contactsOpen"
+          :content="popoverContent"
+          :ui="popoverUi"
         >
-          <span class="info-chip__icon">
-            <UIcon
-              name="i-heroicons-phone"
-              class="size-5"
-            />
-          </span>
-          <span class="text-left leading-tight">
-            <span class="block text-xs text-gray-500">Позвоните нам</span>
-            <span class="block text-sm font-bold text-gray-900 whitespace-nowrap">
-              {{ LIBRARY_INFO.telephone }}
+          <button
+            type="button"
+            class="info-chip hidden 2xl:flex"
+            :class="{ 'info-chip--open': contactsOpen }"
+            aria-label="Контакты библиотеки"
+          >
+            <span class="info-chip__icon">
+              <UIcon
+                name="i-heroicons-envelope"
+                class="size-5"
+              />
             </span>
-          </span>
-        </a>
+            <span class="text-left leading-tight">
+              <span class="block text-xs text-gray-500">Напишите нам</span>
+              <span class="block text-sm font-bold text-gray-900 whitespace-nowrap">
+                {{ LIBRARY_INFO.email }}
+              </span>
+            </span>
+            <UIcon
+              name="i-heroicons-chevron-down-20-solid"
+              class="size-4 text-gray-400 transition-transform"
+              :class="{ 'rotate-180': contactsOpen }"
+            />
+          </button>
+
+          <template #content>
+            <LibraryContacts @navigate="contactsOpen = false" />
+          </template>
+        </UPopover>
 
         <!-- Служебные ссылки и соцсети: компактные иконки с подписью во всплывающей подсказке -->
         <div class="hidden lg:flex items-center gap-1 pl-2 ml-1 border-l border-gray-200">
@@ -219,6 +237,7 @@
 </template>
 
 <script setup lang="ts">
+import LibraryContacts from '~/components/modals/LibraryContacts.vue';
 import LibraryOnMap from '~/components/modals/LibraryOnMap.vue';
 import WorktimeLibrary from '~/components/modals/WorktimeLibrary.vue';
 import type { LibraryStatus } from '~/utils/librarySchedule';
@@ -234,8 +253,7 @@ const mobileMenuOpen = ref(false);
 const mobileSearchOpen = ref(false);
 const worktimeOpen = ref(false);
 const mapOpen = ref(false);
-
-const PHONE_HREF = LIBRARY_INFO.telephone.replace(/[^\d+]/g, '');
+const contactsOpen = ref(false);
 
 const popoverContent = { align: 'end', sideOffset: 10, collisionPadding: 12 } as const;
 const popoverUi = {

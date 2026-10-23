@@ -13,19 +13,23 @@ usePageSeo({
     <section class="bg-gradient-to-br from-primary-50 to-primary-100">
       <div class="w-full px-4 sm:px-6 lg:px-8 py-4 md:py-6 lg:py-8">
         <div class="max-w-[1700px] mx-auto">
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <!-- Слайдер и колонка «уведомление + ближайшее событие» встают рядом только с 2xl:
+               уже на 1024–1439px колонка 3/12 получалась 225–290px и обрезала заголовки, а слайдер
+               фиксированной высоты сильно кадрировал баннеры. До 2xl — слайдер во всю ширину
+               в своих пропорциях, блоки под ним. -->
+          <div class="grid grid-cols-1 2xl:grid-cols-12 gap-4">
             <div
-              class="lg:col-span-9 rounded-2xl overflow-hidden shadow-xl bg-white aspect-[5/2] lg:aspect-auto lg:h-[496px] w-full h-full"
+              class="2xl:col-span-9 rounded-2xl overflow-hidden shadow-xl bg-white aspect-[5/2] 2xl:aspect-auto 2xl:h-[496px] w-full h-full"
             >
               <MainCarousel />
             </div>
 
-            <!-- Правая колонка -->
+            <!-- Правая колонка (с 2xl), до 2xl — под слайдером -->
             <div
-              class="lg:col-span-3 w-full flex flex-col gap-4 min-h-0 lg:h-[496px]"
+              class="2xl:col-span-3 w-full flex flex-col gap-4 min-h-0 2xl:h-[496px]"
             >
               <InfoBanner />
-              <EventCalendar class="flex-1 min-h-0" />
+              <EventCalendar class="flex-1 min-h-0 lg:h-[380px] lg:flex-none 2xl:h-auto 2xl:flex-1" />
             </div>
           </div>
 

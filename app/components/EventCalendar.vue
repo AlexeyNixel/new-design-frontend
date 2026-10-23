@@ -9,7 +9,7 @@ import { libraryNow, toEventApiDate } from '~/composables/useEventTime';
 
 /** Кнопки шапки: на телефоне — на зелёной полосе, с sm — круглые на белой шапке */
 const HEADER_BTN_CLASS
-  = 'shrink-0 text-white hover:bg-white/20 sm:rounded-full sm:text-primary-800 sm:bg-[#eef5f6] sm:hover:bg-[#e0ecee]';
+  = 'shrink-0 rounded-full text-primary-800 bg-[#eef5f6] hover:bg-[#e0ecee]';
 
 const config = useRuntimeConfig();
 const parseEventTime = useParseEventTime();
@@ -419,7 +419,7 @@ onMounted(async () => {
   >
     <!-- Единая шапка для календаря и панели событий -->
     <header
-      class="flex items-center gap-1 shrink-0 px-1 sm:px-3 py-2 sm:py-3 text-white bg-gradient-to-r from-success to-success/70 rounded-t-xl sm:bg-none sm:bg-white sm:text-primary-800 sm:rounded-none sm:border-b sm:border-gray-100"
+      class="flex items-center gap-1 shrink-0 px-2 sm:px-3 py-2 sm:py-3 bg-white text-primary-800 border-b border-gray-100"
     >
       <UButton
         v-if="view === 'calendar'"

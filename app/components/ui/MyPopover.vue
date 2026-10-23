@@ -12,7 +12,7 @@
          а с клавиатуры (Enter/Space) клик только открывает его. -->
     <button
       type="button"
-      class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-semibold text-white/90 transition-colors duration-200 hover:bg-white/15 hover:text-white"
+      class="flex items-center gap-1.5 px-2 2xl:px-3 py-2 rounded-lg text-sm font-semibold whitespace-nowrap text-white/90 transition-colors duration-200 hover:bg-white/15 hover:text-white"
       :class="{ 'bg-white/15 text-white': isOpen }"
       aria-haspopup="menu"
       :aria-expanded="isOpen"

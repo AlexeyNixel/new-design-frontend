@@ -64,7 +64,16 @@
               <p class="mt-4 text-xl font-bold leading-tight">
                 {{ navigation.title }}
               </p>
-              <p class="mt-1 text-sm text-white/70">
+              <p
+                v-if="navigation.description"
+                class="mt-2 text-sm leading-snug text-white/75 line-clamp-6"
+              >
+                {{ navigation.description }}
+              </p>
+              <p
+                v-else
+                class="mt-1 text-sm text-white/70"
+              >
                 {{ linkCount }} {{ pluralLinks(linkCount) }}
               </p>
             </div>

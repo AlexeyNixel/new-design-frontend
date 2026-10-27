@@ -1,15 +1,49 @@
 <template>
   <CommonContentContainer>
-    <h1 class="sr-only">
+    <h1 class="mb-6 text-3xl font-bold text-gray-900 md:mb-8 md:text-4xl">
       Настольные игры
     </h1>
     <CommonCatalogFilters
       v-model:search="searchText"
-      search-placeholder="Поиск игры..."
+      search-placeholder="Название игры"
+      quick-label="Жанр"
+      quick-icon="i-heroicons-tag"
+      more-hint="возраст, число игроков"
       :active-count="activeFiltersCount"
+      :panel-count="panelFiltersCount"
+      :total="games?.meta?.total"
+      :total-forms="['игра', 'игры', 'игр']"
       @search="searchData"
       @reset="resetFilters"
     >
+      <template #quick>
+        <button
+          v-for="genre in visibleGenres"
+          :key="genre.id"
+          type="button"
+          class="genre-pill"
+          :class="{ 'genre-pill--active': isGenreSelected(genre) }"
+          :aria-pressed="isGenreSelected(genre)"
+          @click="toggleGenre(genre)"
+        >
+          <Icon
+            v-if="GenresIcons[genre.tag]"
+            :name="GenresIcons[genre.tag]!"
+            class="size-4 shrink-0"
+          />
+          {{ genre.title }}
+        </button>
+        <button
+          v-if="genres.length > GENRES_COLLAPSED"
+          type="button"
+          class="genre-pill genre-pill--more"
+          :aria-expanded="showAllGenres"
+          @click="showAllGenres = !showAllGenres"
+        >
+          {{ showAllGenres ? 'Свернуть' : `Ещё ${hiddenGenresCount}` }}
+        </button>
+      </template>
+
       <template #active>
         <button
           v-for="genre in selectedGenres"
@@ -25,102 +59,90 @@
             class="size-3.5"
           />
         </button>
-        <span
+        <button
           v-if="ageMin || ageMax"
+          type="button"
           class="filter-chip"
-        >Возраст: {{ ageMin || 0 }}–{{ ageMax || '∞' }}</span>
-        <span
+          aria-label="Убрать фильтр по возрасту"
+          @click="clearAge"
+        >
+          Возраст: {{ ageMin || 0 }}–{{ ageMax || '∞' }}
+          <Icon
+            name="i-heroicons-x-mark"
+            class="size-3.5"
+          />
+        </button>
+        <button
           v-if="players"
+          type="button"
           class="filter-chip"
-        >Игроков: {{ players }}</span>
+          aria-label="Убрать фильтр по числу игроков"
+          @click="setPlayers(undefined)"
+        >
+          Игроков: {{ players }}
+          <Icon
+            name="i-heroicons-x-mark"
+            class="size-3.5"
+          />
+        </button>
       </template>
 
-      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_260px]">
+      <div class="grid gap-6 sm:grid-cols-2 lg:max-w-3xl">
         <section>
-          <header class="flex items-center justify-between mb-3">
-            <h2 class="flex items-center gap-2 text-sm font-semibold text-gray-900">
-              <Icon
-                name="i-heroicons-tag"
-                class="size-4 text-primary"
-              />
-              Жанры
-            </h2>
-            <span class="text-xs text-gray-500">
-              выбрано {{ selectedGenres.length }} из {{ genres.length }}
-            </span>
-          </header>
-
+          <h2 class="filter-title">
+            <Icon
+              name="i-heroicons-user-group"
+              class="size-4 text-primary"
+            />
+            Сколько вас будет
+          </h2>
           <div class="flex flex-wrap gap-2">
             <button
-              v-for="genre in genres"
-              :key="genre.id"
+              v-for="option in PLAYER_OPTIONS"
+              :key="option.value"
               type="button"
-              class="genre-pill"
-              :class="{ 'genre-pill--active': isGenreSelected(genre) }"
-              :aria-pressed="isGenreSelected(genre)"
-              @click="toggleGenre(genre)"
+              class="genre-pill min-w-11 justify-center"
+              :class="{ 'genre-pill--active': players === option.value }"
+              :aria-pressed="players === option.value"
+              @click="setPlayers(players === option.value ? undefined : option.value)"
             >
-              <Icon
-                v-if="GenresIcons[genre.tag]"
-                :name="GenresIcons[genre.tag]!"
-                class="size-4 shrink-0"
-              />
-              {{ genre.title }}
+              {{ option.label }}
             </button>
           </div>
         </section>
 
-        <div class="order-first lg:order-none grid gap-5 grid-cols-2 lg:grid-cols-1 content-start">
-          <section>
-            <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
-              <Icon
-                name="i-heroicons-cake"
-                class="size-4 text-primary"
-              />
-              Возраст
-            </h2>
-            <div class="flex items-center gap-2">
-              <UInput
-                v-model.number="ageMin"
-                type="number"
-                inputmode="numeric"
-                placeholder="От"
-                min="0"
-                class="w-full"
-                @change="applyFilters"
-              />
-              <span class="text-gray-400">—</span>
-              <UInput
-                v-model.number="ageMax"
-                type="number"
-                inputmode="numeric"
-                placeholder="До"
-                min="0"
-                class="w-full"
-                @change="applyFilters"
-              />
-            </div>
-          </section>
-
-          <section>
-            <h2 class="flex items-center gap-2 mb-3 text-sm font-semibold text-gray-900">
-              <Icon
-                name="i-heroicons-user-group"
-                class="size-4 text-primary"
-              />
-              Число игроков
-            </h2>
+        <section>
+          <h2 class="filter-title">
+            <Icon
+              name="i-heroicons-cake"
+              class="size-4 text-primary"
+            />
+            Возраст игроков
+          </h2>
+          <div class="flex items-center gap-2">
             <UInput
-              v-model.number="players"
+              v-model.number="ageMin"
               type="number"
               inputmode="numeric"
-              placeholder="Например, 4"
-              min="1"
+              placeholder="От"
+              min="0"
+              aria-label="Возраст от"
               class="w-full"
               @change="applyFilters"
             />
-          </section>
-        </div>
+            <span class="text-gray-400">—</span>
+            <UInput
+              v-model.number="ageMax"
+              type="number"
+              inputmode="numeric"
+              placeholder="До"
+              min="0"
+              aria-label="Возраст до"
+              class="w-full"
+              @change="applyFilters"
+            />
+          </div>
+        </section>
       </div>
     </CommonCatalogFilters>
 
@@ -136,12 +158,20 @@
           stretch
         />
       </div>
-      <p
+      <div
         v-else
-        class="py-16 text-center text-gray-500"
+        class="py-16 text-center"
       >
-        Ничего не найдено. Попробуйте изменить запрос или фильтры.
-      </p>
+        <p class="mb-5 text-gray-500">
+          Ничего не найдено. Попробуйте изменить запрос или фильтры.
+        </p>
+        <UButton
+          v-if="activeFiltersCount"
+          icon="i-heroicons-arrow-path"
+          label="Сбросить фильтры"
+          @click="resetFilters"
+        />
+      </div>
       <div
         v-if="(games.meta?.total ?? 0) > Number(games.meta?.limit)"
         class="flex items-center justify-center w-full"
@@ -197,6 +227,21 @@ const activeGenreIds = ref<string[]>(
 const selectedGenres = computed(() => {
   return genres.filter(genre => activeGenreIds.value.includes(genre.id));
 });
+
+// Жанров почти три десятка: сначала показываем часть, выбранные — всегда
+const GENRES_COLLAPSED = 12;
+const showAllGenres = ref(false);
+const visibleGenres = computed(() =>
+  showAllGenres.value
+    ? genres
+    : genres.filter((genre, index) => index < GENRES_COLLAPSED || isGenreSelected(genre)),
+);
+const hiddenGenresCount = computed(() => genres.length - visibleGenres.value.length);
+
+const PLAYER_OPTIONS = [1, 2, 3, 4, 5, 6, 8].map(value => ({
+  value,
+  label: value === 8 ? '8+' : String(value),
+}));
 
 const updateUrl = () => {
   const query: Record<string, string | number> = {};
@@ -257,12 +302,24 @@ const toggleGenre = async (genre: GameGenre) => {
   await applyFilters();
 };
 
-const activeFiltersCount = computed(
-  () =>
-    selectedGenres.value.length
-    + (ageMin.value || ageMax.value ? 1 : 0)
-    + (players.value ? 1 : 0),
+const panelFiltersCount = computed(
+  () => (ageMin.value || ageMax.value ? 1 : 0) + (players.value ? 1 : 0),
 );
+
+const activeFiltersCount = computed(
+  () => selectedGenres.value.length + panelFiltersCount.value,
+);
+
+const setPlayers = async (value: number | undefined) => {
+  players.value = value;
+  await applyFilters();
+};
+
+const clearAge = async () => {
+  ageMin.value = undefined;
+  ageMax.value = undefined;
+  await applyFilters();
+};
 
 const isGenreSelected = (genre: GameGenre) => {
   return activeGenreIds.value.includes(genre.id);

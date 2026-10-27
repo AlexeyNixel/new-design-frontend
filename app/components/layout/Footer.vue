@@ -214,10 +214,11 @@
       </div>
     </section>
 
-    <!-- Обязательные документы и копирайт -->
+    <!-- Обязательные документы и копирайт.
+         Нижний отступ — под ярлык/кнопку чата Jivo (fixed внизу справа), иначе он перекрывает ссылки -->
     <section class="bg-primary-900">
       <div
-        class="max-w-[1710px] mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col-reverse gap-4 lg:flex-row lg:items-center lg:justify-between text-xs text-white/60"
+        class="max-w-[1710px] mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-24 lg:pb-16 flex flex-col-reverse gap-4 lg:flex-row lg:items-center lg:justify-between text-xs text-white/60"
       >
         <p>
           © {{ currentYear }} Новосибирская областная молодёжная библиотека

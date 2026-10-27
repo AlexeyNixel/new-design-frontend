@@ -5,6 +5,7 @@ import { API_ENDPOINTS } from './endpoints';
 export interface NavigationMenuItem {
   id: string | number;
   title: string;
+  description?: string;
   icon?: string;
   to?: string;
   target?: string;

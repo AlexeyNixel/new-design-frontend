@@ -16,14 +16,22 @@
 
     <CommonCatalogFilters
       v-model:search="search"
-      search-placeholder="Поиск новостей"
+      v-model:sort="sortOrder"
+      search-placeholder="Поиск по новостям"
+      quick-label="Период"
+      quick-icon="i-heroicons-calendar-days"
+      more-hint="год и месяц, отдел, теги"
       :active-count="activeFiltersCount"
+      :panel-count="panelFiltersCount"
+      :total="posts?.meta?.total"
+      :total-forms="['новость', 'новости', 'новостей']"
+      :sort-options="SORT_OPTIONS"
       @search="handleSearchChange"
       @reset="clearFilters"
     >
       <template #actions>
         <div
-          class="hidden md:flex items-center gap-1 p-1 bg-white border border-neutral-200 rounded-xl shadow-sm shrink-0"
+          class="hidden md:flex items-center gap-1 p-1 bg-neutral-100 rounded-xl shrink-0"
           role="group"
           aria-label="Вид списка"
         >
@@ -47,6 +55,20 @@
             />
           </button>
         </div>
+      </template>
+
+      <template #quick>
+        <button
+          v-for="item in PERIODS"
+          :key="item.value"
+          type="button"
+          class="genre-pill"
+          :class="{ 'genre-pill--active': filters.period === item.value }"
+          :aria-pressed="filters.period === item.value"
+          @click="setPeriod(filters.period === item.value ? undefined : item.value)"
+        >
+          {{ item.chip }}
+        </button>
       </template>
 
       <template #active>
@@ -93,31 +115,15 @@
       </template>
 
       <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
-        <!-- Период: быстрые варианты или год + месяц (без календаря) -->
+        <!-- Год и месяц: нативные списки удобнее календаря на телефоне -->
         <section>
           <h2 class="filter-title">
             <Icon
-              name="i-heroicons-calendar-days"
+              name="i-heroicons-calendar"
               class="size-4 text-primary"
             />
-            Период
+            Год и месяц
           </h2>
-
-          <div class="flex flex-wrap gap-2 mb-3">
-            <button
-              v-for="item in PERIODS"
-              :key="item.value"
-              type="button"
-              class="genre-pill"
-              :class="{ 'genre-pill--active': filters.period === item.value }"
-              :aria-pressed="filters.period === item.value"
-              @click="
-                setPeriod(filters.period === item.value ? undefined : item.value)
-              "
-            >
-              {{ item.label }}
-            </button>
-          </div>
 
           <div class="grid grid-cols-2 gap-2">
             <label class="block">
@@ -160,7 +166,7 @@
           </div>
         </section>
 
-        <!-- Отдел и порядок -->
+        <!-- Отдел -->
         <div class="grid gap-6 content-start">
           <section>
             <h2 class="filter-title">
@@ -191,37 +197,6 @@
                 </option>
               </select>
             </label>
-          </section>
-
-          <section>
-            <h2 class="filter-title">
-              <Icon
-                name="i-heroicons-arrows-up-down"
-                class="size-4 text-primary"
-              />
-              Порядок
-            </h2>
-            <div
-              class="grid grid-cols-2 p-1 bg-neutral-100 rounded-xl"
-              role="group"
-              aria-label="Порядок сортировки"
-            >
-              <button
-                v-for="option in SORT_OPTIONS"
-                :key="option.value"
-                type="button"
-                class="h-9 rounded-lg text-sm font-medium transition-colors"
-                :class="
-                  filters.sort === option.value
-                    ? 'bg-white text-gray-900 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-900'
-                "
-                :aria-pressed="filters.sort === option.value"
-                @click="setSort(option.value)"
-              >
-                {{ option.label }}
-              </button>
-            </div>
           </section>
         </div>
 
@@ -319,10 +294,6 @@
           class="flex items-center justify-center"
           @update:page="handleNavigate"
         />
-
-        <div class="text-center text-sm text-gray-500 mt-4">
-          Найдено новостей: {{ posts.meta?.total }}
-        </div>
       </div>
     </div>
 
@@ -529,6 +500,14 @@ const activeFiltersCount = computed(
     + filters.value.tags.length,
 );
 
+/** Фильтры под «Ещё фильтры»: всё, кроме быстрого периода */
+const panelFiltersCount = computed(
+  () =>
+    (filters.value.year ? 1 : 0)
+    + (filters.value.department ? 1 : 0)
+    + filters.value.tags.length,
+);
+
 /** Диапазон дат для API */
 const dateRange = computed(() => {
   const { period, year, month } = filters.value;
@@ -629,6 +608,11 @@ const setSort = (sort: SortOrder) => {
   filters.value.sort = sort;
   handleFilterChange();
 };
+
+const sortOrder = computed({
+  get: () => filters.value.sort,
+  set: (value: string) => setSort(value as SortOrder),
+});
 
 const clearFilters = () => {
   filters.value = { tags: [], sort: filters.value.sort };

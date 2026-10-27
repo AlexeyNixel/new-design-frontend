@@ -38,221 +38,146 @@
       </div>
     </section>
 
-    <div class="flex flex-col lg:flex-row gap-6 lg:gap-8">
-      <!-- Блок фильтров -->
-      <div class="lg:w-1/4">
-        <div
-          class="flex flex-col bg-white p-5 shadow rounded-2xl border border-gray-100 sticky top-6"
+    <h2
+      id="catalog-title"
+      class="mb-5 text-2xl font-bold tracking-tight text-gray-900"
+    >
+      Все книги и видеообзоры
+    </h2>
+
+    <CommonCatalogFilters
+      v-model:search="searchText"
+      v-model:sort="sort"
+      search-placeholder="Название, автор или описание"
+      live-search
+      :active-count="activeFiltersCount"
+      :total="filteredBooks.length"
+      :total-forms="['результат', 'результата', 'результатов']"
+      :sort-options="SORT_OPTIONS"
+      @reset="resetFilters"
+    >
+      <template #quick>
+        <button
+          v-for="option in TYPE_OPTIONS"
+          :key="option.value"
+          type="button"
+          class="genre-pill"
+          :class="{ 'genre-pill--active': typeFilter === option.value }"
+          :aria-pressed="typeFilter === option.value"
+          @click="selectType(option.value)"
         >
-          <div
-            class="flex items-center justify-between border-b border-gray-100 pb-3 mb-4"
-          >
-            <h2 class="flex items-center gap-2 font-bold text-gray-900">
-              <Icon
-                name="i-heroicons-funnel"
-                class="w-5 h-5 text-primary"
-              />
-              Фильтры
-            </h2>
-            <UButton
-              v-if="hasActiveFilters"
-              size="xs"
-              color="neutral"
-              variant="ghost"
-              class="text-gray-500 hover:text-gray-700"
-              @click="resetFilters"
-            >
-              Сбросить всё
-            </UButton>
-          </div>
-
-          <!-- Тип -->
-          <div class="mb-6">
-            <h3
-              class="flex items-center gap-2 text-sm font-medium text-gray-900 mb-3"
-            >
-              <Icon
-                name="i-heroicons-adjustments-horizontal"
-                class="w-4 h-4"
-              />
-              Тип
-            </h3>
-
-            <div class="grid grid-cols-3 gap-2">
-              <UButton
-                v-for="option in TYPE_OPTIONS"
-                :key="option.value"
-                variant="ghost"
-                size="sm"
-                :class="[
-                  'flex-col h-auto py-2 gap-1',
-                  typeFilter === option.value ? 'border border-primary bg-primary/5' : 'border border-transparent',
-                ]"
-                @click="selectType(option.value)"
-              >
-                <Icon
-                  :name="option.icon"
-                  class="w-4 h-4"
-                />
-                <span class="text-xs">{{ option.label }}</span>
-              </UButton>
-            </div>
-          </div>
-
-          <!-- Место хранения -->
-          <div class="mb-6">
-            <header class="flex items-center justify-between mb-3">
-              <h3 class="flex items-center gap-2 text-sm font-medium text-gray-900">
-                <Icon
-                  name="i-heroicons-map-pin"
-                  class="w-4 h-4"
-                />
-                Хранение
-              </h3>
-
-              <div class="text-sm text-gray-500">
-                {{ activePlaces.length }} / {{ places.length }}
-              </div>
-            </header>
-
-            <div
-              v-if="activePlaces.length > 0"
-              class="flex gap-2 flex-wrap mb-3"
-            >
-              <UBadge
-                v-for="place in activePlaces"
-                :key="place"
-                :label="place"
-                class="rounded-xl flex items-center"
-              >
-                <template #trailing>
-                  <button
-                    class="flex items-center ml-1 hover:scale-125 transition-transform"
-                    @click="togglePlace(place)"
-                  >
-                    <Icon
-                      name="i-heroicons-x-mark"
-                      class="w-3 h-3"
-                    />
-                  </button>
-                </template>
-              </UBadge>
-            </div>
-
-            <div class="flex flex-col gap-2 max-h-56 overflow-y-auto">
-              <button
-                v-for="place in places"
-                :key="place"
-                type="button"
-                class="flex items-start gap-2 text-left text-sm rounded-lg px-3 py-2 border transition-colors hover:bg-gray-50"
-                :class="isPlaceSelected(place) ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-gray-700'"
-                @click="togglePlace(place)"
-              >
-                <Icon
-                  name="i-heroicons-building-library"
-                  class="w-4 h-4 mt-0.5 shrink-0"
-                />
-                <span class="leading-snug">{{ place }}</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Сортировка -->
-          <div class="pt-4 border-t border-gray-100">
-            <h3 class="flex items-center gap-2 text-sm font-medium text-gray-900 mb-3">
-              <Icon
-                name="i-heroicons-bars-arrow-down"
-                class="w-4 h-4"
-              />
-              Сортировка
-            </h3>
-            <USelect
-              v-model="sort"
-              :items="SORT_OPTIONS"
-              size="md"
-              class="w-full"
-              @change="applyFilterChange"
-            />
-          </div>
-        </div>
-      </div>
-
-      <!-- Основной контент -->
-      <div class="lg:w-3/4">
-        <div class="mb-4 bg-white border border-neutral-200 rounded-xl shadow">
-          <UInput
-            v-model="searchText"
-            variant="none"
-            class="w-full rounded-xl bg-white"
-            placeholder="Поиск по названию или описанию..."
-            icon="i-heroicons-magnifying-glass-20-solid"
-            size="xl"
+          <Icon
+            :name="option.icon"
+            class="size-4 shrink-0"
           />
-        </div>
+          {{ option.label }}
+        </button>
 
-        <div
-          v-if="filteredBooks.length > 0"
-          class="mb-4 text-sm text-gray-500"
-        >
-          Найдено книг: {{ filteredBooks.length }}
-        </div>
-
-        <div v-if="paginatedBooks.length > 0">
-          <div
-            class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-6"
-          >
-            <BookCard
-              v-for="book in paginatedBooks"
-              :key="book.id"
-              :book="book"
-            />
-          </div>
-
-          <div
-            v-if="totalPages > 1"
-            class="flex items-center justify-center w-full"
-          >
-            <UPagination
-              v-model:page="page"
-              show-edges
-              :total="filteredBooks.length"
-              :items-per-page="PAGE_SIZE"
-              @update:page="handleNavigate"
-            />
-          </div>
-        </div>
-
-        <!-- Состояние "нет результатов" -->
-        <div
-          v-else
-          class="text-center py-16 bg-white rounded-2xl shadow border border-gray-100"
-        >
-          <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
-            <Icon
-              name="i-heroicons-book-open"
-              class="w-full h-full"
-            />
-          </div>
-          <h3 class="text-xl font-semibold text-gray-700 mb-2">
-            Книги не найдены
-          </h3>
-          <p class="text-gray-500 mb-6 max-w-md mx-auto">
-            Попробуйте изменить параметры фильтрации или очистить фильтры
-          </p>
-          <UButton
-            color="primary"
-            variant="solid"
-            size="lg"
-            @click="resetFilters"
+        <template v-if="places.length > 1">
+          <span
+            class="quick-divider"
+            aria-hidden="true"
+          />
+          <button
+            v-for="place in places"
+            :key="place"
+            type="button"
+            class="genre-pill"
+            :class="{ 'genre-pill--active': isPlaceSelected(place) }"
+            :aria-pressed="isPlaceSelected(place)"
+            :title="`Где стоит книга: ${place}`"
+            @click="togglePlace(place)"
           >
             <Icon
-              name="i-heroicons-arrow-path"
-              class="w-5 h-5 mr-2"
+              name="i-heroicons-map-pin"
+              class="size-4 shrink-0"
             />
-            Очистить фильтры
-          </UButton>
-        </div>
+            {{ place }}
+          </button>
+        </template>
+      </template>
+
+      <template #active>
+        <button
+          v-if="typeFilter !== 'all'"
+          type="button"
+          class="filter-chip"
+          aria-label="Убрать фильтр по типу"
+          @click="selectType('all')"
+        >
+          {{ TYPE_OPTIONS.find(option => option.value === typeFilter)?.label }}
+          <Icon
+            name="i-heroicons-x-mark"
+            class="size-3.5"
+          />
+        </button>
+        <button
+          v-for="place in activePlaces"
+          :key="place"
+          type="button"
+          class="filter-chip"
+          :aria-label="`Убрать фильтр «${place}»`"
+          @click="togglePlace(place)"
+        >
+          {{ place }}
+          <Icon
+            name="i-heroicons-x-mark"
+            class="size-3.5"
+          />
+        </button>
+      </template>
+    </CommonCatalogFilters>
+
+    <div v-if="paginatedBooks.length > 0">
+      <div
+        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 mb-6"
+      >
+        <BookCard
+          v-for="book in paginatedBooks"
+          :key="book.id"
+          :book="book"
+        />
       </div>
+
+      <div
+        v-if="totalPages > 1"
+        class="flex items-center justify-center w-full"
+      >
+        <UPagination
+          v-model:page="page"
+          show-edges
+          :total="filteredBooks.length"
+          :items-per-page="PAGE_SIZE"
+          @update:page="handleNavigate"
+        />
+      </div>
+    </div>
+
+    <!-- Состояние "нет результатов" -->
+    <div
+      v-else
+      class="text-center py-16 bg-white rounded-2xl shadow-sm ring-1 ring-[#0d4954]/10"
+    >
+      <div class="w-24 h-24 mx-auto mb-6 text-gray-300">
+        <Icon
+          name="i-heroicons-book-open"
+          class="w-full h-full"
+        />
+      </div>
+      <h3 class="text-xl font-semibold text-gray-700 mb-2">
+        Книги не найдены
+      </h3>
+      <p class="text-gray-500 mb-6 max-w-md mx-auto">
+        Попробуйте изменить запрос или сбросить фильтры
+      </p>
+      <UButton
+        color="primary"
+        variant="solid"
+        size="lg"
+        icon="i-heroicons-arrow-path"
+        label="Сбросить поиск и фильтры"
+        @click="resetAll"
+      />
     </div>
   </CommonContentContainer>
 </template>
@@ -263,7 +188,7 @@ import { useBookApi } from '~~/services/api/bookService';
 type TypeFilter = 'all' | 'book' | 'video';
 type SortOption = 'new' | 'old' | 'alpha';
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 24;
 
 const TYPE_OPTIONS: { label: string; value: TypeFilter; icon: string }[] = [
   { label: 'Все', value: 'all', icon: 'i-heroicons-squares-2x2' },
@@ -312,14 +237,9 @@ const places = computed(() => {
   return [...unique].sort((a, b) => a.localeCompare(b, 'ru'));
 });
 
-const hasActiveFilters = computed(() => {
-  return (
-    !!searchText.value
-    || typeFilter.value !== 'all'
-    || activePlaces.value.length > 0
-    || sort.value !== 'new'
-  );
-});
+const activeFiltersCount = computed(
+  () => (typeFilter.value !== 'all' ? 1 : 0) + activePlaces.value.length,
+);
 
 const filteredBooks = computed(() => {
   let result = allBooks;
@@ -375,6 +295,8 @@ const applyFilterChange = () => {
 };
 
 let searchDebounce: ReturnType<typeof setTimeout> | undefined;
+watch(sort, applyFilterChange);
+
 watch(searchText, () => {
   page.value = 1;
   clearTimeout(searchDebounce);
@@ -396,11 +318,14 @@ const togglePlace = (place: string) => {
 const isPlaceSelected = (place: string) => activePlaces.value.includes(place);
 
 const resetFilters = () => {
-  searchText.value = '';
   typeFilter.value = 'all';
   activePlaces.value = [];
-  sort.value = 'new';
   applyFilterChange();
+};
+
+const resetAll = () => {
+  searchText.value = '';
+  resetFilters();
 };
 
 const handleNavigate = () => {

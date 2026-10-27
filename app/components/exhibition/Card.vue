@@ -1,8 +1,6 @@
 <template>
-  <a
-    :href="exhibitionUrl(exhibition)"
-    target="_blank"
-    rel="noopener"
+  <NuxtLink
+    :to="exhibitionPage(exhibition)"
     class="group flex flex-col bg-white rounded-2xl overflow-hidden shadow hover:shadow-lg transition-shadow duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500"
   >
     <!-- Обложки бывают 16:9 и 4:3 — рамка 16:9, у 4:3 срезаются только поля -->
@@ -23,14 +21,14 @@
         {{ formatDate(exhibition.createdAt) }}
       </span>
       <span class="inline-flex items-center gap-1 font-semibold text-primary-500 group-hover:underline">
-        Открыть
+        Смотреть
         <UIcon
-          name="i-heroicons-arrow-top-right-on-square"
-          class="size-4"
+          name="i-heroicons-arrow-right"
+          class="size-4 transition-transform group-hover:translate-x-0.5"
         />
       </span>
     </div>
-  </a>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">

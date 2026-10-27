@@ -207,7 +207,30 @@
           class="flex items-baseline gap-4 px-5 py-3 text-sm"
         >
           <span class="w-24 shrink-0 tabular-nums text-gray-500">{{ item.day.format('D MMMM') }}</span>
-          <span class="min-w-0 flex-1 text-gray-800">{{ item.event.title }}</span>
+          <div class="min-w-0 flex-1">
+            <p class="font-medium text-gray-800">
+              {{ item.event.title }}
+            </p>
+            <!-- Описание — чтобы было видно, что проходило, а не только название -->
+            <p
+              v-if="item.event.description"
+              :id="`event-desc-${item.event.id}`"
+              class="mt-1 whitespace-pre-line leading-relaxed text-gray-600"
+              :class="{ 'line-clamp-2': !expanded.has(item.event.id) }"
+            >
+              {{ item.event.description }}
+            </p>
+            <button
+              v-if="item.event.description.length > PAST_DESCRIPTION_CLAMP"
+              type="button"
+              class="mt-1 text-sm font-medium text-[#157486] hover:underline focus-visible:outline-2 focus-visible:outline-[#0d4954]"
+              :aria-expanded="expanded.has(item.event.id)"
+              :aria-controls="`event-desc-${item.event.id}`"
+              @click="toggle(item.event.id)"
+            >
+              {{ expanded.has(item.event.id) ? 'Свернуть' : 'Читать полностью' }}
+            </button>
+          </div>
           <span
             v-if="item.event.age != null"
             class="shrink-0 text-xs text-gray-400"
@@ -227,6 +250,8 @@ const props = defineProps<{ events: TableEvent[] }>();
 
 /** Описание длиннее — сворачиваем в 4 строки с кнопкой «Читать полностью» */
 const DESCRIPTION_CLAMP = 220;
+/** В архиве строка шире, а свёрнуто до 2 строк */
+const PAST_DESCRIPTION_CLAMP = 160;
 
 // «Сейчас» фиксируем один раз: на сервере и в браузере статусы совпадут
 const now = useState('event-table-now', () => libraryNow().format('YYYY-MM-DDTHH:mm'));

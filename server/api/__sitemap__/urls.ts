@@ -4,6 +4,8 @@ import type { SitemapUrlInput } from '#sitemap/types';
 interface ListItem {
   id: string;
   slug?: string;
+  /** У файлов (выставок) вместо slug — путь пакета в хранилище */
+  path?: string;
   isDeleted?: boolean;
   updatedAt?: string;
   publishedAt?: string;
@@ -35,6 +37,11 @@ const SOURCES: {
   {
     endpoint: '/api/book-collection/',
     path: item => item.slug && `/books/collections/${item.slug}`,
+  },
+  // Выставка открывается по имени папки пакета: /dev/exhibitions/<slug>/index.html
+  {
+    endpoint: '/api/files/exhibitions/',
+    path: item => item.path && `/page/exhibition/${item.path.split('/').at(-2)}`,
   },
   // Только предстоящие события: прошедших больше двух тысяч, в поиске они бесполезны
   {

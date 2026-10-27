@@ -94,9 +94,6 @@ const handleImageError = (e: Event) => {
   const target = e.target as HTMLImageElement;
   target.removeAttribute('srcset');
   target.src = 'https://placehold.co/320x480/e5e7eb/6b7280?text=Обложка+книги';
-
-  // Можно использовать иконку вместо placeholder
-  // target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='400' viewBox='0 0 320 400'%3E%3Crect width='320' height='400' fill='%23e5e7eb'/%3E%3Cpath d='M80 120L160 80L240 120V280L160 320L80 280V120Z' fill='%239ca3af'/%3E%3Cpath d='M80 120L160 160L240 120M160 160V320' stroke='%236b7280' stroke-width='4' fill='none'/%3E%3C/svg%3E`;
 };
 </script>
 

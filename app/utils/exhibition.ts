@@ -7,9 +7,6 @@ import type { File } from '~~/services/types/file.type';
 export const exhibitionCover = (exhibition: Pick<File, 'path'>) =>
   exhibition.path.replace(/index\.html$/, 'cover.jpg');
 
-/** Адрес самого HTML-пакета (полноэкранный плеер iSpring) */
-export const exhibitionUrl = (exhibition: Pick<File, 'path'>) => exhibition.path;
-
 /** Слаг — имя папки пакета: `/dev/exhibitions/v_kohl_sep_oct/index.html` → `v_kohl_sep_oct` */
 export const exhibitionSlug = (exhibition: Pick<File, 'path'>) =>
   exhibition.path.split('/').at(-2) ?? '';

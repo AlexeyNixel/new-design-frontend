@@ -13,8 +13,9 @@
         Каталог игр
       </NuxtLink>
 
-      <!-- Временный переключатель дизайна для сравнения вариантов -->
+      <!-- Временный переключатель дизайна для сравнения вариантов — только для авторизованных в админке -->
       <div
+        v-if="isAuthenticated"
         class="inline-flex rounded-full bg-white p-1 shadow-sm ring-1 ring-gray-200"
       >
         <button
@@ -96,10 +97,14 @@ const designOptions: { value: DesignVariant; label: string }[] = [
   { value: 'classic', label: 'Классический' },
 ];
 
-const design = useState<DesignVariant>('game-detail-design', () => 'modern');
+const { isAuthenticated } = useAuth();
+
+// Посетители всегда видят «Современный»; выбор варианта — только у авторизованных в админке
+const chosenDesign = useState<DesignVariant>('game-detail-design', () => 'modern');
+const design = computed(() => (isAuthenticated.value ? chosenDesign.value : 'modern'));
 
 const setDesign = (value: DesignVariant) => {
-  design.value = value;
+  chosenDesign.value = value;
   if (import.meta.client) {
     localStorage.setItem('game-detail-design', value);
   }
@@ -108,7 +113,7 @@ const setDesign = (value: DesignVariant) => {
 onMounted(() => {
   const saved = localStorage.getItem('game-detail-design');
   if (saved === 'modern' || saved === 'classic') {
-    design.value = saved;
+    chosenDesign.value = saved;
   }
 });
 

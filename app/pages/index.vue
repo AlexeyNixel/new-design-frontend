@@ -33,11 +33,6 @@ usePageSeo({
             </div>
           </div>
 
-          <!-- Поиск -->
-          <!--          <div class="mt-4 block"> -->
-          <!--            <CatalogSearch class="w-full" /> -->
-          <!--          </div> -->
-
           <div class="mt-4">
             <Achievements />
           </div>

@@ -19,23 +19,6 @@
           @error="notFoundImage"
         >
 
-        <!-- Дата -->
-        <!-- <div class="absolute top-4 left-4">
-          <div
-            class="flex flex-col items-center justify-center bg-white/90 backdrop-blur-sm rounded-xl p-3 shadow-lg"
-          >
-            <span class="text-sm font-semibold text-gray-500">{{
-              dayjs(postDisplayDate(post)).format('MMM')
-            }}</span>
-            <span class="text-2xl font-bold text-gray-800">{{
-              dayjs(postDisplayDate(post)).format('DD')
-            }}</span>
-            <span class="text-xs text-gray-500">{{
-              dayjs(postDisplayDate(post)).format('YYYY')
-            }}</span>
-          </div>
-        </div> -->
-
         <!-- Бейдж отдела -->
         <div
           v-if="post.department"

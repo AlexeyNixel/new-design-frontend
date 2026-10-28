@@ -2,7 +2,7 @@
 export interface ExhibitionInfo {
   slug: string;
   title: string;
-  /** Адрес HTML-пакета (через прокси `/dev/**` — тот же origin, что у сайта) */
+  /** Адрес HTML-пакета (через прокси `/dev/**` или `/site/**` — тот же origin, что у сайта) */
   path: string;
   cover: string;
   /** Размер слайда iSpring — по нему рамка на странице держит пропорции */
@@ -25,6 +25,23 @@ const decodeEntities = (text: string) =>
     .replace(/&amp;/g, '&');
 
 /**
+ * Путь пакета по слагу. Пакеты лежат в разных местах: загруженные через CMS —
+ * `/dev/exhibitions/<slug>/`, перенесённые со старого сайта — `/site/exhibition/<uuid>/<slug>/`,
+ * поэтому путь берём из списка API. Если API недоступно — пробуем путь CMS.
+ */
+const resolvePackagePath = async (slug: string) => {
+  const baseApi = useRuntimeConfig().public.apiBaseUrl;
+  const list = await $fetch<{ data?: { path?: string }[] }>(`${baseApi}/api/files/exhibitions/`, {
+    query: { limit: 1000, page: 1 },
+  }).catch(() => undefined);
+
+  return (
+    list?.data?.find(item => item.path?.split('/').at(-2) === slug)?.path
+    ?? `/dev/exhibitions/${slug}/index.html`
+  );
+};
+
+/**
  * API отдаёт выставки только списком, без поиска по слагу и без названий —
  * название и размер слайда берём из самого `index.html` пакета (его собирает iSpring:
  * `<!-- 960 540 -->` в начале и `<title>` в шапке).
@@ -36,7 +53,7 @@ export default defineCachedEventHandler(
       throw createError({ statusCode: 404, statusMessage: 'Выставка не найдена' });
     }
 
-    const path = `/dev/exhibitions/${slug}/index.html`;
+    const path = await resolvePackagePath(slug);
     const html = await $fetch<string>(STATIC_HOST + path, { responseType: 'text' }).catch(
       (error) => {
         const statusCode = error?.statusCode === 404 ? 404 : 502;

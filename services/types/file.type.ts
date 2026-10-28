@@ -7,6 +7,8 @@ export interface File {
   path: string;
   preview: string;
   createdAt: string;
+  /** Название выставки из CMS (у остальных файлов нет) */
+  title?: string | null;
   /** Размеры оригинала (у старых файлов могут быть 0) */
   width?: number | null;
   height?: number | null;

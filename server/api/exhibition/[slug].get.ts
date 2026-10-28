@@ -25,25 +25,26 @@ const decodeEntities = (text: string) =>
     .replace(/&amp;/g, '&');
 
 /**
- * Путь пакета по слагу. Пакеты лежат в разных местах: загруженные через CMS —
+ * Выставка по слагу. Пакеты лежат в разных местах: загруженные через CMS —
  * `/dev/exhibitions/<slug>/`, перенесённые со старого сайта — `/site/exhibition/<uuid>/<slug>/`,
- * поэтому путь берём из списка API. Если API недоступно — пробуем путь CMS.
+ * поэтому путь берём из списка API. Скрытых выставок в списке нет — для них 404.
+ * Если API недоступно — пробуем путь CMS.
  */
-const resolvePackagePath = async (slug: string) => {
+const resolvePackage = async (slug: string): Promise<{ path: string; title?: string | null } | undefined> => {
   const baseApi = useRuntimeConfig().public.apiBaseUrl;
-  const list = await $fetch<{ data?: { path?: string }[] }>(`${baseApi}/api/files/exhibitions/`, {
-    query: { limit: 1000, page: 1 },
-  }).catch(() => undefined);
+  const list = await $fetch<{ data?: { path?: string; title?: string | null }[] }>(
+    `${baseApi}/api/files/exhibitions/`,
+    { query: { limit: 1000, page: 1 } },
+  ).catch(() => undefined);
 
-  return (
-    list?.data?.find(item => item.path?.split('/').at(-2) === slug)?.path
-    ?? `/dev/exhibitions/${slug}/index.html`
-  );
+  if (!list) return { path: `/dev/exhibitions/${slug}/index.html` };
+  const item = list.data?.find(entry => entry.path?.split('/').at(-2) === slug);
+  return item?.path ? { path: item.path, title: item.title } : undefined;
 };
 
 /**
- * API отдаёт выставки только списком, без поиска по слагу и без названий —
- * название и размер слайда берём из самого `index.html` пакета (его собирает iSpring:
+ * API отдаёт выставки только списком, без поиска по слагу. Размер слайда
+ * (и название, если в CMS его нет) берём из самого `index.html` пакета (его собирает iSpring:
  * `<!-- 960 540 -->` в начале и `<title>` в шапке).
  */
 export default defineCachedEventHandler(
@@ -53,7 +54,11 @@ export default defineCachedEventHandler(
       throw createError({ statusCode: 404, statusMessage: 'Выставка не найдена' });
     }
 
-    const path = await resolvePackagePath(slug);
+    const found = await resolvePackage(slug);
+    if (!found) {
+      throw createError({ statusCode: 404, statusMessage: 'Выставка не найдена' });
+    }
+    const { path } = found;
     const html = await $fetch<string>(STATIC_HOST + path, { responseType: 'text' }).catch(
       (error) => {
         const statusCode = error?.statusCode === 404 ? 404 : 502;
@@ -66,7 +71,8 @@ export default defineCachedEventHandler(
 
     return {
       slug,
-      title: title ? decodeEntities(title) : 'Виртуальная выставка',
+      // Название из CMS важнее <title> пакета: iSpring часто пишет туда имя папки
+      title: found.title?.trim() || (title ? decodeEntities(title) : 'Виртуальная выставка'),
       path,
       cover: path.replace(/index\.html$/, 'cover.jpg'),
       width: Number(size?.[1]) || 16,

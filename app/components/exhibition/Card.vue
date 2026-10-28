@@ -7,7 +7,7 @@
     <div class="relative aspect-video overflow-hidden bg-gray-100">
       <img
         :src="exhibitionCover(exhibition)"
-        :alt="`Обложка виртуальной выставки от ${formatDate(exhibition.createdAt)}`"
+        :alt="exhibition.title ? `Виртуальная выставка «${exhibition.title}»` : `Обложка виртуальной выставки от ${formatDate(exhibition.createdAt)}`"
         width="640"
         height="360"
         :loading="eager ? 'eager' : 'lazy'"

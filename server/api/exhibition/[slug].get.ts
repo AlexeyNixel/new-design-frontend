@@ -10,7 +10,7 @@ export interface ExhibitionInfo {
   height: number;
 }
 
-const STATIC_HOST = 'http://static.infomania.ru';
+const STATIC_HOST = 'https://s3.infomania.ru';
 
 /** Слаг — имя папки пакета в хранилище: `v_kohl_sep_oct` */
 const SLUG_PATTERN = /^[\w-]+$/;

@@ -7,6 +7,9 @@ import tailwindcss from '@tailwindcss/vite';
 const MEDIA_CACHE = 'public, max-age=2592000';
 const STATIC_CACHE = 'public, max-age=604800, stale-while-revalidate=86400';
 
+// S3-хранилище Silo — бакеты `site` (файлы старого сайта) и `dev` (загрузки CMS)
+const STORAGE_HOST = 'https://s3.infomania.ru';
+
 // Правила кеша для файлов в корне public/ (картинки, иконки, манифест).
 // Маски вида '/*.png' роутер Nitro не поддерживает — перечисляем файлы явно.
 const publicFileCacheRules = Object.fromEntries(
@@ -44,7 +47,7 @@ export default defineNuxtConfig({
         },
         {
           rel: 'preconnect',
-          href: 'http://static.infomania.ru',
+          href: STORAGE_HOST,
         },
       ],
       script: [
@@ -130,16 +133,16 @@ export default defineNuxtConfig({
       // Медиа из CMS: имена файлов уникальны (uuid/timestamp), содержимое не меняется —
       // хранилище не отдаёт Cache-Control, поэтому выставляем сами
       '/site/**': {
-        proxy: 'http://static.infomania.ru/site/**',
+        proxy: `${STORAGE_HOST}/site/**`,
         headers: { 'cache-control': MEDIA_CACHE },
       },
       // Картинки игр и комиксов (`/dev/images/...`) — в production vite.server.proxy не работает
       '/dev/**': {
-        proxy: 'http://static.infomania.ru/dev/**',
+        proxy: `${STORAGE_HOST}/dev/**`,
         headers: { 'cache-control': MEDIA_CACHE },
       },
       '/media/**': {
-        proxy: 'http://static.infomania.ru/site/**',
+        proxy: `${STORAGE_HOST}/site/**`,
         headers: { 'cache-control': MEDIA_CACHE },
       },
       // Файлы из public/ без хеша в имени — кешируем, но не навсегда
@@ -156,15 +159,15 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         '/site/': {
-          target: 'http://static.infomania.ru',
+          target: STORAGE_HOST,
           changeOrigin: true,
         },
         '/dev': {
-          target: 'http://static.infomania.ru/',
+          target: `${STORAGE_HOST}/`,
           changeOrigin: true,
         },
         '/media': {
-          target: 'http://static.infomania.ru/site',
+          target: `${STORAGE_HOST}/site`,
           changeOrigin: true,
         },
       },

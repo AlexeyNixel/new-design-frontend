@@ -110,7 +110,7 @@ import type { Post } from '~~/services/types/post.type';
 
 ### Прокси статики
 
-В dev и prod медиафайлы (`/site/**`) проксируются на `http://static.infomania.ru`. Картинки в контенте приходят через этот прокси.
+В dev и prod медиафайлы (`/site/**`, `/dev/**`, `/media/**`) проксируются на S3-хранилище Silo `https://s3.infomania.ru` (константа `STORAGE_HOST` в `nuxt.config.ts`). Картинки в контенте приходят через этот прокси. Веб-консоль Silo — `https://silo.infomania.ru`.
 
 ### Директива v-image-gallery
 

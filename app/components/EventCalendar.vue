@@ -456,10 +456,6 @@ onMounted(async () => {
         :class="HEADER_BTN_CLASS"
         @click="changeMonth('next')"
       />
-      <div
-        v-else-if="view === 'detail'"
-        class="w-9 h-8 shrink-0"
-      />
       <UButton
         v-else
         variant="ghost"

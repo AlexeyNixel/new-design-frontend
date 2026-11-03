@@ -125,7 +125,7 @@
     <div v-if="comics">
       <div
         v-if="comics.data?.length"
-        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-5 gap-4 mb-8"
+        class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 3xl:grid-cols-6 gap-4 mb-8"
       >
         <ComicCard
           v-for="comic in comics.data"
@@ -209,7 +209,7 @@ const updateUrl = () => {
 
 const fetchData = async () => {
   comics.value = await comicApi.getAllComics({
-    limit: 15,
+    limit: 24,
     page: page.value,
     search: searchText.value,
     seriesId: activeSeriesId.value,

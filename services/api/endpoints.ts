@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
   document: '/api/document/',
   book: '/api/book/',
   bookCollection: '/api/book-collection/',
+  podcast: '/api/podcasts/',
   notification: '/api/notification/',
   game: '/api/games/',
   genres: '/api/games/genres',

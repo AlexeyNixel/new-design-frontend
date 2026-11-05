@@ -51,6 +51,38 @@ const selectSlide = (index: number) => {
 const goPrev = () => swiperElRef.value?.swiper?.slidePrev();
 const goNext = () => swiperElRef.value?.swiper?.slideNext();
 
+// Поля ввода и contenteditable не перехватываем: стрелки должны двигать каретку
+const isEditableTarget = (target: EventTarget | null) => {
+  if (!(target instanceof HTMLElement)) return false;
+  return (
+    target.isContentEditable
+    || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
+  );
+};
+
+// Стрелки на клавиатуре листают галерею так же, как кнопки на экране
+const handleKeyboardNav = (event: KeyboardEvent) => {
+  if (props.imgLinks.length < 2) return;
+  if (event.altKey || event.ctrlKey || event.metaKey) return;
+  if (isEditableTarget(event.target)) return;
+
+  if (event.key === 'ArrowLeft') {
+    event.preventDefault();
+    goPrev();
+    return;
+  }
+
+  if (event.key === 'ArrowRight') {
+    event.preventDefault();
+    goNext();
+  }
+};
+
+// Модалка монтируется на открытие и размонтируется после закрытия (useOverlay),
+// поэтому слушатель живёт ровно столько, сколько открыт просмотрщик
+onMounted(() => window.addEventListener('keydown', handleKeyboardNav));
+onBeforeUnmount(() => window.removeEventListener('keydown', handleKeyboardNav));
+
 const handleWheelZoom = (event: WheelEvent) => {
   const img = (event.currentTarget as HTMLElement).querySelector('img');
   if (!img) return;
@@ -121,6 +153,7 @@ const handleWheelZoom = (event: WheelEvent) => {
             v-if="imgLinks.length > 1"
             type="button"
             aria-label="Предыдущее изображение"
+            aria-keyshortcuts="ArrowLeft"
             class="absolute z-10 top-1/2 -translate-y-1/2 left-2 sm:left-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 hover:cursor-pointer transition-colors"
             @click="goPrev"
           >
@@ -133,6 +166,7 @@ const handleWheelZoom = (event: WheelEvent) => {
             v-if="imgLinks.length > 1"
             type="button"
             aria-label="Следующее изображение"
+            aria-keyshortcuts="ArrowRight"
             class="absolute z-10 top-1/2 -translate-y-1/2 right-2 sm:right-6 flex items-center justify-center w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 hover:cursor-pointer transition-colors"
             @click="goNext"
           >

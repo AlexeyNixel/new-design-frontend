@@ -10,8 +10,9 @@
       />
 
       <NuxtLink
+        v-if="activeItem.link"
         :to="activeItem.link"
-        class="group inline-flex items-center gap-2 self-end sm:self-auto shrink-0 rounded-full bg-white py-1.5 pl-4 pr-1.5 text-sm font-bold text-[#0d4954] shadow-sm ring-1 ring-[#0d4954]/10 transition-colors hover:bg-[#0d4954] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4954]"
+        class="group shelf-link inline-flex items-center gap-2 self-end sm:self-auto shrink-0 rounded-full bg-white py-1.5 pl-4 pr-1.5 text-sm font-bold text-[#0d4954] shadow-sm ring-1 ring-[#0d4954]/10 transition-colors hover:bg-[#0d4954] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4954]"
       >
         <!-- Та же «пилюля», что у ссылок в заголовках остальных блоков главной (CommonSectionWrapper) -->
         <span>{{ activeItem.linkLabel }}</span>
@@ -28,14 +29,34 @@
       role="tabpanel"
       :aria-label="activeItem.label"
     >
-      <component :is="activeItem.component" />
+      <!-- Содержимое вкладки не подменяется, а живёт в CSS-сетке поверх своего места.
+           Вкладки разного роста, поэтому по умолчанию высоту блока задаёт самая низкая
+           («Комиксы»), а если текущая не помещается — блок плавно дорастает до неё.
+           Так переключение не дёргает страницу, а скрытые вкладки не пересчитывают
+           раскладку карусели при каждом открытии. -->
+      <div
+        ref="stackRef"
+        class="shelf-stack"
+        :style="{ '--shelf-min-h': `${minContentHeight}px` }"
+      >
+        <div
+          v-for="item in items"
+          :key="item.value"
+          class="shelf-panel"
+          :class="{ 'shelf-panel--active': item.value === tab }"
+          :inert="item.value !== tab"
+          :aria-hidden="item.value !== tab"
+        >
+          <component :is="item.component" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import type { TabsItem } from '#ui/components/Tabs.vue';
-import { BookCollections, BookList, ComicList } from '#components';
+import { BookCollections, BookList, ComicList, PodcastList } from '#components';
 
 /** Вкладки-«пилюли» в фирменных бирюзовых цветах — как кнопки календаря событий */
 const TABS_UI = {
@@ -49,7 +70,7 @@ const TABS_UI = {
   label: 'text-sm sm:text-base font-bold',
 };
 
-type ShelfTab = 'books' | 'collections' | 'comics';
+type ShelfTab = 'books' | 'collections' | 'comics' | 'podcasts';
 
 const tab = ref<ShelfTab>('books');
 
@@ -78,9 +99,74 @@ const items = [
     link: '/comics',
     linkLabel: 'Все комиксы и манга',
   },
+  {
+    label: 'Подкасты',
+    icon: 'i-heroicons-musical-note',
+    value: 'podcasts',
+    component: PodcastList,
+    link: '',
+    linkLabel: '',
+  },
 ] satisfies (TabsItem & { value: ShelfTab; link: string; linkLabel: string })[];
 
 const activeItem = computed(() => items.find(item => item.value === tab.value) ?? items[0]);
+
+// Высота блока вкладок. Минимум выбирает сама CSS-сетка (--shelf-min-h, см. <style>),
+// а здесь запоминаем самую низкую раскладку, у которой есть содержимое: именно она
+// задаёт минимальную высоту. Пустую вкладку («Подборки», пока реестр пуст) мерой
+// не считаем — иначе пустой абзац сжал бы блок и карточки обрезались бы.
+const stackRef = ref<HTMLElement | null>(null);
+const minContentHeight = ref(0);
+
+let resizeObserver: ResizeObserver | null = null;
+
+// Панель без содержимого: Nuxt рендерит только пустую обёртку <div>
+const isFilledPanel = (panel: HTMLElement) =>
+  Array.from(panel.children).some(
+    child => child.childElementCount > 0 || (child.textContent?.trim().length ?? 0) > 0,
+  );
+
+const measureBaseHeight = () => {
+  if (!stackRef.value) return;
+
+  let min = Number.POSITIVE_INFINITY;
+  stackRef.value.querySelectorAll<HTMLElement>(':scope > .shelf-panel').forEach((panel) => {
+    if (!isFilledPanel(panel) || !panel.offsetHeight) return;
+    min = Math.min(min, panel.getBoundingClientRect().height);
+  });
+
+  minContentHeight.value = Number.isFinite(min) ? Math.ceil(min) : 0;
+};
+
+// Пустая вкладка зажимает сетку по своей высоте — когда она открыта, меряем заново
+watch(tab, () => nextTick(measureBaseHeight));
+
+// Список изменился (API или разметка): карточки могли стать другими —
+// заново ищем самую низкую заполненную вкладку
+watch(
+  () => {
+    const stack = stackRef.value;
+    if (!stack) return '';
+    return Array.from(stack.querySelectorAll<HTMLElement>(':scope > .shelf-panel'))
+      .filter(isFilledPanel)
+      .map(panel => String(panel.offsetHeight))
+      .join(',');
+  },
+  () => measureBaseHeight(),
+);
+
+onMounted(() => {
+  // ResizeObserver на самой сетке: её высота меняется вместе с самой высокой
+  // вкладкой и при ресайзе — этот случай нужен, когда ниже подстроить нечего
+  resizeObserver = new ResizeObserver(() => measureBaseHeight());
+  if (stackRef.value) resizeObserver.observe(stackRef.value);
+  measureBaseHeight();
+});
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect();
+  resizeObserver = null;
+});
 </script>
 
 <style scoped>
@@ -91,5 +177,43 @@ const activeItem = computed(() => items.find(item => item.value === tab.value) ?
 
 :deep(.tabs-scroll)::-webkit-scrollbar {
   display: none;
+}
+
+/* Все вкладки — в одной ячейке CSS-сетки: высоту задаёт самая высокая, но не ниже
+   --shelf-min-h (самой низкой заполненной вкладки). Смена вкладки высоту не меняет. */
+.shelf-stack {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: var(--shelf-min-h);
+
+  /* Высота при смене вкладки или загрузке данных меняется плавно, а не рывком.
+     grid-template-rows в переход не входит, поэтому анимируются сами панели по высоте. */
+  transition: height 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-stack {
+    transition: none;
+  }
+}
+
+.shelf-panel {
+  grid-area: 1 / 1;
+  align-self: start;
+  min-width: 0;
+  transition: height 0.3s ease;
+}
+
+/* Неактивные вкладки лежат в потоке (высота и ширина известны, карусели
+   проинициализированы), но не видны, не кликаются (inert) и не озвучиваются. */
+.shelf-panel:not(.shelf-panel--active) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-panel {
+    transition: none;
+  }
 }
 </style>

@@ -63,9 +63,11 @@ import { BookCollections, BookList, ComicList, PodcastList } from '#components';
 const TABS_UI = {
   root: 'min-w-0',
   list: 'w-full sm:w-fit max-w-full p-1 rounded-full bg-white ring-1 ring-[#0d4954]/10 shadow-sm overflow-x-auto tabs-scroll',
-  indicator: 'rounded-full bg-[#0d4954] shadow-none inset-y-1',
+  // transition-none — индикатор не «доезжает» до вкладки 200 мс: контент вкладки
+  // подменяется мгновенно, иначе видно, как старая картинка ещё стоит под новой вкладкой
+  indicator: 'rounded-full bg-[#0d4954] shadow-none inset-y-1 transition-none!',
   trigger:
-    'shrink-0 grow sm:grow-0 rounded-full px-3 sm:px-5 py-2 text-[#0d4954] data-[state=inactive]:text-[#0d4954]/70 hover:data-[state=inactive]:not-disabled:text-[#0d4954] data-[state=active]:text-white focus-visible:outline-[#0d4954]',
+    'shrink-0 grow sm:grow-0 rounded-full px-3 sm:px-5 py-2 text-[#0d4954] transition-none! data-[state=inactive]:text-[#0d4954]/70 hover:data-[state=inactive]:not-disabled:text-[#0d4954] data-[state=active]:text-white focus-visible:outline-[#0d4954]',
   // На телефоне без иконок — так все три вкладки помещаются в ширину экрана
   leadingIcon: 'hidden sm:inline-block size-5',
   label: 'text-sm sm:text-base font-bold',
@@ -187,10 +189,6 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   min-height: var(--shelf-min-h);
-
-  /* Высота при смене вкладки или загрузке данных меняется плавно, а не рывком.
-     grid-template-rows в переход не входит, поэтому анимируются сами панели по высоте. */
-  transition: height 0.3s ease;
 }
 
 /* Вкладка «Подкасты» — компактная область: высоту задаёт только её содержимое, а не
@@ -208,17 +206,10 @@ onBeforeUnmount(() => {
   right: 0;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .shelf-stack {
-    transition: none;
-  }
-}
-
 .shelf-panel {
   grid-area: 1 / 1;
   align-self: start;
   min-width: 0;
-  transition: height 0.3s ease;
 }
 
 /* Неактивные вкладки лежат в потоке (высота и ширина известны, карусели
@@ -226,11 +217,5 @@ onBeforeUnmount(() => {
 .shelf-panel:not(.shelf-panel--active) {
   visibility: hidden;
   pointer-events: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .shelf-panel {
-    transition: none;
-  }
 }
 </style>

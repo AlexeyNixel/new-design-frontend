@@ -68,7 +68,7 @@ const TABS_UI = {
   indicator: 'rounded-full bg-[#0d4954] shadow-none inset-y-1 transition-none!',
   trigger:
     'shrink-0 grow sm:grow-0 rounded-full px-3 sm:px-5 py-2 text-[#0d4954] transition-none! data-[state=inactive]:text-[#0d4954]/70 hover:data-[state=inactive]:not-disabled:text-[#0d4954] data-[state=active]:text-white focus-visible:outline-[#0d4954]',
-  // На телефоне без иконок — так все три вкладки помещаются в ширину экрана
+  // На телефоне без иконок — так все четыре вкладки помещаются в ширину экрана
   leadingIcon: 'hidden sm:inline-block size-5',
   label: 'text-sm sm:text-base font-bold',
 };
@@ -192,18 +192,10 @@ onBeforeUnmount(() => {
 }
 
 /* Вкладка «Подкасты» — компактная область: высоту задаёт только её содержимое, а не
-   высокая карусель книг/комиксов. Остальные панели убираем из потока (ширина и высота
-   у них остаются, карусели не пересчитываются), поэтому под карточками подкастов нет
-   пустого места на весь блок полки. */
-.shelf-stack--compact {
-  overflow: hidden;
-}
-
+   высокая карусель книг/комиксов. Неактивные панели полностью убираем из отрисовки
+   (display:none), иначе при переключении с «Книг» на миг видны обрезанные обложки. */
 .shelf-stack--compact .shelf-panel:not(.shelf-panel--active) {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  display: none;
 }
 
 .shelf-panel {

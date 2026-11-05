@@ -37,6 +37,7 @@
       <div
         ref="stackRef"
         class="shelf-stack"
+        :class="{ 'shelf-stack--compact': tab === 'podcasts' }"
         :style="{ '--shelf-min-h': `${minContentHeight}px` }"
       >
         <div
@@ -182,6 +183,7 @@ onBeforeUnmount(() => {
 /* Все вкладки — в одной ячейке CSS-сетки: высоту задаёт самая высокая, но не ниже
    --shelf-min-h (самой низкой заполненной вкладки). Смена вкладки высоту не меняет. */
 .shelf-stack {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   min-height: var(--shelf-min-h);
@@ -189,6 +191,21 @@ onBeforeUnmount(() => {
   /* Высота при смене вкладки или загрузке данных меняется плавно, а не рывком.
      grid-template-rows в переход не входит, поэтому анимируются сами панели по высоте. */
   transition: height 0.3s ease;
+}
+
+/* Вкладка «Подкасты» — компактная область: высоту задаёт только её содержимое, а не
+   высокая карусель книг/комиксов. Остальные панели убираем из потока (ширина и высота
+   у них остаются, карусели не пересчитываются), поэтому под карточками подкастов нет
+   пустого места на весь блок полки. */
+.shelf-stack--compact {
+  overflow: hidden;
+}
+
+.shelf-stack--compact .shelf-panel:not(.shelf-panel--active) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

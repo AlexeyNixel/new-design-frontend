@@ -1,6 +1,6 @@
 <template>
   <ul
-    v-if="variant === 'chips' && specs.length"
+    v-if="specs.length"
     class="flex flex-wrap gap-2"
   >
     <li
@@ -25,52 +25,18 @@
       >{{ spec.label }}</span>
     </li>
   </ul>
-
-  <div
-    v-else-if="variant === 'card'"
-    class="flex flex-col gap-2.5"
-  >
-    <p
-      v-if="!specs.length"
-      class="text-sm text-gray-500"
-    >
-      Параметры уточняются
-    </p>
-    <div
-      v-for="spec in specs"
-      :key="spec.label"
-      class="flex items-center gap-3 rounded-xl bg-neutral-100 p-3"
-    >
-      <div
-        class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary-700/10 text-primary-700"
-      >
-        <Icon
-          :name="spec.icon"
-          class="h-5 w-5"
-        />
-      </div>
-      <div class="min-w-0">
-        <div class="text-xs text-gray-500">
-          {{ spec.label }}
-        </div>
-        <div class="font-bold text-gray-900">
-          {{ spec.value }}
-        </div>
-      </div>
-    </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import type { Game } from '~~/services/types/game.type';
 
+// Параметры игры чипами. Используется в hero игры, карточке клуба и панели параметров.
 const props = withDefaults(
   defineProps<{
     game: Game;
-    variant?: 'card' | 'chips';
     tone?: 'default' | 'onDark';
   }>(),
-  { variant: 'card', tone: 'default' },
+  { tone: 'default' },
 );
 
 const playersText = computed(() => {

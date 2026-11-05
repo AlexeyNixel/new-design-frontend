@@ -52,12 +52,12 @@
     </div>
   </div>
 
-  <!-- Только обложка (или её нет вовсе) — просто картинка. -->
+  <!-- Только обложка (или её нет вовсе) — просто картинка.
+       Обложка уже стоит в hero, поэтому на узком экране дубль скрыт. -->
   <div
-    v-else-if="coverFallback"
+    v-else
     v-image-gallery="{ modal }"
-    class="items-center justify-center rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100"
-    :class="heroCovered ? 'hidden lg:flex' : 'flex'"
+    class="hidden items-center justify-center rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 lg:flex"
   >
     <img
       :src="cover"
@@ -78,15 +78,10 @@ interface SwiperInstance {
   slideTo: (index: number) => void;
 }
 
-const props = withDefaults(
-  defineProps<{
-    comic: Comic;
-    modal: unknown;
-    coverFallback?: boolean;
-    heroCovered?: boolean;
-  }>(),
-  { coverFallback: true, heroCovered: false },
-);
+const props = defineProps<{
+  comic: Comic;
+  modal: unknown;
+}>();
 
 const cover = computed(() => props.comic.images[0]?.file.path || '/placeholder.jpg');
 

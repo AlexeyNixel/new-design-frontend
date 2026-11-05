@@ -8,6 +8,7 @@ type GalleryElement = HTMLElement & {
 };
 
 const ZOOMABLE_CLASS = 'is-zoomable';
+const WRAP_CLASS = 'image-zoom-wrap';
 
 /** Помечает картинки как кликабельные и доступные с клавиатуры (повторно не трогает) */
 const markImages = (el: HTMLElement) => {
@@ -23,6 +24,22 @@ const markImages = (el: HTMLElement) => {
       );
     }
     if (!img.title) img.title = 'Нажмите, чтобы увеличить';
+
+    // Картинку контента без <figure class="image"> (старый редактор) оборачиваем
+    // в контейнер, чтобы значок лупы встал в угол фото (см. .image-zoom-wrap в editor.css).
+    // Обложки книг и галереи игр/комиксов (вне .tiptap) не трогаем.
+    const parent = img.parentElement;
+    if (
+      img.closest('.tiptap')
+      && !img.closest('figure.image')
+      && parent
+      && !parent.classList.contains(WRAP_CLASS)
+    ) {
+      const wrap = document.createElement('span');
+      wrap.className = WRAP_CLASS;
+      parent.insertBefore(wrap, img);
+      wrap.appendChild(img);
+    }
   });
 };
 

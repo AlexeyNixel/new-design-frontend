@@ -79,7 +79,6 @@
         <ComicGallery
           :comic="comic"
           :modal="modal"
-          hero-covered
         />
 
         <article

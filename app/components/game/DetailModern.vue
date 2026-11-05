@@ -87,7 +87,6 @@
         <GameGallery
           :game="game"
           :modal="modal"
-          hero-covered
         />
 
         <article

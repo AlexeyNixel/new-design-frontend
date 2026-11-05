@@ -1,0 +1,6 @@
+{
+  // Конфиг OpenCode для папки frontend. Правила и контекст — в AGENTS.md
+  // (он самодостаточен: правила соседних частей монорепозитория здесь не нужны).
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"]
+}

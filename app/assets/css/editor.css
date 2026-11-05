@@ -1,5 +1,75 @@
 
 :root {
+    /* Картинки, которые открываются в галерее: figure облегает картинку (как в CKEditor),
+       в правом верхнем углу — значок лупы (подсказка и для тач-экранов, где нет hover).
+       Вертикальный отступ перенесён с img на figure, чтобы значок встал в угол фото.
+       Класс .image-gallery ставит директива v-image-gallery на контейнер; в новостях
+       контент лежит во вложенном .tiptap, поэтому селектор не требует их совпадения. */
+    .image-gallery figure.image:has(> img.is-zoomable) {
+        position: relative;
+        display: table;
+        margin: 2rem auto;
+
+        > img {
+            margin: 0 auto;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            background: rgb(255 255 255 / 0.9) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23157486' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M20 20l-4.8-4.8M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / 18px no-repeat;
+            box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+            pointer-events: none;
+            transition: transform 0.2s ease;
+        }
+
+        &:hover::after {
+            transform: scale(1.12);
+        }
+    }
+
+    /* В ячейках таблиц фото стоят вплотную — без вертикальных отступов */
+    .image-gallery td figure.image:has(> img.is-zoomable) {
+        margin: 0 auto;
+    }
+
+    /* Картинки без <figure> (старый редактор): директива оборачивает их в span,
+       значок лупы рисуется на обёртке так же, как на figure выше. */
+    .tiptap .image-zoom-wrap {
+        position: relative;
+        display: inline-block;
+        max-width: 100%;
+        margin: 2rem auto;
+
+        > img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            background: rgb(255 255 255 / 0.9) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23157486' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M20 20l-4.8-4.8M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / 18px no-repeat;
+            box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+            pointer-events: none;
+            transition: transform 0.2s ease;
+        }
+
+        &:hover::after {
+            transform: scale(1.12);
+        }
+    }
+
     .tiptap {
         h1 {
             @apply font-bold text-3xl md:text-4xl mb-2 mt-10;
@@ -43,41 +113,6 @@
             @apply rounded-lg shadow-md mx-auto my-8 max-w-full h-auto;
         }
 
-        /* Картинки, которые открываются в галерее: figure облегает картинку (как в CKEditor),
-           в правом верхнем углу — значок лупы (подсказка и для тач-экранов, где нет hover).
-           Вертикальный отступ перенесён с img на figure, чтобы значок встал в угол фото. */
-        &.image-gallery figure.image:has(> img.is-zoomable) {
-            position: relative;
-            display: table;
-            margin: 2rem auto;
-
-            > img {
-                margin: 0 auto;
-            }
-
-            &::after {
-                content: '';
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                width: 34px;
-                height: 34px;
-                border-radius: 9999px;
-                background: rgb(255 255 255 / 0.9) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23157486' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M20 20l-4.8-4.8M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / 18px no-repeat;
-                box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
-                pointer-events: none;
-                transition: transform 0.2s ease;
-            }
-
-            &:hover::after {
-                transform: scale(1.12);
-            }
-        }
-
-        /* В ячейках таблиц фото стоят вплотную — без вертикальных отступов */
-        &.image-gallery td figure.image:has(> img.is-zoomable) {
-            margin: 0 auto;
-        }
         a {
             @apply text-primary-600 underline hover:opacity-70 transition;
         }

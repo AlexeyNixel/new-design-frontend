@@ -316,9 +316,36 @@ useJsonLd('content', () => {
   }
 }
 
-.poster:focus-visible {
+.poster-link {
+  border-radius: 1rem;
+}
+
+.poster-link:focus-visible {
   outline: 3px solid #0d4954;
-  outline-offset: 3px;
+  outline-offset: 4px;
+}
+
+/* Кнопка «Купить билет»: рамка в цвете текста плаката и заливка тем же цветом
+   с прозрачностью. Текст и иконка остаются цветом плаката и читаются на любой теме */
+.poster-buy {
+  position: relative;
+  isolation: isolate;
+  border: 1px solid currentColor;
+}
+
+.poster-buy::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: currentColor;
+  opacity: 0.14;
+  pointer-events: none;
+}
+
+.poster:hover .poster-buy::before {
+  opacity: 0.22;
 }
 
 .chip {

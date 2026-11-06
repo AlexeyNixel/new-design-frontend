@@ -26,6 +26,35 @@ body {
   transition: filter 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Лупа в правом верхнем углу картинки, которую можно открыть на весь экран.
+   Работает и внутри .tiptap, и вне его — например, на странице Пушкинской карты. */
+.image-gallery figure:has(> img.is-zoomable),
+.image-gallery span.image-zoom-wrap:has(> img.is-zoomable) {
+  position: relative;
+  display: table;
+  max-width: 100%;
+}
+
+.image-gallery figure:has(> img.is-zoomable)::after,
+.image-gallery span.image-zoom-wrap:has(> img.is-zoomable)::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.9) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23157486' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M20 20l-4.8-4.8M10.5 8v5M8 10.5h5'/%3E%3C/svg%3E") center / 18px no-repeat;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.2);
+  pointer-events: none;
+  transition: transform 0.2s ease;
+}
+
+.image-gallery figure:has(> img.is-zoomable):hover::after,
+.image-gallery span.image-zoom-wrap:has(> img.is-zoomable):hover::after {
+  transform: scale(1.12);
+}
+
 .image-gallery img.is-zoomable:hover {
   filter: brightness(0.92);
 }

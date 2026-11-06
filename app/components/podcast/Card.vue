@@ -30,6 +30,20 @@
         >
           {{ podcast.description }}
         </p>
+
+        <!-- Длительность: из API, иначе — из метаданных аудио -->
+        <p
+          class="mt-2 inline-flex items-center gap-1.5 text-xs font-medium tabular-nums text-gray-500"
+        >
+          <Icon
+            name="i-heroicons-clock-20-solid"
+            class="size-4 shrink-0 text-[#157486]"
+            aria-hidden="true"
+          />
+          <span :aria-label="duration ? `Длительность ${duration}` : undefined">
+            {{ duration }}
+          </span>
+        </p>
       </div>
     </div>
   </div>
@@ -37,6 +51,7 @@
 
 <script setup lang="ts">
 import type { Podcast } from '~~/services/types/podcast.type';
+import { eventPodcastDuration, formatDuration } from '~/utils/duration';
 
 const props = defineProps<{
   podcast: Podcast;
@@ -47,13 +62,29 @@ const player = usePodcastPlayer();
 const isCurrent = computed(() => player.current.value?.id === props.podcast.id);
 const isPlayingNow = computed(() => player.isPlaying.value);
 
+// Длительность считает клиент: читаем метаданные аудиофайла, не скачивая его целиком.
+// Поле с сервера — сразу, если оно есть; иначе берём из готового кэша плеера
+// или догружаем через плеер (usePodcastPlayer.durationOf).
+const duration = computed(() => {
+  const fromApi = formatDuration(eventPodcastDuration(props.podcast.audio?.duration));
+  if (fromApi) return fromApi;
+
+  const src = podcastAudioSrc(props.podcast);
+  const known = src ? player.durations.value[src] : 0;
+  return formatDuration(known);
+});
+
+// На клиенте подгружаем длительность карточки через метаданные аудио
+onMounted(() => {
+  void player.durationOf(props.podcast);
+});
+
 const toggle = () => {
   if (isCurrent.value) {
     player.toggle();
-  } else {
+  }
+  else {
     player.play(props.podcast);
   }
 };
 </script>
-
-<style scoped></style>

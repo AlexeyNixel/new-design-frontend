@@ -14,4 +14,6 @@ export interface File {
   height?: number | null;
   /** Уменьшенные копии для srcset: { "400": "/dev/variants/...-w400.webp", ... } */
   variants?: Record<string, string> | null;
+  /** Длительность аудио в секундах (File.type = AUDIO); null — не посчитана */
+  duration?: number | null;
 }

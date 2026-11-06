@@ -1,6 +1,6 @@
 <template>
   <div
-    class="poster group @container"
+    class="poster group"
     :class="EVENT_CATEGORIES[eventCategory(event)].poster"
   >
     <NuxtLink

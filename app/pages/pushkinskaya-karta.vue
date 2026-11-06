@@ -34,7 +34,9 @@
           <div
             class="rounded-2xl bg-white/10 p-5 text-sm leading-relaxed text-white/80 ring-1 ring-white/15 sm:p-6"
           >
-            <p class="font-medium text-white">Нет Пушкинской карты?</p>
+            <p class="font-medium text-white">
+              Нет Пушкинской карты?
+            </p>
             <p class="mt-2">
               Её можно оформить школьникам и студентам от 14 до 22 лет через
               «Госуслуги» и приложение «Госуслуги Культура».
@@ -62,7 +64,10 @@
         <ul
           class="plakat grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
-          <li v-for="event in upcoming" :key="event.id">
+          <li
+            v-for="event in upcoming"
+            :key="event.id"
+          >
             <EventPoster :event="event" />
           </li>
         </ul>
@@ -94,7 +99,7 @@
               height="727"
               loading="lazy"
               class="h-auto w-full rounded-xl"
-            />
+            >
           </figure>
 
           <div>
@@ -107,7 +112,10 @@
 
             <div class="tiptap max-w-none">
               <ul class="mb-4 list-disc space-y-2 pl-5 text-gray-700">
-                <li v-for="(item, index) in pageRules" :key="index">
+                <li
+                  v-for="(item, index) in pageRules"
+                  :key="index"
+                >
                   {{ item }}
                 </li>
               </ul>
@@ -122,8 +130,7 @@
                   target="_blank"
                   rel="noopener noreferrer"
                   class="font-semibold text-[#157486] underline underline-offset-4 hover:text-[#0d4954]"
-                  >{{ pageLink.label }}</a
-                >
+                >{{ pageLink.label }}</a>
               </p>
             </div>
           </div>
@@ -178,7 +185,11 @@
         <p class="mt-1 text-gray-600">
           Скоро появятся новые — пока посмотрите всю афишу.
         </p>
-        <UButton to="/afisha" label="Вся афиша" class="mt-4" />
+        <UButton
+          to="/afisha"
+          label="Вся афиша"
+          class="mt-4"
+        />
       </div>
     </div>
   </div>
@@ -210,7 +221,7 @@ const isDeleted = (event: Event) =>
   String(event.isDeleted).toLowerCase() === 'true';
 
 const pushkinEvents = computed<Event[]>(() =>
-  (data ?? []).filter((event) => isPushkinEvent(event) && !isDeleted(event))
+  (data ?? []).filter(event => isPushkinEvent(event) && !isDeleted(event)),
 );
 
 // Сравнение по полному времени события, а не по началу дня; libraryNow() — как на часах в библиотеке
@@ -218,12 +229,12 @@ const now = libraryNow();
 
 const upcoming = computed<Event[]>(() =>
   pushkinEvents.value
-    .filter((event) => !parseEventTime(event.eventTime).isBefore(now))
+    .filter(event => !parseEventTime(event.eventTime).isBefore(now))
     .sort(
       (a, b) =>
-        parseEventTime(a.eventTime).valueOf() -
-        parseEventTime(b.eventTime).valueOf()
-    )
+        parseEventTime(a.eventTime).valueOf()
+        - parseEventTime(b.eventTime).valueOf(),
+    ),
 );
 
 const showAllArchive = ref(false);
@@ -232,37 +243,37 @@ const archiveCutoff = now.subtract(ARCHIVE_MONTHS, 'month');
 
 const allPast = computed<Event[]>(() =>
   pushkinEvents.value
-    .filter((event) => parseEventTime(event.eventTime).isBefore(now))
+    .filter(event => parseEventTime(event.eventTime).isBefore(now))
     // Свежие прошедшие — выше
     .sort(
       (a, b) =>
-        parseEventTime(b.eventTime).valueOf() -
-        parseEventTime(a.eventTime).valueOf()
-    )
+        parseEventTime(b.eventTime).valueOf()
+        - parseEventTime(a.eventTime).valueOf(),
+    ),
 );
 
 const archive = computed<Event[]>(() =>
   showAllArchive.value
     ? allPast.value
     : allPast.value.filter(
-        (event) => !parseEventTime(event.eventTime).isBefore(archiveCutoff)
-      )
+        event => !parseEventTime(event.eventTime).isBefore(archiveCutoff),
+      ),
 );
 
 const hiddenArchiveCount = computed(() =>
-  showAllArchive.value ? 0 : allPast.value.length - archive.value.length
+  showAllArchive.value ? 0 : allPast.value.length - archive.value.length,
 );
 
 // ——— Материалы со старой страницы ———
 // Текст и картинка перенесены из поста /post/…pushkinskaya-karta… без изменений.
-const PUSHKIN_POST_SLUG =
-  'molodezhnaya-na-krasnom-prisoedinyaetsya-k-proektu-pushkinskaya-karta-12-06-19-01-23';
+const PUSHKIN_POST_SLUG
+  = 'molodezhnaya-na-krasnom-prisoedinyaetsya-k-proektu-pushkinskaya-karta-12-06-19-01-23';
 const pushkinPostUrl = `/post/${PUSHKIN_POST_SLUG}`;
 
-const pageIntro =
-  'Новосибирская областная молодежная библиотека предлагает новосибирцам мероприятия в рамках федеральной программы «Пушкинская карта» (количество мест ограничено):';
-const pageImage =
-  '/site/image/2025/11/06/ab98394c-6245-4864-b2ef-922ddf43c74e.jpeg';
+const pageIntro
+  = 'Новосибирская областная молодежная библиотека предлагает новосибирцам мероприятия в рамках федеральной программы «Пушкинская карта» (количество мест ограничено):';
+const pageImage
+  = '/site/image/2025/11/06/ab98394c-6245-4864-b2ef-922ddf43c74e.jpeg';
 const pageRules = [
   'оплатить услуги по Пушкинской карте можно на сайте билетного оператора «Кассир.Ру»;',
   'услуга оказывается гражданам Российской Федерации в возрасте от 14 до 22 лет, оформившим Пушкинскую карту;',
@@ -271,8 +282,8 @@ const pageRules = [
   'услуга оказывается только владельцу Пушкинской карты лично; передача билета третьим лицам в целях его использования не допускается;',
   'возврат средств за непосещенное мероприятие производится по заявлению владельца Пушкинской карты.',
 ];
-const pageNote =
-  'Библиотека принимает к оплате средства целевой субсидии на услуги учреждений культуры по посещению мероприятий на основании постановления Правительства РФ от 08.09.2021 №1521 «О социальной поддержке молодежи в возрасте от 14 до 22 лет для повышения доступности организаций культуры».';
+const pageNote
+  = 'Библиотека принимает к оплате средства целевой субсидии на услуги учреждений культуры по посещению мероприятий на основании постановления Правительства РФ от 08.09.2021 №1521 «О социальной поддержке молодежи в возрасте от 14 до 22 лет для повышения доступности организаций культуры».';
 const pageLink = {
   href: 'https://mk.nso.ru/page/8180',
   label: 'Федеральная программа «Пушкинская карта» в Новосибирской области',
@@ -294,18 +305,18 @@ usePageSeo({
 
 useJsonLd('content', () => {
   const items = upcoming.value
-    .map((event) => toEventSchema(event))
-    .filter((item) => !!item);
+    .map(event => toEventSchema(event))
+    .filter(item => !!item);
   if (!items.length) return undefined;
 
   return {
     '@type': 'ItemList',
-    name: 'Мероприятия по Пушкинской карте — НОМБ',
-    url: toAbsolute('/pushkinskaya-karta'),
-    itemListElement: items.map((item, index) => ({
+    'name': 'Мероприятия по Пушкинской карте — НОМБ',
+    'url': toAbsolute('/pushkinskaya-karta'),
+    'itemListElement': items.map((item, index) => ({
       '@type': 'ListItem',
-      position: index + 1,
-      item: item,
+      'position': index + 1,
+      'item': item,
     })),
   };
 });

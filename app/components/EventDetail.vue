@@ -46,7 +46,11 @@ const circleClass = computed(() =>
 );
 
 const ticket = computed(() =>
-  eventTicket({ content: props.selectedEvent?.content ?? '' }),
+  eventTicketInfo({
+    content: props.selectedEvent?.content ?? '',
+    ticketUrl: props.selectedEvent?.ticketUrl,
+    isPushkin: props.selectedEvent?.isPushkin,
+  }),
 );
 
 /** «Сегодня, 15:00» или «Пт, 24 октября, 16:00» */
@@ -213,6 +217,20 @@ const when = computed(() => {
           }}
         </li>
       </ul>
+
+      <a
+        v-if="ticket.url"
+        :href="ticket.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-1 inline-flex items-center justify-center gap-1.5 self-start rounded-full bg-current px-4 py-2 text-sm font-bold no-underline ring-1 ring-current/20 transition-opacity hover:opacity-90"
+      >
+        <UIcon
+          name="i-heroicons-ticket"
+          class="size-4 shrink-0"
+        />
+        Купить билет
+      </a>
 
       <div
         v-if="position && position.total > 1"

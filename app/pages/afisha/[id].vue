@@ -70,6 +70,45 @@
               {{ event.phone }}
             </a>
           </div>
+
+          <!-- Билет: ссылка из админки (или найденная в тексте), плашка Пушкинской карты -->          <div
+            v-if="ticket.url || ticket.pushkin || showFree"
+            class="mt-6 flex flex-wrap items-center gap-3"
+          >
+            <a
+              v-if="ticket.url"
+              :href="ticket.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-full bg-current px-5 py-2.5 text-sm font-bold no-underline ring-1 ring-current/20 transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-current"
+            >
+              <UIcon
+                name="i-heroicons-ticket-20-solid"
+                class="size-5 shrink-0"
+              />
+              Купить билет
+            </a>
+            <span
+              v-if="ticket.pushkin"
+              class="inline-flex items-center gap-2 rounded-full bg-black/10 px-4 py-2 text-sm font-medium"
+            >
+              <UIcon
+                name="i-heroicons-credit-card-20-solid"
+                class="size-5 shrink-0 opacity-80"
+              />
+              Можно по Пушкинской карте
+            </span>
+            <span
+              v-if="showFree"
+              class="inline-flex items-center gap-2 rounded-full bg-black/10 px-4 py-2 text-sm font-medium"
+            >
+              <UIcon
+                name="i-heroicons-gift-20-solid"
+                class="size-5 shrink-0 opacity-80"
+              />
+              Вход свободный
+            </span>
+          </div>
         </header>
 
         <div
@@ -114,6 +153,10 @@ const month = start.format('D MMMM').split(' ')[1];
 const category = eventCategory(event);
 const placeName = eventPlaceName(event);
 const isPast = start.isBefore(libraryNow().startOf('day'));
+
+/** Билет: поля из админки важнее парсинга текста; бесплатный вход — только из текста */
+const ticket = eventTicketInfo(event);
+const showFree = ticket.free && !ticket.url;
 
 const breadcrumbItems = [
   { label: 'Главная', icon: 'i-heroicons-home', to: '/' },

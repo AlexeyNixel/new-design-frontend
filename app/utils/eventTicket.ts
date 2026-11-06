@@ -1,10 +1,12 @@
 import type { Event } from '~~/services/types/event.type';
+import { isPushkinEvent } from '~/utils/eventPushkin';
 
 /**
  * Условия посещения события, найденные в его тексте.
- * Отдельных полей в API пока нет: редакторы пишут «Купить билет» со ссылкой
- * на кассу, «по Пушкинской карте» или «Вход свободный». Когда поля появятся —
- * брать данные из них, а не из текста.
+ * Сначала — поля из админки (ticketUrl, isPushkin), а текст описания остаётся
+ * фолбэком для старых событий: редакторы писали «Купить билет» со ссылкой
+ * на кассу, «по Пушкинской карте» или «Вход свободный».
+ * Собирать их вместе — eventTicketInfo() внизу файла.
  */
 export interface EventTicket {
   /** Ссылка на покупку билета */
@@ -65,6 +67,22 @@ export const eventTicket = (event: Pick<Event, 'content'>): EventTicket => {
  * на кассу, событие платное, просто цена не указана.
  * Пусто — про стоимость говорит только строка «Пушкинская карта».
  */
+/**
+ * Билет события: сначала поля из админки (ticketUrl, isPushkin), затем — как фолбэк
+ * для старых событий — поиск ссылки на кассу и упоминания карты в тексте.
+ * Источник цены и бесплатного входа — только текст описания.
+ */
+export const eventTicketInfo = (
+  event: Pick<Event, 'content' | 'ticketUrl' | 'isPushkin'>,
+): EventTicket => {
+  const parsed = eventTicket(event);
+  return {
+    ...parsed,
+    url: event.ticketUrl?.trim() || parsed.url,
+    pushkin: isPushkinEvent(event) || parsed.pushkin,
+  };
+};
+
 export const eventPriceLabel = (ticket: EventTicket) => {
   if (ticket.price) return ticket.price;
   if (ticket.url) return 'Вход по билету';

@@ -34,7 +34,7 @@ const items = {
   pushkin: () =>
     link(
       'Пушкинская карта',
-      '/post/molodezhnaya-na-krasnom-prisoedinyaetsya-k-proektu-pushkinskaya-karta-12-06-19-01-23',
+      '/pushkinskaya-karta',
       'mdi:ticket',
     ),
   assortment: () => link('Ассортимент услуг', '/page/assortiment-uslug', 'mdi:format-list-bulleted'),

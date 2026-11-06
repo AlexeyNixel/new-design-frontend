@@ -1,5 +1,6 @@
 import type { Event } from '~~/services/types/event.type';
 import { IBillboardPlaces } from '~/constants/billboardPlaces';
+import { libraryNow } from '~/composables/useEventTime';
 
 /** Часовой пояс библиотеки: API хранит время события «как на часах», с фиктивным Z */
 const LIBRARY_UTC_OFFSET = '+07:00';
@@ -43,6 +44,17 @@ export const useEventSchema = () => {
     const room = eventPlaceName(event);
     const description = truncateText(stripHtml(event.content), 300);
 
+    // Ссылка на билет из админки; для старых событий — найденная в тексте
+    const ticketUrl = event.ticketUrl?.trim() || eventTicket({ content: event.content }).url;
+    const offers
+      = ticketUrl && parseEventTime(event.eventTime).isAfter(parseEventTime(libraryNow()))
+        ? {
+            '@type': 'Offer',
+            'url': ticketUrl,
+            'availability': 'https://schema.org/InStock',
+          }
+        : undefined;
+
     return {
       '@type': 'Event',
       'name': event.title,
@@ -65,6 +77,8 @@ export const useEventSchema = () => {
       'image': [toAbsolute(DEFAULT_OG_IMAGE)],
       'typicalAgeRange': Number(event.age) ? `${Number(event.age)}-` : undefined,
       'organizer': { '@id': `${siteUrl}#organization` },
+      // Ссылка на кассу — как предложение билета; ссылки прошедших событий не индексируем
+      'offers': offers,
     };
   };
 };

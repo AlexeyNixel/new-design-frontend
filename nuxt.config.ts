@@ -76,11 +76,11 @@ export default defineNuxtConfig({
           `,
         },
         // Счётчик culturaltracking.ru (pixelId 3163)
-        {
-          'async': 'true',
-          'src': 'https://culturaltracking.ru/static/js/spxl.js?pixelId=3163',
-          'data-pixel-id': 3163,
-        },
+        // {
+        //   'async': 'true',
+        //   'src': 'https://culturaltracking.ru/static/js/spxl.js?pixelId=3163',
+        //   'data-pixel-id': 3163,
+        // },
         // Umami (self-hosted, metric.infomania.ru)
         {
           'defer': true,

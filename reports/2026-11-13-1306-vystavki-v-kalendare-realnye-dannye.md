@@ -55,6 +55,11 @@
   (`UPopover` + `UCalendar`), проверка «окончание не раньше начала».
 - `services/endpoints.ts`, `app/constants/sections.ts` (пункт в «Мероприятия» и
   в шаблон доступа), `app/utils/auditLog.ts` (подпись и ссылка).
+- `app/components/LayoutAside.vue` — пункт **«Выставки в календаре»** в группе
+  «Мероприятия». Боковое меню — отдельный захардкоженный список `navGroups`, он
+  не собирается из `sections.ts`: без этой правки страница открывалась по адресу,
+  но пункта в меню не было. Видимость пункта фильтруется через `canPath()` →
+  `sectionForPath()` → секция `library-exhibitions`.
 
 ### Публичный сайт (`frontend`)
 

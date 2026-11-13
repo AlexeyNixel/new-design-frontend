@@ -355,6 +355,15 @@ const dayExhibitions = (date: DateValue) =>
     parseEventTime,
   );
 
+/** Выставки в дне по ключу `YYYY-MM-DD` */
+const exhibitionsOnDayKey = (dayKey: string) =>
+  exhibitionsOnDay(exhibitions.value, dayKey, parseEventTime);
+
+/** Есть ли в показанном месяце хоть одна выставка — иначе легенда про них лишняя */
+const monthHasExhibitions = computed(() =>
+  monthDays.value.some(day => exhibitionsOnDayKey(day.key).length > 0),
+);
+
 const selectedDayLabel = computed(() => {
   const day = dayjs(selectedDay.value);
   const prefix = selectedDay.value === todayKey ? 'Сегодня, ' : '';
@@ -566,9 +575,13 @@ onMounted(async () => {
           </div>
 
           <div class="border-t border-gray-100 p-3 min-h-[148px]">
-            <p class="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
-              {{ selectedDayLabel }}
-            </p>
+            <!-- Легенда — на той же строке, что и дата: высота блока не растёт -->
+            <div class="mb-2 flex items-center justify-between gap-2">
+              <p class="min-w-0 truncate text-xs font-semibold uppercase tracking-wide text-gray-400">
+                {{ selectedDayLabel }}
+              </p>
+              <EventCalendarLegend :show-exhibition="monthHasExhibitions" />
+            </div>
 
             <div
               v-if="loading"
@@ -629,7 +642,13 @@ onMounted(async () => {
         </div>
 
         <!-- Desktop версия - сетка календаря -->
-        <div class="hidden sm:flex sm:flex-col flex-1 min-h-0">
+        <div class="hidden sm:flex sm:flex-col flex-1 min-h-0 relative">
+          <!-- Легенда поверх свободного места справа от названия месяца:
+               не занимает место в потоке, высота блока не меняется -->
+          <EventCalendarLegend
+            :show-exhibition="monthHasExhibitions"
+            class="pointer-events-none select-none absolute right-2.5 top-2.5 z-10"
+          />
           <div class="px-2.5 pt-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto">
             <!-- Без v-model: календарь только показывает месяц (placeholder),
                  поэтому ни сегодняшний, ни какой-либо другой день не «выбран» и не подсвечивается -->

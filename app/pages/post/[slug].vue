@@ -7,7 +7,8 @@
       class="mb-6"
     />
 
-    <article class="max-w-4xl mx-auto animate-fade-in-up">
+    <!-- max-w-3xl: при кегле 17px и контейнере px-4 даёт ~65–68 символов в строке -->
+    <article class="max-w-3xl mx-auto animate-fade-in-up">
       <header class="mb-8">
         <div class="mb-6">
           <div class="flex gap-2">

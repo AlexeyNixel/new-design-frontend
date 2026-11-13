@@ -8,6 +8,8 @@ const props = defineProps<{
   selectedEvent: Event | null;
   /** Место события в листаемом списке — точки под плакатом */
   position?: { index: number; total: number };
+  /** Скрыть кнопку «Купить билет»: в календаре событий она не нужна */
+  hideTicketButton?: boolean;
 }>();
 
 const emits = defineEmits<{
@@ -218,8 +220,9 @@ const when = computed(() => {
         </li>
       </ul>
 
+      <!-- Кнопка покупки — только на полной странице события: в календаре она не нужна -->
       <a
-        v-if="ticket.url"
+        v-if="ticket.url && !hideTicketButton"
         :href="ticket.url"
         target="_blank"
         rel="noopener noreferrer"

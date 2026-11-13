@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { DateValue } from '@internationalized/date';
 import type { Event } from '~~/services/types/event.type';
+import type { LibraryExhibition } from '~~/services/types/libraryExhibition.type';
 import { CalendarDate } from '@internationalized/date';
 import dayjs from 'dayjs';
 import { NuxtLink } from '#components';
@@ -301,6 +302,11 @@ const stripRef = ref<HTMLElement | null>(null);
 const todayKey = dayjs().format('YYYY-MM-DD');
 const selectedDay = ref(todayKey);
 
+// Выставки: период в недели. Загружаются один раз; показываются цветным кружком
+// в сетке и раскрывающимся блоком «Выставки» в списке дня.
+// Источник — API (app/utils/exhibitionCalendar.ts).
+const exhibitions = ref<LibraryExhibition[]>(await useExhibitionsCalendar());
+
 const monthStart = computed(() =>
   dayjs(calendarDate.value.toString()).startOf('month'),
 );
@@ -332,6 +338,22 @@ const sortByTime = (list: Event[]) =>
 const selectedDayEvents = computed(() =>
   sortByTime(eventsByDate.value[selectedDay.value] ?? []),
 );
+
+/** Выставки, которые идут в выбранный день (desktop — по дню из dayEvents, mobile — selectedDay) */
+const selectedDayExhibitions = computed(() => {
+  const key = dayEvents.value?.length
+    ? parseEventTime(dayEvents.value[0]!.eventTime).format('YYYY-MM-DD')
+    : selectedDay.value;
+  return exhibitionsOnDay(exhibitions.value, key, parseEventTime);
+});
+
+/** Выставки, которые идут в конкретный день сетки — для цветного кружка под числом */
+const dayExhibitions = (date: DateValue) =>
+  exhibitionsOnDay(
+    exhibitions.value,
+    dayjs(date.toString()).format('YYYY-MM-DD'),
+    parseEventTime,
+  );
 
 const selectedDayLabel = computed(() => {
   const day = dayjs(selectedDay.value);
@@ -559,45 +581,50 @@ onMounted(async () => {
               />
             </div>
 
-            <EventDetail
-              v-else-if="selectedDayEvents.length"
-              :events="selectedDayEvents"
-              :selected-event="null"
-              @select="openEventFromStrip"
-            />
+            <template v-else>
+              <!-- Выставки дня: свёрнутая строка, по нажатию — названия и описания -->
+              <EventCalendarExhibitions :exhibitions="selectedDayExhibitions" />
 
-            <div
-              v-else
-              class="py-3 text-center"
-            >
-              <p class="text-sm text-gray-500">
-                {{ isSelectedMonday ? 'Понедельник — выходной день' : 'В этот день событий нет' }}
-              </p>
-              <button
-                v-if="nextEventDay"
-                type="button"
-                class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-info"
-                @click="selectDay(nextEventDay)"
+              <EventDetail
+                v-if="selectedDayEvents.length"
+                :events="selectedDayEvents"
+                :selected-event="null"
+                @select="openEventFromStrip"
+              />
+
+              <div
+                v-else-if="!selectedDayExhibitions.length"
+                class="py-3 text-center"
               >
-                Ближайшее событие: {{ formatDayShort(nextEventDay) }}
-                <UIcon
-                  name="i-heroicons-arrow-right-20-solid"
-                  class="size-4"
-                />
-              </button>
-              <button
-                v-else
-                type="button"
-                class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-info"
-                @click="changeMonth('next')"
-              >
-                Смотреть следующий месяц
-                <UIcon
-                  name="i-heroicons-arrow-right-20-solid"
-                  class="size-4"
-                />
-              </button>
-            </div>
+                <p class="text-sm text-gray-500">
+                  {{ isSelectedMonday ? 'Понедельник — выходной день' : 'В этот день событий нет' }}
+                </p>
+                <button
+                  v-if="nextEventDay"
+                  type="button"
+                  class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-info"
+                  @click="selectDay(nextEventDay)"
+                >
+                  Ближайшее событие: {{ formatDayShort(nextEventDay) }}
+                  <UIcon
+                    name="i-heroicons-arrow-right-20-solid"
+                    class="size-4"
+                  />
+                </button>
+                <button
+                  v-else
+                  type="button"
+                  class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-info"
+                  @click="changeMonth('next')"
+                >
+                  Смотреть следующий месяц
+                  <UIcon
+                    name="i-heroicons-arrow-right-20-solid"
+                    class="size-4"
+                  />
+                </button>
+              </div>
+            </template>
           </div>
         </div>
 
@@ -653,13 +680,20 @@ onMounted(async () => {
                 >
                   <span class="leading-none">{{ day.day }}</span>
                   <span
-                    v-if="dayState(day) === 'event'"
-                    class="absolute bottom-1 flex gap-0.5"
+                    v-if="dayState(day) === 'event' || dayExhibitions(day).length"
+                    class="absolute bottom-1 flex gap-0.5 items-center"
                   >
+                    <!-- Синие точки — сколько событий в день (не больше трёх) -->
                     <span
                       v-for="i in Math.min(isEvent(day)?.length ?? 0, 3)"
                       :key="i"
                       class="size-1 rounded-full bg-primary-50 group-hover:bg-white"
+                    />
+                    <!-- Жёлтый кружок — в этот день ещё идёт выставка (отдельно от событий) -->
+                    <span
+                      v-if="dayExhibitions(day).length"
+                      class="size-1.5 rounded-full bg-[#F2B632] ring-1 ring-white/70 group-hover:ring-white"
+                      :title="`Выставка: ${dayExhibitions(day).map(e => e.title).join(', ')}`"
                     />
                   </span>
                 </div>
@@ -682,6 +716,7 @@ onMounted(async () => {
             class="block w-full h-full"
             :initial-slide="detailStartIndex"
             space-between="12"
+            run-callbacks-on-init="false"
             @swiperslidechange="onDetailSlideChange"
           >
             <swiper-slide
@@ -693,6 +728,7 @@ onMounted(async () => {
                 :events="[]"
                 :selected-event="item"
                 :position="{ index, total: detailList.length }"
+                hide-ticket-button
               />
             </swiper-slide>
           </swiper-container>
@@ -769,12 +805,16 @@ onMounted(async () => {
           </section>
         </div>
 
-        <EventDetail
-          v-else
-          :events="dayEvents ?? []"
-          :selected-event="null"
-          @select="openEvent"
-        />
+        <template v-else>
+          <!-- Выставки дня: свёрнутая строка, по нажатию — названия и описания -->
+          <EventCalendarExhibitions :exhibitions="selectedDayExhibitions" />
+
+          <EventDetail
+            :events="dayEvents ?? []"
+            :selected-event="null"
+            @select="openEvent"
+          />
+        </template>
       </div>
     </Transition>
   </div>

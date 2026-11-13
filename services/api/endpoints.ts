@@ -20,4 +20,6 @@ export const API_ENDPOINTS = {
   club: '/api/clubs/',
   page: '/api/page/',
   exhibitions: '/api/files/exhibitions/',
+  // Выставки-анонсы в календаре на главной (не виртуальные выставки выше)
+  libraryExhibitionsCalendar: '/api/library-exhibition/calendar',
 };
